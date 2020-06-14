@@ -4,10 +4,12 @@ Generates a 2-D unit plate mesh with variable numbers of elements in 2 direction
 
 from __future__ import division
 import math
-from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates
+from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates, findOrCreateFieldGroup, \
+    findOrCreateFieldNodeGroup, findOrCreateFieldStoredMeshLocation, findOrCreateFieldStoredString
 from opencmiss.zinc.element import Element, Elementbasis
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.node import Node
+from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, findOrCreateAnnotationGroupForTerm
 from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 
 class MeshType_2d_plate1(Scaffold_base):
@@ -84,8 +86,23 @@ class MeshType_2d_plate1(Scaffold_base):
 
         cache = fm.createFieldcache()
 
+        sampleGroup = AnnotationGroup(region, ("sample", ""))
+        sampleMeshGroup = sampleGroup.getMeshGroup(mesh)
+        annotationGroups = [sampleGroup]
+
+        # annotation fiducial points
+        markerGroup = findOrCreateFieldGroup(fm, "marker")
+        markerName = findOrCreateFieldStoredString(fm, name="marker_name")
+        markerLocation = findOrCreateFieldStoredMeshLocation(fm, mesh, name="marker_location")
+
+        markerPoints = findOrCreateFieldNodeGroup(markerGroup, nodes).getNodesetGroup()
+        markerTemplateInternal = nodes.createNodetemplate()
+        markerTemplateInternal.defineField(markerName)
+        markerTemplateInternal.defineField(markerLocation)
+
         # create nodes
         nodeIdentifier = 1
+        markerIdentifier = 1000001
         x = [ 0.0, 0.0, 0.0 ]
         dx_ds1 = [ 1.0 / elementsCount1, 0.0, 0.0 ]
         dx_ds2 = [ 0.0, 1.0 / elementsCount2, 0.0 ]
@@ -113,6 +130,38 @@ class MeshType_2d_plate1(Scaffold_base):
                 nodeIdentifiers = [ bni, bni + 1, bni + no2, bni + no2 + 1 ]
                 result = element.setNodesByIdentifier(eft, nodeIdentifiers)
                 elementIdentifier = elementIdentifier + 1
+                sampleMeshGroup.addElement(element)
+
+        # Add markers
+        for n2 in range(2):
+            for n1 in range(2):
+                if n2 == 0 and n1 == 0:
+                    addMarker = {"name": "bottom left", "xi": [0.0, 0.0, 0.0]}
+                    elementIdentifierMarker = 1
+                if n2 == 0 and n1 == 1:
+                    addMarker = {"name": "bottom right", "xi": [1.0, 0.0, 0.0]}
+                    elementIdentifierMarker = elementsCount1
+                if n2 == 1 and n1 == 0:
+                    addMarker = {"name": "top left", "xi": [0.0, 1.0, 0.0]}
+                    elementIdentifierMarker = elementsCount1 * (elementsCount2 - 1) + 1
+                if n2 == 1 and n1 == 1:
+                    addMarker = {"name": "top right", "xi": [1.0, 1.0, 0.0]}
+                    elementIdentifierMarker = elementsCount1 * elementsCount2
+                markerPoint = markerPoints.createNode(markerIdentifier, markerTemplateInternal)
+                markerIdentifier += 1
+                cache.setNode(markerPoint)
+                markerName.assignString(cache, addMarker["name"])
+                element = mesh.findElementByIdentifier(elementIdentifierMarker)
+                markerLocation.assignMeshLocation(cache, element, addMarker["xi"])
+
+        fm.defineAllFaces()
+        mesh1d = fm.findMeshByDimension(1)
+        sampleGroup.addSubelements()
+        is_sampleLines = sampleGroup.getFieldElementGroup(mesh1d)
+        is_exterior = fm.createFieldIsExterior()
+        is_submucosa = fm.createFieldAnd(is_sampleLines, is_exterior)
+        submucosaGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("Submucosa of transverse colon", ""))
+        submucosaGroup.getMeshGroup(mesh1d).addElementsConditional(is_submucosa)
 
         fm.endChange()
 

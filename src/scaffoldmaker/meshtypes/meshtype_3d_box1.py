@@ -118,7 +118,7 @@ class MeshType_3d_box1(Scaffold_base):
 
         # create nodes
         nodeIdentifier = 1
-        markerIdentifier = 100001
+        markerIdentifier = 1000001
         addMarker = None
         x = [ 0.0, 0.0, 0.0 ]
         dx_ds1 = [ 1.0 / elementsCount1, 0.0, 0.0 ]
