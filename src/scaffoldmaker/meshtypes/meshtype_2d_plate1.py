@@ -159,9 +159,20 @@ class MeshType_2d_plate1(Scaffold_base):
         sampleGroup.addSubelements()
         is_sampleLines = sampleGroup.getFieldElementGroup(mesh1d)
         is_exterior = fm.createFieldIsExterior()
+        # For Gould's data
         is_submucosa = fm.createFieldAnd(is_sampleLines, is_exterior)
         submucosaGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("Submucosa of transverse colon", ""))
         submucosaGroup.getMeshGroup(mesh1d).addElementsConditional(is_submucosa)
 
-        fm.endChange()
+        # # For PuQing's data
+        # is_exterior_face_xi2_0 = fm.createFieldAnd(is_exterior, fm.createFieldIsOnFace(Element.FACE_TYPE_XI2_0))
+        # is_exterior_face_xi2_1 = fm.createFieldAnd(is_exterior, fm.createFieldIsOnFace(Element.FACE_TYPE_XI2_1))
+        # is_bottom = fm.createFieldAnd(is_sampleLines, is_exterior_face_xi2_0)
+        # is_top = fm.createFieldAnd(is_sampleLines, is_exterior_face_xi2_1)
+        # bottomGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("ImageOutlineBottom", ""))
+        # bottomGroup.getMeshGroup(mesh1d).addElementsConditional(is_bottom)
+        # topGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("ImageOutlineTop", ""))
+        # topGroup.getMeshGroup(mesh1d).addElementsConditional(is_top)
 
+        fm.endChange()
+        
