@@ -892,6 +892,57 @@ class eftfactory_tricubichermite:
         assert eft.validate(), 'eftfactory_tricubichermite.createEftWedgeCollapseXi1Quadrant:  Failed to validate eft'
         return eft
 
+    def createEftWedgeDorsal(self, collapseNodes):
+        '''
+        Create a tricubic hermite element field for a wedge element, where xi2 collapsed on xi1 = 1.
+        :return: Element field template
+        '''
+        eft = self.createEftBasic()
+        # setEftScaleFactorIds(eft, [1], [])
+
+        if collapseNodes in [[4, 8]]:
+            nodes = [2, 6]
+            cross_nodes = [2, 4, 6, 8]
+            # remap parameters on xi3 = 0 before collapsing nodes
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D_DS2, [])
+            remapEftNodeValueLabel(eft, nodes, Node.VALUE_LABEL_D_DS1, [(Node.VALUE_LABEL_D_DS2, [])])
+            ln_map = [1, 2, 3, 2, 4, 5, 6, 5]
+
+            # zero cross derivative parameters
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D2_DS1DS2, [])
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D2_DS2DS3, [])
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D3_DS1DS2DS3, [])
+
+        remapEftLocalNodes(eft, 6, ln_map)
+        return eft
+
+    def createEftWedgeVentral(self, collapseNodes):
+        '''
+        Create a tricubic hermite element field for a wedge element, where xi2 collapsed on xi1 = 1.
+        :return: Element field template
+        '''
+        eft = self.createEftBasic()
+        setEftScaleFactorIds(eft, [1], [])
+
+        if collapseNodes in [[4, 8]]:
+            cross_nodes = [2, 4, 6, 8]
+            # remap parameters on xi3 = 0 before collapsing nodes
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D_DS2, [])
+            #remapEftNodeValueLabel(eft, [2, 6], Node.VALUE_LABEL_D_DS2, [(Node.VALUE_LABEL_D_DS1, [1])])
+            #remapEftNodeValueLabel(eft, [2, 6], Node.VALUE_LABEL_D_DS1, [(Node.VALUE_LABEL_D_DS1, [1])])
+            scaleEftNodeValueLabels(eft, [2, 6], [ Node.VALUE_LABEL_D_DS1 ], [1] )
+            remapEftNodeValueLabel(eft, [4, 8], Node.VALUE_LABEL_D_DS1, [(Node.VALUE_LABEL_D_DS2, [])])
+
+            ln_map = [1, 2, 3, 2, 4, 5, 6, 5]
+
+            # zero cross derivative parameters
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D2_DS1DS2, [])
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D2_DS2DS3, [])
+            remapEftNodeValueLabel(eft, cross_nodes, Node.VALUE_LABEL_D3_DS1DS2DS3, [])
+
+        remapEftLocalNodes(eft, 6, ln_map)
+        return eft
+
     def createEftWedgeCollapseXi2Quadrant(self, collapseNodes):
         '''
         Create a tricubic hermite element field for a wedge element, where xi2 collapsed on xi3 = 0 or Xi3 = 1.
@@ -1654,3 +1705,4 @@ class eftfactory_tricubichermite:
         self._mesh.destroyElement(origElement1)
         self._mesh.destroyElement(origElement2)
         fm.endChange()
+
