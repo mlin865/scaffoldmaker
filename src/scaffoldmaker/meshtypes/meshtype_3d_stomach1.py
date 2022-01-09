@@ -10,9 +10,9 @@ import copy
 import math
 
 from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates, findOrCreateFieldGroup, \
-    findOrCreateFieldStoredString, findOrCreateFieldStoredMeshLocation, findOrCreateFieldNodeGroup
+    findOrCreateFieldStoredString, findOrCreateFieldStoredMeshLocation, findOrCreateFieldNodeGroup, findOrCreateFieldFiniteElement
 from opencmiss.utils.zinc.finiteelement import get_element_node_identifiers
-from opencmiss.zinc.element import Element
+from opencmiss.zinc.element import Element, Elementbasis, Elementfieldtemplate
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.node import Node
 from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, mergeAnnotationGroups, \
@@ -28,6 +28,7 @@ from scaffoldmaker.utils import vector
 from scaffoldmaker.utils.annulusmesh import createAnnulusMesh3d
 from scaffoldmaker.utils.bifurcation import get_bifurcation_triple_point
 from scaffoldmaker.utils.eft_utils import scaleEftNodeValueLabels, setEftScaleFactorIds, remapEftNodeValueLabel
+from scaffoldmaker.utils.eft_utils import remapEftLocalNodes
 from scaffoldmaker.utils.eftfactory_bicubichermitelinear import eftfactory_bicubichermitelinear
 from scaffoldmaker.utils.eftfactory_tricubichermite import eftfactory_tricubichermite
 from scaffoldmaker.utils.eft_utils import scaleEftNodeValueLabels, setEftScaleFactorIds, remapEftNodeValueLabel, \
@@ -2001,8 +2002,16 @@ class MeshType_3d_stomach1(Scaffold_base):
                 xi3 += thicknessProportions[i]
                 xi3List.append(xi3)
 
+        xListAlong = []
+        d1ListAlong = []
+        d2ListAlong = []
+        d3ListAlong = []
         for n2 in range(elementsCountAlong + 1):
             idxThroughWall = []
+            xAlong = []
+            d1Along = []
+            d2Along = []
+            d3Along = []
             for n3 in range(elementsCountThroughWall + 1):
                 xi3 = xi3List[n3] if elementsCountThroughWall > 1 else 1.0 / elementsCountThroughWall * n3
                 idxAround = []
@@ -2014,26 +2023,34 @@ class MeshType_3d_stomach1(Scaffold_base):
                     dWall = [wallThickness * c for c in norm]
                     x = interp.interpolateCubicHermite(xIn, dWall, xOut, dWall, xi3)
                     xList.append(x)
+                    xAlong.append(x)
 
                     # d1
                     factor = 1.0 + wallThickness * (1.0 - xi3) * d1Curvature[n2][n1]
                     d1 = [factor * c for c in d1Outer[n2][n1]]
                     d1List.append(d1)
+                    d1Along.append(d1)
 
                     # d2
                     factor = 1.0 + wallThickness * (1.0 - xi3) * d2Curvature[n2][n1]
                     d2 = [factor * c for c in d2Outer[n2][n1]]
                     d2List.append(d2)
+                    d2Along.append(d2)
 
                     # d3
                     d3 = [c * wallThickness * (thicknessProportions[n3 + 1] if elementsCountThroughWall > 1 else 1.0)
                           for c in norm]
                     d3List.append(d3)
+                    d3Along.append(d3)
 
                     idxAround.append(nodeIdx)
                     nodeIdx += 1
                 idxThroughWall.append(idxAround)
             idxMat.append(idxThroughWall)
+            xListAlong.append(xAlong)
+            d1ListAlong.append(d1Along)
+            d2ListAlong.append(d2Along)
+            d3ListAlong.append(d3Along)
 
         nodeIdxGC = []
         nodesFlipD2 = []
@@ -2091,6 +2108,22 @@ class MeshType_3d_stomach1(Scaffold_base):
         elementtemplateX = mesh.createElementtemplate()
         elementtemplateX.setElementShapeType(Element.SHAPE_TYPE_CUBE)
 
+        ghrelinDensity = findOrCreateFieldFiniteElement(fm, name='Ghrelin density', components_count=1, type_coordinate=False)
+        gastrinDensity = findOrCreateFieldFiniteElement(fm, name='Gastrin density', components_count=1, type_coordinate=False)
+
+        constantBasis = fm.createElementbasis(3, Elementbasis.FUNCTION_TYPE_CONSTANT)
+        eftConstantStd = mesh.createElementfieldtemplate(constantBasis)
+        eftConstantStd.setParameterMappingMode(Elementfieldtemplate.PARAMETER_MAPPING_MODE_ELEMENT)
+
+        ghrelinDensityElementtemplateStandard = mesh.createElementtemplate()
+        ghrelinDensityElementtemplateStandard.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+        ghrelinDensityElementtemplateStandard.defineField(ghrelinDensity, -1, eftConstantStd)
+
+        gastrinDensityElementtemplateStandard = mesh.createElementtemplate()
+        gastrinDensityElementtemplateStandard.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+        gastrinDensityElementtemplateStandard.defineField(gastrinDensity, -1, eftConstantStd)
+
+        elementIdentifierAfterEso = elementIdentifier
         for e2 in range(elementsCountAlong):
             startNode = stomachStartNode
             for e in range(e2):
@@ -2158,6 +2191,14 @@ class MeshType_3d_stomach1(Scaffold_base):
                             if limitingRidge and elementsCountThroughWall > 1 and e3 == 0:
                                 fundusMucosaElementIdentifiers.append(elementIdentifier)
                             elementIdxAround.append(elementIdentifier)
+                            element.merge(ghrelinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            ghrelinDensity.assignReal(cache, 0.0)
+
+                            element.merge(gastrinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            gastrinDensity.assignReal(cache, 0.0)
+
                             elementIdentifier += 1
                             annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
                             if annotationGroups:
@@ -2207,6 +2248,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                                                        bni21 + elementsCountAround2,
                                                        bni22 + elementsCountAround2]
                                     eft1 = eftfactory.createEftWedgeCollapseXi1Quadrant([1, 5])
+
                                 elementtemplateX.defineField(coordinates, -1, eft1)
                                 elementtemplate1 = elementtemplateX
 
@@ -2232,6 +2274,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                                                        bni21 + elementsCountAround2,
                                                        bni22 + elementsCountAround2]
                                     eft1 = eftfactory.createEftWedgeCollapseXi1Quadrant([2, 6])
+
                                 elif e1 == elementsCountAround1 + 1:  # Remap derivatives of element adjacent to GC
                                     scaleFactors = [-1.0]
                                     nodeIdentifiers = [bni11, bni12, bni21, bni22,
@@ -2255,6 +2298,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                             elementIdxAround.append(elementIdentifier)
                             if limitingRidge and elementsCountThroughWall > 1 and e3 == 0:
                                 fundusMucosaElementIdentifiers.append(elementIdentifier)
+                            element.merge(ghrelinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            ghrelinDensity.assignReal(cache, 0.0)
+                            element.merge(gastrinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            gastrinDensity.assignReal(cache, 0.0)
                             elementIdentifier += 1
                             annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
                             if annotationGroups:
@@ -2275,6 +2324,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                             scaleFactors = []
                             eft1 = eftStandard
                             elementtemplate1 = elementtemplateStandard
+
                             bni11 = startNode + e3 * elementsCountAround1 + e1
                             bni12 = startNode + e3 * elementsCountAround1 + (e1 + 1) % elementsCountAround1
                             bni21 = startNode + elementsAroundThroughWall + e1 + elementsCountAround2 * e3
@@ -2288,6 +2338,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                             element.setNodesByIdentifier(eft1, nodeIdentifiers)
                             if scaleFactors:
                                 element.setScaleFactors(eft1, scaleFactors)
+                            element.merge(ghrelinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            ghrelinDensity.assignReal(cache, 0.0)
+                            element.merge(gastrinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            gastrinDensity.assignReal(cache, 0.0)
                             if limitingRidge and elementsCountThroughWall > 1 and e3 == 0:
                                 fundusMucosaElementIdentifiers.append(elementIdentifier)
                             elementIdxAround.append(elementIdentifier)
@@ -2353,6 +2409,13 @@ class MeshType_3d_stomach1(Scaffold_base):
                                 element.setScaleFactors(eft1, scaleFactors)
                             if e3 == 0 and e1 == 0:
                                 fundusBodyJunctionInnerElementIdentifier = elementIdentifier
+                            element.merge(ghrelinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            ghrelinDensity.assignReal(cache, 30.0)
+                            element.merge(gastrinDensityElementtemplateStandard)
+                            cache.setElement(element)
+                            gastrinDensity.assignReal(cache, 5.0)
+
                             elementIdxAround.append(elementIdentifier)
                             elementIdentifier += 1
                             annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
@@ -2429,6 +2492,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                         element.setNodesByIdentifier(eft1, nodeIdentifiers)
                         if scaleFactors:
                             element.setScaleFactors(eft1, scaleFactors)
+                        element.merge(ghrelinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        ghrelinDensity.assignReal(cache, 30.0)
+                        element.merge(gastrinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        gastrinDensity.assignReal(cache, 5.0)
                         elementIdxAround.append(elementIdentifier)
                         elementIdentifier += 1
                         annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
@@ -2460,6 +2529,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                                            bni21 + elementsCountAround2, bni22 + elementsCountAround2]
                         element = mesh.createElement(elementIdentifier, elementtemplateStandard)
                         element.setNodesByIdentifier(eftStandard, nodeIdentifiers)
+                        element.merge(ghrelinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        ghrelinDensity.assignReal(cache, 15.0)
+                        element.merge(gastrinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        gastrinDensity.assignReal(cache, 50.0)
                         elementIdxAround.append(elementIdentifier)
                         elementIdentifier = elementIdentifier + 1
                         annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
@@ -2530,6 +2605,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                         element.setNodesByIdentifier(eft1, nodeIdentifiers)
                         if scaleFactors:
                             element.setScaleFactors(eft1, scaleFactors)
+                        element.merge(ghrelinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        ghrelinDensity.assignReal(cache, 15.0 if e2 == elementsAroundHalfEso else 0.0)
+                        element.merge(gastrinDensityElementtemplateStandard)
+                        cache.setElement(element)
+                        gastrinDensity.assignReal(cache, 50.0 if e2 == elementsAroundHalfEso else 0.0)
                         elementIdxAround.append(elementIdentifier)
                         elementIdentifier += 1
                         annotationGroups = annotationGroupsAlong[e2] + annotationGroupsThroughWall[e3]
@@ -2540,6 +2621,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                                 meshGroup.addElement(element)
                     elementIdxThroughWall.append(elementIdxAround)
                 elementIdxMat.append(elementIdxThroughWall)
+        elementIdentifierAfterDuod = elementIdentifier
 
         # Annulus
         # Assemble endPoints for annulus
@@ -2638,6 +2720,21 @@ class MeshType_3d_stomach1(Scaffold_base):
 
         # delete mucosa layer in fundus when there is a limiting ridge
         mesh_destroy_elements_and_nodes_by_identifiers(mesh, fundusMucosaElementIdentifiers)
+
+        # loop through to add density to elements on ostium and annulus
+        elementIter = mesh.createElementiterator()
+        element = elementIter.next()
+        while element.isValid():
+            identifier = element.getIdentifier()
+            if identifier < elementIdentifierAfterEso or identifier >= elementIdentifierAfterDuod:
+                element.merge(ghrelinDensityElementtemplateStandard)
+                cache.setElement(element)
+                ghrelinDensity.assignReal(cache, 0.0)
+                element.merge(gastrinDensityElementtemplateStandard)
+                cache.setElement(element)
+                gastrinDensity.assignReal(cache, 0.0)
+
+            element = elementIter.next()
 
         # annotation fiducial points for embedding in whole body
         markerNames = [["esophagogastric junction along the greater curvature on luminal surface",
