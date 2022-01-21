@@ -266,8 +266,10 @@ class MeshType_3d_colon1(Scaffold_base):
             segmentProfileOption = ScaffoldPackage(MeshType_3d_colonsegment1, defaultParameterSetName='Cattle 1')
         elif 'Mouse' in parameterSetName:
             segmentProfileOption = ScaffoldPackage(MeshType_3d_colonsegment1, defaultParameterSetName='Mouse 1')
-        elif 'Pig' in parameterSetName:
+        elif 'Pig 1' in parameterSetName:
             segmentProfileOption = ScaffoldPackage(MeshType_3d_colonsegment1, defaultParameterSetName='Pig 1')
+        elif 'Pig 2' in parameterSetName:
+            segmentProfileOption = ScaffoldPackage(MeshType_3d_colonsegment1, defaultParameterSetName='Pig 2')
         else:
             segmentProfileOption = ScaffoldPackage(MeshType_3d_colonsegment1, defaultParameterSetName='Human 1')
         options = {
@@ -557,7 +559,7 @@ class MeshType_3d_colon1(Scaffold_base):
                                     [colonGroup, distalGroup]]
 
         elif tcCount == 2:
-            spiralGroup = AnnotationGroup(region, get_colon_term("spiral colon"))
+            spiralGroup = AnnotationGroup(region, get_colon_term("proximal colon"))
             transverseGroup = AnnotationGroup(region, get_colon_term("transverse colon"))
             distalGroup = AnnotationGroup(region, get_colon_term("distal colon"))
             annotationGroupAlong = [[colonGroup, spiralGroup],
@@ -575,8 +577,20 @@ class MeshType_3d_colon1(Scaffold_base):
         annotationGroupsAlong = []
         for i in range(len(elementsCountAlongGroups)):
             elementsCount = elementsCountAlongGroups[i]
+            print(i, elementsCount)
             for n in range(elementsCount):
-                annotationGroupsAlong.append(annotationGroupAlong[i])
+                if i == 0:
+                    annotationGroupsAlong.append(annotationGroupAlong[i])
+                elif i == 1:
+                    annotationGroupsAlong.append(annotationGroupAlong[i])
+                elif i == 2:
+                    annotationGroupsAlong.append(annotationGroupAlong[i])
+                else:
+                    annotationGroupsAlong.append([colonGroup])
+
+        annotationGroupsThroughWall = []
+        for i in range(elementsCountThroughWall):
+            annotationGroupsThroughWall.append([ ])
 
         xExtrude = []
         d1Extrude = []

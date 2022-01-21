@@ -50,7 +50,8 @@ class MeshType_3d_colonsegment1(Scaffold_base):
             'Cattle 1',
             'Human 1',
             'Mouse 1',
-            'Pig 1']
+            'Pig 1',
+            'Pig 2']
 
     @staticmethod
     def getDefaultOptions(parameterSetName='Default'):
@@ -133,6 +134,8 @@ class MeshType_3d_colonsegment1(Scaffold_base):
             options['Submucosa relative thickness'] = 0.25
             options['Circular muscle layer relative thickness'] = 0.25
             options['Longitudinal muscle layer relative thickness'] = 0.16
+            if 'Pig 2' in parameterSetName:
+                options['Number of elements through wall'] = 1
 
         return options
 
