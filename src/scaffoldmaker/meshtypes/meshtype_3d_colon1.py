@@ -577,7 +577,6 @@ class MeshType_3d_colon1(Scaffold_base):
         annotationGroupsAlong = []
         for i in range(len(elementsCountAlongGroups)):
             elementsCount = elementsCountAlongGroups[i]
-            print(i, elementsCount)
             for n in range(elementsCount):
                 if i == 0:
                     annotationGroupsAlong.append(annotationGroupAlong[i])
