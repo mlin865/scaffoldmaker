@@ -288,6 +288,10 @@ class MeshType_3d_colon1(Scaffold_base):
             'Transverse-distal tenia coli width': 10.0,
             'Distal inner radius': 31.5,
             'Distal tenia coli width': 10.0,
+            'Proximal pressure': 173.85,
+            'Proximal-transverse pressure': 160.27,
+            'Transverse-distal pressure': 99.393,
+            'Distal pressure': 114.85,
             'Refine': False,
             'Refine number of elements around': 1,
             'Refine number of elements along': 1,
@@ -358,17 +362,21 @@ class MeshType_3d_colon1(Scaffold_base):
             'Segment profile',
             'Number of segments',
             'Start phase',
+            'Proximal inner radius',
+            'Proximal-transverse inner radius',
+            'Transverse-distal inner radius',
+            'Distal inner radius',
+            'Proximal pressure',
+            'Proximal-transverse pressure',
+            'Transverse-distal pressure',
+            'Distal pressure',
+            'Proximal tenia coli width',
+            'Proximal-transverse tenia coli width',
+            'Transverse-distal tenia coli width',
+            'Distal tenia coli width',
             'Proximal length',
             'Transverse length',
             'Distal length',
-            'Proximal inner radius',
-            'Proximal tenia coli width',
-            'Proximal-transverse inner radius',
-            'Proximal-transverse tenia coli width',
-            'Transverse-distal inner radius',
-            'Transverse-distal tenia coli width',
-            'Distal inner radius',
-            'Distal tenia coli width',
             'Refine',
             'Refine number of elements around',
             'Refine number of elements along',
@@ -463,6 +471,11 @@ class MeshType_3d_colon1(Scaffold_base):
         distalTCWidth = options['Distal tenia coli width']
         segmentSettings = segmentProfile.getScaffoldSettings()
 
+        proximalPressure = options['Proximal pressure']
+        proximalTransversePressure = options['Proximal-transverse pressure']
+        transverseDistalPressure = options['Transverse-distal pressure']
+        distalPressure = options['Distal pressure']
+
         elementsCountAroundTC = segmentSettings['Number of elements around tenia coli']
         elementsCountAroundHaustrum = segmentSettings['Number of elements around haustrum']
         cornerInnerRadiusFactor = segmentSettings['Corner inner radius factor']
@@ -533,14 +546,17 @@ class MeshType_3d_colon1(Scaffold_base):
                                                                                             tcWidthList,
                                                                                             elementsCountAlong)
 
+        pressureList = [proximalPressure, proximalTransversePressure, transverseDistalPressure, distalPressure]
+        pressureAlongElementList = interp.sampleParameterAlongLine(lengthList, pressureList, elementsCountAlong)[0]
+
         # Account for reduced haustrum appearance in transverse and distal pig colon
-        if tcCount == 2:
-            haustrumInnerRadiusFactorList = [haustrumInnerRadiusFactor, haustrumInnerRadiusFactor * 0.75,
-                                             haustrumInnerRadiusFactor * 0.5, haustrumInnerRadiusFactor * 0.2]
-            haustrumInnerRadiusFactorAlongElementList = \
-                interp.sampleParameterAlongLine(lengthList, haustrumInnerRadiusFactorList, elementsCountAlong)[0]
-        else:
-            haustrumInnerRadiusFactorAlongElementList = [haustrumInnerRadiusFactor] * (elementsCountAlong + 1)
+        # if tcCount == 2:
+        #     haustrumInnerRadiusFactorList = [haustrumInnerRadiusFactor, haustrumInnerRadiusFactor * 0.75,
+        #                                      haustrumInnerRadiusFactor * 0.5, haustrumInnerRadiusFactor * 0.2]
+        #     haustrumInnerRadiusFactorAlongElementList = \
+        #         interp.sampleParameterAlongLine(lengthList, haustrumInnerRadiusFactorList, elementsCountAlong)[0]
+        # else:
+        haustrumInnerRadiusFactorAlongElementList = [haustrumInnerRadiusFactor] * (elementsCountAlong + 1)
 
         # Create annotation groups for colon sections
         elementsAlongInProximal = round(proximalLength / elementAlongLength)
@@ -578,14 +594,7 @@ class MeshType_3d_colon1(Scaffold_base):
         for i in range(len(elementsCountAlongGroups)):
             elementsCount = elementsCountAlongGroups[i]
             for n in range(elementsCount):
-                if i == 0:
-                    annotationGroupsAlong.append(annotationGroupAlong[i])
-                elif i == 1:
-                    annotationGroupsAlong.append(annotationGroupAlong[i])
-                elif i == 2:
-                    annotationGroupsAlong.append(annotationGroupAlong[i])
-                else:
-                    annotationGroupsAlong.append([colonGroup])
+                annotationGroupsAlong.append(annotationGroupAlong[i])
 
         annotationGroupsThroughWall = []
         for i in range(elementsCountThroughWall):
@@ -685,7 +694,7 @@ class MeshType_3d_colon1(Scaffold_base):
                 "colon coordinates", elementsCountAroundTC, elementsCountAroundHaustrum, elementsCountAlong,
                 elementsCountThroughWall, tcCount, annotationGroupsAround, annotationGroupsAlong,
                 annotationGroupsThroughWall, firstNodeIdentifier, firstElementIdentifier, useCubicHermiteThroughWall,
-                useCrossDerivatives, closedProximalEnd)
+                useCrossDerivatives, closedProximalEnd, pressureAlongElementList)
 
         else:
             # Create flat coordinates

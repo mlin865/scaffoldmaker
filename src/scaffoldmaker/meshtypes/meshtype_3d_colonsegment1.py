@@ -8,8 +8,8 @@ and thickness along.
 import copy
 import math
 
-from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates
-from opencmiss.zinc.element import Element
+from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates, findOrCreateFieldFiniteElement
+from opencmiss.zinc.element import Element, Elementbasis
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.node import Node
 from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, mergeAnnotationGroups, \
@@ -20,6 +20,7 @@ from scaffoldmaker.utils import interpolation as interp
 from scaffoldmaker.utils import matrix
 from scaffoldmaker.utils import tubemesh
 from scaffoldmaker.utils import vector
+from scaffoldmaker.utils.eft_utils import remapEftLocalNodes
 from scaffoldmaker.utils.eftfactory_bicubichermitelinear import eftfactory_bicubichermitelinear
 from scaffoldmaker.utils.eftfactory_tricubichermite import eftfactory_tricubichermite
 from scaffoldmaker.utils.geometry import createCirclePoints
@@ -121,13 +122,13 @@ class MeshType_3d_colonsegment1(Scaffold_base):
             options['Start inner radius'] = 20.0
             options['End inner radius'] = 20.0
             options['Corner inner radius factor'] = 0.0
-            options['Haustrum inner radius factor'] = 0.2
+            options['Haustrum inner radius factor'] = 0.04 # 0.5 0.25 0.1
             options['Segment length end derivative factor'] = 0.8
             options['Segment length mid derivative factor'] = 2.0
             options['Segment length'] = 25.0
             options['Number of tenia coli'] = 2
-            options['Start tenia coli width'] = 5.0
-            options['End tenia coli width'] = 5.0
+            options['Start tenia coli width'] = 2.0
+            options['End tenia coli width'] = 2.0
             options['Tenia coli thickness'] = 0.5
             options['Wall thickness'] = 2.0
             options['Mucosa relative thickness'] = 0.34
@@ -1689,7 +1690,8 @@ def createNodesAndElementsTeniaColi(region,
                                     elementsCountAlong, elementsCountThroughWall, tcCount,
                                     annotationGroupsAround, annotationGroupsAlong, annotationGroupsThroughWall,
                                     firstNodeIdentifier, firstElementIdentifier,
-                                    useCubicHermiteThroughWall, useCrossDerivatives, closedProximalEnd):
+                                    useCubicHermiteThroughWall, useCrossDerivatives, closedProximalEnd,
+                                    pressureList):
     """
     Create nodes and elements for the coordinates and flat coordinates fields.
     Note that flat coordinates not implemented for closedProximalEnd yet.
@@ -1740,6 +1742,12 @@ def createNodesAndElementsTeniaColi(region,
             nodetemplate.setValueNumberOfVersions(coordinates, -1, Node.VALUE_LABEL_D2_DS2DS3, 1)
             nodetemplate.setValueNumberOfVersions(coordinates, -1, Node.VALUE_LABEL_D3_DS1DS2DS3, 1)
 
+    # Set up pressure field
+    pressure = findOrCreateFieldFiniteElement(fm, name='luminal pressure', components_count=1,
+                                              type_coordinate=False)
+    pressureNodetemplate = nodes.createNodetemplate()
+    pressureNodetemplate.defineField(pressure)
+
     mesh = fm.findMeshByDimension(3)
 
     if useCubicHermiteThroughWall:
@@ -1751,6 +1759,30 @@ def createNodesAndElementsTeniaColi(region,
     elementtemplate = mesh.createElementtemplate()
     elementtemplate.setElementShapeType(Element.SHAPE_TYPE_CUBE)
     elementtemplate.defineField(coordinates, -1, eft)
+
+    # Pressure field
+    linearLagrangeBasis = fm.createElementbasis(3, Elementbasis.FUNCTION_TYPE_LINEAR_LAGRANGE)
+    eft8 = mesh.createElementfieldtemplate(linearLagrangeBasis)
+    pressureElementtemplate = mesh.createElementtemplate()
+    pressureElementtemplate.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+    pressureElementtemplate.defineField(pressure, -1, eft8)
+
+    # for tenia coli
+    pressureElementtemplate1 = mesh.createElementtemplate()
+    pressureElementtemplate1.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+    eft9 = mesh.createElementfieldtemplate(linearLagrangeBasis)
+    ln_map = [1, 2, 3, 4, 5, 2, 6, 4]
+    remapEftLocalNodes(eft9, 6, ln_map)
+    assert eft.validate(), 'linearLagrangeBasis.createEftWedgeXi1One:  Failed to validate eft'
+    pressureElementtemplate1.defineField(pressure, -1, eft9)
+
+    pressureElementtemplate2 = mesh.createElementtemplate()
+    pressureElementtemplate2.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+    eft10 = mesh.createElementfieldtemplate(linearLagrangeBasis)
+    ln_map = [1, 2, 3, 4, 1, 5, 3, 6]
+    remapEftLocalNodes(eft10, 6, ln_map)
+    assert eft.validate(), 'linearLagrangeBasis.createEftWedgeXi1Zero:  Failed to validate eft'
+    pressureElementtemplate2.defineField(pressure, -1, eft10)
 
     # Tenia coli edge elements
     elementtemplate1 = mesh.createElementtemplate()
@@ -1864,11 +1896,13 @@ def createNodesAndElementsTeniaColi(region,
                         (elementsCountAround + 1) * n3 + n1 + n2 * ((elementsCountAroundTC - 1) * tcCount + 1)
                     node = nodes.findNodeByIdentifier(nodeIdentifier)
                     node.merge(flatNodetemplate2 if n1 == 0 else flatNodetemplate1)
+                    node.merge(pressureNodetemplate)
                     cache.setNode(node)
                     # print('NodeIdentifier', nodeIdentifier, 'version 1', xFlatList[i])
                     flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, xFlat[i])
                     flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS1, 1, d1Flat[i])
                     flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS2, 1, d2Flat[i])
+                    pressure.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, pressureList[n2])
                     if useCrossDerivatives:
                         flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D2_DS1DS2, 1, zero)
                     if n1 == 0:
@@ -1888,10 +1922,12 @@ def createNodesAndElementsTeniaColi(region,
                 j = i + 2 + nTC
                 node = nodes.findNodeByIdentifier(nodeIdentifier)
                 node.merge(flatNodetemplate2 if nTC == 0 else flatNodetemplate1)
+                node.merge(pressureNodetemplate)
                 cache.setNode(node)
                 flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, xFlat[j])
                 flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS1, 1, d1Flat[j])
                 flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS2, 1, d2Flat[j])
+                pressure.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, pressureList[n2])
                 if useCrossDerivatives:
                     flatCoordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D2_DS1DS2, 1, zero)
                 if nTC == 0:
@@ -2148,6 +2184,8 @@ def createNodesAndElementsTeniaColi(region,
                 if xFlat:
                     element.merge(flatElementtemplate2 if onOpening else flatElementtemplate1)
                     element.setNodesByIdentifier(eftFlat4 if onOpening else eftFlat3, nodeIdentifiers)
+                    element.merge(pressureElementtemplate)
+                    element.setNodesByIdentifier(eft8, nodeIdentifiers)
                 if xOrgan:
                     element.merge(organElementtemplate)
                     element.setNodesByIdentifier(eftOrgan, nodeIdentifiers)
@@ -2185,6 +2223,8 @@ def createNodesAndElementsTeniaColi(region,
                 mesh.createElement(elementIdentifier,
                                    elementtemplate if eTC < int(elementsCountAroundTC * 0.5) - 1 else elementtemplate1)
             element.setNodesByIdentifier(eft if eTC < int(elementsCountAroundTC * 0.5) - 1 else eft1, nodeIdentifiers)
+            element.merge(pressureElementtemplate1)
+            element.setNodesByIdentifier(eft9, nodeIdentifiers)
             if xFlat:
                 element.merge(flatElementtemplate1 if eTC < int(elementsCountAroundTC * 0.5) - 1 else
                               flatElementtemplate3)
@@ -2235,6 +2275,8 @@ def createNodesAndElementsTeniaColi(region,
                                        bni22 + now + tcOffset, bni32, bni32 + now + tcOffset]
                     element = mesh.createElement(elementIdentifier, elementtemplate2)
                     element.setNodesByIdentifier(eft2, nodeIdentifiers)
+                    element.merge(pressureElementtemplate2)
+                    element.setNodesByIdentifier(eft10, nodeIdentifiers)
                     if xFlat:
                         element.merge(flatElementtemplate4)
                         element.setNodesByIdentifier(eftFlat6, nodeIdentifiers)
@@ -2246,6 +2288,8 @@ def createNodesAndElementsTeniaColi(region,
                                        bni31, bni32, bni31 + now + tcOffset, bni32 + now + tcOffset]
                     element = mesh.createElement(elementIdentifier, elementtemplate)
                     element.setNodesByIdentifier(eft, nodeIdentifiers)
+                    element.merge(pressureElementtemplate)
+                    element.setNodesByIdentifier(eft8, nodeIdentifiers)
                     if xFlat:
                         element.merge(flatElementtemplate1)
                         element.setNodesByIdentifier(eftFlat3, nodeIdentifiers)
@@ -2257,6 +2301,8 @@ def createNodesAndElementsTeniaColi(region,
                                        bni22 + now + tcOffset, bni31, bni31 + now + tcOffset]
                     element = mesh.createElement(elementIdentifier, elementtemplate1)
                     element.setNodesByIdentifier(eft1, nodeIdentifiers)
+                    element.merge(pressureElementtemplate1)
+                    element.setNodesByIdentifier(eft9, nodeIdentifiers)
                     if xFlat:
                         element.merge(flatElementtemplate3)
                         element.setNodesByIdentifier(eftFlat5, nodeIdentifiers)
@@ -2306,6 +2352,8 @@ def createNodesAndElementsTeniaColi(region,
             onOpening = (eTC == int(elementsCountAroundTC * 0.5 - 1))
             element = mesh.createElement(elementIdentifier, elementtemplate if eTC > 0 else elementtemplate2)
             element.setNodesByIdentifier(eft if eTC > 0 else eft2, nodeIdentifiers)
+            element.merge(pressureElementtemplate if eTC > 0 else pressureElementtemplate2)
+            element.setNodesByIdentifier(eft8 if eTC > 0 else eft10, nodeIdentifiers)
             if xFlat:
                 if eTC > 0:
                     element.merge(flatElementtemplate2 if onOpening else flatElementtemplate1)
