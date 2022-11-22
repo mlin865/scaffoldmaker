@@ -11,6 +11,7 @@ from scaffoldmaker.meshtypes.meshtype_2d_platehole1 import MeshType_2d_platehole
 from scaffoldmaker.meshtypes.meshtype_2d_sphere1 import MeshType_2d_sphere1
 from scaffoldmaker.meshtypes.meshtype_2d_tube1 import MeshType_2d_tube1
 from scaffoldmaker.meshtypes.meshtype_2d_tubebifurcation1 import MeshType_2d_tubebifurcation1
+from scaffoldmaker.meshtypes.meshtype_2d_tubebifurcationtree1 import MeshType_2d_tubebifurcationtree1
 from scaffoldmaker.meshtypes.meshtype_3d_bladder1 import MeshType_3d_bladder1
 from scaffoldmaker.meshtypes.meshtype_3d_bladderurethra1 import MeshType_3d_bladderurethra1
 from scaffoldmaker.meshtypes.meshtype_3d_box1 import MeshType_3d_box1
@@ -19,7 +20,6 @@ from scaffoldmaker.meshtypes.meshtype_3d_brainstem import MeshType_3d_brainstem1
 from scaffoldmaker.meshtypes.meshtype_3d_cecum1 import MeshType_3d_cecum1
 from scaffoldmaker.meshtypes.meshtype_3d_colon1 import MeshType_3d_colon1
 from scaffoldmaker.meshtypes.meshtype_3d_colonsegment1 import MeshType_3d_colonsegment1
-from scaffoldmaker.meshtypes.meshtype_3d_esophagus1 import MeshType_3d_esophagus1
 from scaffoldmaker.meshtypes.meshtype_3d_heart1 import MeshType_3d_heart1
 from scaffoldmaker.meshtypes.meshtype_3d_heart2 import MeshType_3d_heart2
 from scaffoldmaker.meshtypes.meshtype_3d_heartarterialroot1 import MeshType_3d_heartarterialroot1
@@ -33,8 +33,6 @@ from scaffoldmaker.meshtypes.meshtype_3d_heartventriclesbase1 import MeshType_3d
 from scaffoldmaker.meshtypes.meshtype_3d_heartventriclesbase2 import MeshType_3d_heartventriclesbase2
 from scaffoldmaker.meshtypes.meshtype_3d_lens1 import MeshType_3d_lens1
 from scaffoldmaker.meshtypes.meshtype_3d_lung1 import MeshType_3d_lung1
-from scaffoldmaker.meshtypes.meshtype_3d_lung2 import MeshType_3d_lung2
-from scaffoldmaker.meshtypes.meshtype_3d_musclefusiform1 import MeshType_3d_musclefusiform1
 from scaffoldmaker.meshtypes.meshtype_3d_ostium1 import MeshType_3d_ostium1
 from scaffoldmaker.meshtypes.meshtype_3d_smallintestine1 import MeshType_3d_smallintestine1
 from scaffoldmaker.meshtypes.meshtype_3d_solidcylinder1 import MeshType_3d_solidcylinder1
@@ -62,7 +60,7 @@ class Scaffolds(object):
             MeshType_2d_sphere1,
             MeshType_2d_tube1,
             MeshType_2d_tubebifurcation1,
-            #MeshType_2d_tubebifurcationtree1,
+            MeshType_2d_tubebifurcationtree1,
             MeshType_3d_bladder1,
             MeshType_3d_bladderurethra1,
             MeshType_3d_box1,
@@ -71,7 +69,6 @@ class Scaffolds(object):
             MeshType_3d_cecum1,
             MeshType_3d_colon1,
             MeshType_3d_colonsegment1,
-            MeshType_3d_esophagus1,
             MeshType_3d_heart1,
             MeshType_3d_heart2,
             MeshType_3d_heartarterialroot1,
@@ -85,13 +82,11 @@ class Scaffolds(object):
             MeshType_3d_heartventriclesbase2,
             MeshType_3d_lens1,
             MeshType_3d_lung1,
-            MeshType_3d_lung2,
-            MeshType_3d_musclefusiform1,
             MeshType_3d_ostium1,
             MeshType_3d_smallintestine1,
-            MeshType_3d_solidcylinder1,
             MeshType_3d_solidsphere1,
             MeshType_3d_solidsphere2,
+            MeshType_3d_solidcylinder1,
             MeshType_3d_sphereshell1,
             MeshType_3d_sphereshellseptum1,
             MeshType_3d_stellate1,
