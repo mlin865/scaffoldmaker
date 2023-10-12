@@ -6,6 +6,7 @@ import json
 
 from scaffoldmaker.meshtypes.meshtype_1d_bifurcationtree1 import MeshType_1d_bifurcationtree1
 from scaffoldmaker.meshtypes.meshtype_1d_network_layout1 import MeshType_1d_network_layout1
+from scaffoldmaker.meshtypes.meshtype_1d_stickman1 import MeshType_1d_stickman1
 from scaffoldmaker.meshtypes.meshtype_1d_path1 import MeshType_1d_path1
 from scaffoldmaker.meshtypes.meshtype_2d_plate1 import MeshType_2d_plate1
 from scaffoldmaker.meshtypes.meshtype_2d_platehole1 import MeshType_2d_platehole1
@@ -51,6 +52,7 @@ from scaffoldmaker.meshtypes.meshtype_3d_tube1 import MeshType_3d_tube1
 from scaffoldmaker.meshtypes.meshtype_3d_tubeseptum1 import MeshType_3d_tubeseptum1
 from scaffoldmaker.meshtypes.meshtype_3d_uterus1 import MeshType_3d_uterus1
 from scaffoldmaker.meshtypes.meshtype_3d_wholebody1 import MeshType_3d_wholebody1
+from scaffoldmaker.meshtypes.meshtype_3d_wholebody2 import MeshType_3d_wholebody2
 from scaffoldmaker.scaffoldpackage import ScaffoldPackage
 
 
@@ -60,6 +62,7 @@ class Scaffolds(object):
         self._allScaffoldTypes = [
             MeshType_1d_bifurcationtree1,
             MeshType_1d_network_layout1,
+            MeshType_1d_stickman1,
             MeshType_1d_path1,
             MeshType_2d_plate1,
             MeshType_2d_platehole1,
@@ -105,8 +108,9 @@ class Scaffolds(object):
             MeshType_3d_tube1,
             MeshType_3d_tubeseptum1,
             MeshType_3d_uterus1,
-            MeshType_3d_wholebody1
-            ]
+            MeshType_3d_wholebody1,
+            MeshType_3d_wholebody2
+        ]
 
     def findScaffoldTypeByName(self, name):
         for scaffoldType in self._allScaffoldTypes:

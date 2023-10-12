@@ -10,12 +10,12 @@ from enum import Enum
 from cmlibs.utils.zinc.finiteelement import getMaximumNodeIdentifier, getMaximumElementIdentifier
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
+from scaffoldmaker.meshtypes.meshtype_1d_path1 import extractPathParametersFromRegion
 from scaffoldmaker.utils import vector, geometry
 from scaffoldmaker.utils.interpolation import sampleCubicHermiteCurves, interpolateSampleCubicHermite, \
     smoothCubicHermiteDerivativesLine
 from scaffoldmaker.utils.mirror import Mirror
 from scaffoldmaker.utils.shieldmesh import ShieldMesh2D, ShieldShape2D, ShieldRimDerivativeMode
-from scaffoldmaker.utils.zinc_utils import get_nodeset_path_field_parameters
 
 
 class CylinderShape(Enum):
@@ -107,13 +107,12 @@ class CylinderCentralPath:
         """
         tmpRegion = region.createRegion()
         centralPath.generate(tmpRegion)
-        tmpFieldmodule = tmpRegion.getFieldmodule()
-        cx, cd1, cd2, cd3, cd12, cd13 = get_nodeset_path_field_parameters(
-            tmpFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES),
-            tmpFieldmodule.findFieldByName('coordinates'),
-            [Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2, Node.VALUE_LABEL_D_DS3,
-             Node.VALUE_LABEL_D2_DS1DS2, Node.VALUE_LABEL_D2_DS1DS3])
-        del tmpFieldmodule
+        cx, cd1, cd2, cd3, cd12, cd13 = extractPathParametersFromRegion(tmpRegion,
+                                                                        [Node.VALUE_LABEL_VALUE,
+                                                                         Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2,
+                                                                         Node.VALUE_LABEL_D_DS3,
+                                                                         Node.VALUE_LABEL_D2_DS1DS2,
+                                                                         Node.VALUE_LABEL_D2_DS1DS3])
         del tmpRegion
         # for i in range(len(cx)):
         #     print(i, '[', cx[i], ',', cd1[i], ',', cd2[i], ',', cd12[i], ',', cd3[i], ',', cd13[i], '],')
@@ -136,8 +135,9 @@ class CylinderMesh:
     """
 
     def __init__(self, fieldModule, coordinates, elementsCountAlong, base=None, end=None,
-                 cylinderShape=CylinderShape.CYLINDER_SHAPE_FULL, rangeOfRequiredElements=None,
-                 tapered=None, cylinderCentralPath=None, useCrossDerivatives=False , meshGroupsElementsAlong=[], meshGroups=[]):
+                 cylinderShape=CylinderShape.CYLINDER_SHAPE_FULL,
+                 tapered=None, cylinderCentralPath=None, useCrossDerivatives=False, meshGroupsElementsAlong=[],
+                 meshGroups=[], rangeOfRequiredElementsAlong=None):
         """
         :param fieldModule: Zinc fieldModule to create elements in.
         :param coordinates: Coordinate field to define.
@@ -176,18 +176,13 @@ class CylinderMesh:
         self._endElementIdentifier = 1
         self._cylinderShape = cylinderShape
         self._cylinderType = CylinderType.CYLINDER_STRAIGHT
+        self._rangeOfRequiredElementsAlong = rangeOfRequiredElementsAlong
         if (tapered is not None) or cylinderCentralPath:
             self._cylinderType = CylinderType.CYLINDER_TAPERED
             self._tapered = tapered
         self._useCrossDerivatives = useCrossDerivatives
-        if rangeOfRequiredElements:
-            self._rangeOfRequiredElements = rangeOfRequiredElements
-        else:
-            self._rangeOfRequiredElements = [
-                [0, self._elementsCountAcrossMajor],
-                [0, self._elementsCountAcrossMinor],
-                [0, self._elementsCountAlong],
-            ]
+        if rangeOfRequiredElementsAlong:
+            self._rangeOfRequiredElementsAlong = rangeOfRequiredElementsAlong
 
         self._meshGroups = meshGroups
         self._meshGroupsElementsAlong = meshGroupsElementsAlong
@@ -268,8 +263,8 @@ class CylinderMesh:
                             self._shield.pd2[n3][n2][n1] = self._shield.pd2[0][n2][n1]
                             self._shield.pd3[n3][n2][n1] = self._shield.pd3[0][n2][n1]
 
-        self.generateNodes(nodes, fieldModule, coordinates)
-        self.generateElements(mesh, fieldModule, coordinates)
+        self.generateNodes(nodes, fieldModule, coordinates, self._rangeOfRequiredElementsAlong)
+        self.generateElements(mesh, fieldModule, coordinates, self._rangeOfRequiredElementsAlong)
 
         if self._end is None:
             self._end = CylinderEnds(self._elementsCountAcrossMajor, self._elementsCountAcrossMinor,
@@ -383,7 +378,7 @@ class CylinderMesh:
         self._shield.pd2[n3] = self._ellipses[n3].pd2
         self._shield.pd3[n3] = self._ellipses[n3].pd3
 
-    def generateNodes(self, nodes, fieldModule, coordinates):
+    def generateNodes(self, nodes, fieldModule, coordinates, rangeOfRequiredElementsAlong=None):
         """
         Create cylinder nodes from coordinates.
         :param nodes: nodes from coordinates.
@@ -393,10 +388,10 @@ class CylinderMesh:
         nodeIdentifier = max(1, getMaximumNodeIdentifier(nodes) + 1)
         self._startNodeIdentifier = nodeIdentifier
         nodeIdentifier = self._shield.generateNodes(fieldModule, coordinates, nodeIdentifier,
-                                                    self._rangeOfRequiredElements)
+                                                    rangeOfRequiredElementsAlong=rangeOfRequiredElementsAlong)
         self._endNodeIdentifier = nodeIdentifier
 
-    def generateElements(self, mesh, fieldModule, coordinates):
+    def generateElements(self, mesh, fieldModule, coordinates, rangeOfRequiredElementsAlong=None):
         """
         Create cylinder elements from nodes.
         :param mesh:
@@ -405,9 +400,8 @@ class CylinderMesh:
         """
         elementIdentifier = max(1, getMaximumElementIdentifier(mesh) + 1)
         self._startElementIdentifier = elementIdentifier
-        elementIdentifier = self._shield.generateElements(fieldModule, coordinates, elementIdentifier,
-                                                          self._rangeOfRequiredElements,
-                                                          self._meshGroupsElementsAlong, self._meshGroups)
+        elementIdentifier = self._shield.generateElements(fieldModule, coordinates, elementIdentifier, [], [],
+                                                          rangeOfRequiredElementsAlong=rangeOfRequiredElementsAlong)
         self._endElementIdentifier = elementIdentifier
 
     def getElementsCountAround(self):
@@ -415,6 +409,9 @@ class CylinderMesh:
 
     def getElementIdentifiers(self):
         return self._shield.elementId
+
+    def getShield(self):
+        return self._shield
 
 
 class Ellipse2D:
@@ -601,8 +598,8 @@ class Ellipse2D:
         for n2 in range(n2d, n2m + 1):
             txm, td3m, pe, pxi, psf = sampleCubicHermiteCurves(
                 [btx[n2][n1a], rscx[n2 - n2a], btx[n2][n1z]],
-                [vector.setMagnitude(btd3[n2][n1a], -1.0), rscd3[n2 - n2a], btd3[n2][n1z]],
-                self.elementsCountAcrossMinor-2*self.elementsCountAcrossShell, arcLengthDerivatives=True)
+                [vector.scaleVector(btd3[n2][n1a], -1.0), rscd3[n2 - n2a], btd3[n2][n1z]],
+                self.elementsCountAcrossMinor-2*self.elementsCountAcrossShell)
             td1m = interpolateSampleCubicHermite([[-btd1[n2][n1a][c] for c in range(3)], rscd1[n2 - n2a],
                                                   btd1[n2][n1z]], [[0.0, 0.0, 0.0]] * 3, pe, pxi, psf)[0]
 
