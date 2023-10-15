@@ -142,7 +142,7 @@ class MeshType_1d_stickman1(Scaffold_base):
             element.setNodesByIdentifier(eft, e)
             elementIdentifier += 1
 
-        return []
+        return [], None
 
 
 def extractPathParametersFromRegion(region, valueLabels, groupName=None):

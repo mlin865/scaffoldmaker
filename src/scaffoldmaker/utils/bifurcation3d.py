@@ -22,7 +22,7 @@ from scaffoldmaker.utils.interpolation import sampleCubicHermiteCurves, interpol
 from scaffoldmaker.utils.mirror import Mirror
 from scaffoldmaker.utils.shieldmesh import ShieldMesh3D
 from scaffoldmaker.utils.spheremesh import SphereMesh, SphereShape
-from scaffoldmaker.utils.zinc_utils import exnodeStringFromNodeValues
+from scaffoldmaker.utils.zinc_utils import exnode_string_from_nodeset_field_parameters
 
 
 class PathNodes:
@@ -55,11 +55,11 @@ class PathNodes:
         d3w = vector.setMagnitude(d3sh, radius[1][1])
 
         if attach_bottom:
-            path_list = [[csh, d1sh, d2sh, [0.0, 0.0, 0.0], d3sh, [0.0, 0.0, 0.0]],
-                         [cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]]]
+            path_list = [(1, [csh, d1sh, d2sh, [0.0, 0.0, 0.0], d3sh, [0.0, 0.0, 0.0]]),
+                         (2, [cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]])]
         else:
-            path_list = [[cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]],
-                         [csh, d1sh, d2sh, [0.0, 0.0, 0.0], d3sh, [0.0, 0.0, 0.0]]]
+            path_list = [(1, [cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]]),
+                         (2, [csh, d1sh, d2sh, [0.0, 0.0, 0.0], d3sh, [0.0, 0.0, 0.0]])]
         self.path_list = path_list
 
     def get_path_list(self):
@@ -102,7 +102,7 @@ class BranchCylinder:
                     'Length': 1.0,
                     'Number of elements': len(path_list) - 1
                 },
-                'meshEdits': exnodeStringFromNodeValues(
+                'meshEdits': exnode_string_from_nodeset_field_parameters(
                     [Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2,
                      Node.VALUE_LABEL_D2_DS1DS2, Node.VALUE_LABEL_D_DS3, Node.VALUE_LABEL_D2_DS1DS3],
                     path_list)
@@ -111,7 +111,7 @@ class BranchCylinder:
         if not centralPath._meshEdits:
             centralPath_settings = centralPath.getScaffoldSettings()
             centralPath_settings['Number of elements'] = len(path_list) - 1
-            centralpath_meshEdits = exnodeStringFromNodeValues(
+            centralpath_meshEdits = exnode_string_from_nodeset_field_parameters(
                 [Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2, Node.VALUE_LABEL_D2_DS1DS2,
                  Node.VALUE_LABEL_D_DS3, Node.VALUE_LABEL_D2_DS1DS3],
                 path_list)
@@ -361,6 +361,7 @@ class TrifurcationMesh:
         if not path_list:
             pn = PathNodes(part1, radius, length, number_of_elements, attach_bottom=attach_bottom)
             path_list = pn.get_path_list()
+
         bc = BranchCylinder(self._region, self._mesh, self._nodes, self._fieldmodule, self._coordinates,
                             number_of_elements, part1, attach_bottom=attach_bottom, path_list=path_list)
         cylinder = bc.get_cylinder()

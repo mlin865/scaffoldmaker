@@ -10,12 +10,12 @@ from enum import Enum
 from cmlibs.utils.zinc.finiteelement import getMaximumNodeIdentifier, getMaximumElementIdentifier
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from scaffoldmaker.meshtypes.meshtype_1d_path1 import extractPathParametersFromRegion
 from scaffoldmaker.utils import vector, geometry
 from scaffoldmaker.utils.interpolation import sampleCubicHermiteCurves, interpolateSampleCubicHermite, \
     smoothCubicHermiteDerivativesLine
 from scaffoldmaker.utils.mirror import Mirror
 from scaffoldmaker.utils.shieldmesh import ShieldMesh2D, ShieldShape2D, ShieldRimDerivativeMode
+from scaffoldmaker.utils.zinc_utils import get_nodeset_path_field_parameters
 
 
 class CylinderShape(Enum):
@@ -107,7 +107,11 @@ class CylinderCentralPath:
         """
         tmpRegion = region.createRegion()
         centralPath.generate(tmpRegion)
-        cx, cd1, cd2, cd3, cd12, cd13 = extractPathParametersFromRegion(tmpRegion,
+        tmpFieldmodule = tmpRegion.getFieldmodule()
+        tmpCoordinates = tmpFieldmodule.findFieldByName('coordinates')
+        tmpNodes = tmpFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+
+        cx, cd1, cd2, cd3, cd12, cd13 = get_nodeset_path_field_parameters(tmpNodes, tmpCoordinates,
                                                                         [Node.VALUE_LABEL_VALUE,
                                                                          Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2,
                                                                          Node.VALUE_LABEL_D_DS3,

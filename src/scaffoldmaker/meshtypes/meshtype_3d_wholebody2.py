@@ -318,19 +318,20 @@ Generates a whole body scaffold using a mesh of all cube elements,
         pn = PathNodes(neck_cylinder_shield, [[neck_radius2]*2, [head_radius, neck_radius2]],
                        head_length/head_number_of_elements, [elementsCountAcrossMajor, elementsCountAcrossMajor, 1])
         path_list = pn.get_path_list()
-        path_list[1][0] = vector.addVectors(
-            [path_list[1][0], vector.setMagnitude([0.0, -1.0, 0.0],
+
+        path_list[1][1][0] = vector.addVectors(
+            [path_list[1][1][0], vector.setMagnitude([0.0, -1.0, 0.0],
                                                   head_length/head_number_of_elements)], [1, 1])
 
         # extend the neck and create the head using a cylinder with its central path
-        cw, d1w, d2w = path_list[1][:3]
-        d3w = path_list[1][4]
+        cw, d1w, d2w = path_list[1][1][:3]
+        d3w = path_list[1][1][4]
         for ni in range(2, head_number_of_elements + 1):
             cw = vector.addVectors([cw, vector.setMagnitude(d1w, head_length/head_number_of_elements)], [1, 1])
             if ni == 3:
-                path_list.append([cw, d1w, vector.scaleVector(d2w, 1.1), [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]])
+                path_list.append((ni + 1, [cw, d1w, vector.scaleVector(d2w, 1.1), [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]]))
             else:
-                path_list.append([cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]])
+                path_list.append((ni + 1, [cw, d1w, d2w, [0.0, 0.0, 0.0], d3w, [0.0, 0.0, 0.0]]))
 
         head_cylinder = trifurcation1.create_branch_cylinder([[neck_radius2] * 2, [head_radius, neck_radius2]],
                                                              head_length/head_number_of_elements,
@@ -355,7 +356,8 @@ Generates a whole body scaffold using a mesh of all cube elements,
         # trifurcation1.smooth_all_derivatives()
 
         annotationGroup = []
-        return annotationGroup
+
+        return annotationGroup, None
 
     @classmethod
     def refineMesh(cls, meshRefinement, options):
