@@ -7,9 +7,12 @@ from __future__ import division
 
 import copy
 
-from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
+from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates, findOrCreateFieldGroup, \
+    findOrCreateFieldStoredMeshLocation, findOrCreateFieldStoredString
+from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from scaffoldmaker.annotation.annotationgroup import AnnotationGroup
+from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, findOrCreateAnnotationGroupForTerm
+from scaffoldmaker.annotation.muscle_terms import get_muscle_term
 from scaffoldmaker.meshtypes.meshtype_1d_path1 import MeshType_1d_path1
 from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 from scaffoldmaker.scaffoldpackage import ScaffoldPackage
@@ -65,7 +68,25 @@ with variable numbers of elements in major, minor, shell and axial directions.
                     (8, [[-52.89, 42.78, 330.89], [-2.97, 17.41, 45.15], [-1.98, 5.86, -2.39], [0.55, -5.16, 1.38], [-8.19, -2.58, 0.46], [6.06, 0.38, 1.39]])
                 ])
         }),
-
+        'Left acromial part of deltoid 1': ScaffoldPackage(MeshType_1d_path1, {
+            'scaffoldSettings': {
+                'Coordinate dimensions': 3,
+                'D2 derivatives': True,
+                'D3 derivatives': True,
+                'Length': 3.0,
+                'Number of elements': 6
+            },
+            'meshEdits': exnode_string_from_nodeset_field_parameters(
+                [Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2, Node.VALUE_LABEL_D2_DS1DS2, Node.VALUE_LABEL_D_DS3, Node.VALUE_LABEL_D2_DS1DS3], [
+                (1, [[203.27,-74.69,1208.35], [7.19,-2.05,18.99], [3.15,-1.17,-1.32], [3.04,-2.23,-0.78], [1.28,3.55,-0.10], [1.82,2.15,-0.30]]), 
+                (2, [[208.92,-76.33,1228.35], [4.06,-1.22,20.91], [6.67,-3.40,-1.50], [4.01,-2.22,0.42], [3.59,7.18,-0.28], [2.81,5.10,-0.05]]), 
+                (3, [[211.29,-77.10,1249.98], [1.39,-0.33,24.61], [11.18,-5.61,-0.71], [3.32,-1.17,1.35], [6.92,13.82,-0.20], [2.68,8.09,0.57]]), 
+                (4, [[211.39,-76.87,1277.46], [-2.40,0.71,28.89], [13.00,-5.47,1.22], [-0.26,1.49,2.21], [9.79,23.35,0.24], [0.20,7.62,-0.01]]), 
+                (5, [[206.25,-75.64,1307.39], [-9.98,2.78,26.97], [10.41,-2.48,4.11], [-3.05,1.99,3.57], [7.02,28.84,-0.37], [-1.15,1.63,-0.93]]), 
+                (6, [[192.49,-71.63,1330.21], [-23.42,6.20,20.62], [6.96,-1.39,8.33], [-4.45,1.29,1.86], [6.48,27.35,-0.86], [-1.36,-3.10,-0.47]]), 
+                (7, [[160.40,-63.63,1344.21], [-38.88,10.18,7.17], [0.95,-0.17,5.39], [-6.99,1.79,-4.68], [5.82,22.47,-0.30], [-3.06,-7.50,-0.20]])
+                ]),
+        }),
     }
 
     @staticmethod
@@ -76,8 +97,9 @@ with variable numbers of elements in major, minor, shell and axial directions.
     def getParameterSetNames():
         return [
             'Default',
+            'Left acromial part of deltoid 1',
             'Brachioradialis 1',
-            'Biceps femoris 1',
+            'Biceps femoris 1'            
         ]
 
     @classmethod
@@ -89,6 +111,8 @@ with variable numbers of elements in major, minor, shell and axial directions.
             centralPathOption = cls.centralPathDefaultScaffoldPackages['Brachioradialis 1']
         elif 'Biceps femoris 1' in parameterSetName:
             centralPathOption = cls.centralPathDefaultScaffoldPackages['Biceps femoris 1']
+        elif 'Left acromial part of deltoid 1' in parameterSetName:
+            centralPathOption = cls.centralPathDefaultScaffoldPackages['Left acromial part of deltoid 1']
 
         options = {
             'Base parameter set': parameterSetName,
@@ -222,6 +246,40 @@ with variable numbers of elements in major, minor, shell and axial directions.
         cylinder1 = CylinderMesh(fm, coordinates, elementsCountAlong, base,
                                  cylinderShape=cylinderShape,
                                  cylinderCentralPath=cylinderCentralPath, useCrossDerivatives=False)
+
+        isLeftAcromialDeltoid = 'Left acromial part of deltoid' in parameterSetName
+        if isLeftAcromialDeltoid:
+            acromialDeltoidMarkers = {"anterior end of acromial origin": [154.572, -86.0913, 1344.51],
+                                      "posterior end of acromial origin": [166.222, -41.1608, 1343.92],
+                                      "midpoint of deltoid tuberosity": [203.274, -74.6883, 1208.35]}
+            acromialGroup = AnnotationGroup(region, get_muscle_term("acromial part (TA98)"))
+            deltoidGroup = AnnotationGroup(region, get_muscle_term("deltoid"))
+            acromialMeshGroup = acromialGroup.getMeshGroup(mesh)
+            deltoidMeshGroup = deltoidGroup.getMeshGroup(mesh)
+            meshGroups = [acromialMeshGroup, deltoidMeshGroup]
+            annotationGroups += [acromialGroup, deltoidGroup]
+
+        markerName = findOrCreateFieldStoredString(fm, name="marker_name")
+        markerLocation = findOrCreateFieldStoredMeshLocation(fm, mesh, name="marker_location")
+
+        nodes = fm.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        markerTemplateInternal = nodes.createNodetemplate()
+        markerTemplateInternal.defineField(markerName)
+        markerTemplateInternal.defineField(markerLocation)
+
+        nodeIdentifier = cylinder1._endNodeIdentifier
+        elementIdentifier = cylinder1._endElementIdentifier
+        if isLeftAcromialDeltoid:
+            for termName, muscleCoordinatesValues in acromialDeltoidMarkers.items():
+                annotationGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_muscle_term(termName),
+                                                                     isMarker=True)
+                annotationGroup.createMarkerNode(nodeIdentifier, coordinates, muscleCoordinatesValues)
+                nodeIdentifier += 1
+
+            for elementIdentifier in range(1, elementIdentifier + 1):
+                element = mesh.findElementByIdentifier(elementIdentifier)
+                for i in range(len(meshGroups)):
+                    meshGroups[i].addElement(element)
 
         return annotationGroups, None
 
