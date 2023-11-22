@@ -2,15 +2,14 @@
 Generates a 2D contours based outer surface of left vagal trunk from the Japanese dataset
 """
 
-import os
 import re
 
-from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
-from cmlibs.zinc.element import Element, Elementbasis
+from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
-from cmlibs.utils.zinc.finiteelement import get_element_node_identifiers
+from scaffoldmaker.annotation.annotationgroup import findOrCreateAnnotationGroupForTerm
+from scaffoldmaker.annotation.vagus_terms import get_vagus_term
+from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 
 
 class MeshType_3d_vaguscontours1(Scaffold_base):
@@ -61,44 +60,72 @@ class MeshType_3d_vaguscontours1(Scaffold_base):
         :param options: Dict containing options. See getDefaultOptions().
         :return: annotationGroups
         """
-        inputFile = 'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\top_1.json'
+        inputFiles = ['C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c1_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c2_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c3_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c4_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c5_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c6_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c7_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c8_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c9_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c10_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c11_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c12_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c13_1.json',
+                      'C:\\Users\\mlin865\\Vagus\\Japanese dataset_exf\\test_dump\\c14_1.json']
 
-        # Extract values from webGL file
-        copyValue = False
-        allValues = []
+        allSectionContours = []
+        for i in range(len(inputFiles)):
 
-        for index, line in enumerate(open(inputFile)):
-            if re.match('\t],', line.split(' ')[0]):
-                copyValue = False
-                break
+            # Extract values from webGL file
+            inputFile = inputFiles[i]
 
-            if copyValue == True:
-                tmp = line.split('\t')
-                values = tmp[2].split(',')
-                for t in range(len(values) - 1):
-                    value = float(values[t])
-                    allValues.append(value)
+            copyValue = False
+            allValues = []
 
-            if re.match('\t\"vertices\"', line.split(' ')[0]):
-                copyValue = True
+            for index, line in enumerate(open(inputFile)):
+                if re.match('\t],', line.split(' ')[0]):
+                    copyValue = False
+                    break
 
-        # Make coordinates
-        allCoordinates = []
-        idx = 0
-        while idx < len(allValues) - 3:
-            coord = [allValues[idx], allValues[idx + 1], allValues[idx + 2]]
-            idx += 3
-            allCoordinates.append(coord)
+                if copyValue == True:
+                    tmp = line.split('\t')
+                    values = tmp[2].split(',')
+                    for t in range(len(values) - 1):
+                        value = float(values[t])
+                        allValues.append(value)
 
-        print('Number of coordinates', len(allCoordinates))
+                if re.match('\t\"vertices\"', line.split(' ')[0]):
+                    copyValue = True
 
-        # remove duplicates
-        cleanList = []
-        for i in allCoordinates:
-            if i not in cleanList:
-                cleanList.append(i)
+            # Make coordinates
+            allCoordinates = []
+            idx = 0
+            zMin = allValues[2]
+            while idx < len(allValues) - 3:
+                coord = [allValues[idx], allValues[idx + 1], allValues[idx + 2]]
+                idx += 3
+                if coord[2] < zMin:
+                    zMin = coord[2]
+                allCoordinates.append(coord)
 
-        print('len of cleanList', len(cleanList))
+            # remove duplicates
+            cleanList = []
+            for j in allCoordinates:
+                if j not in cleanList:
+                    cleanList.append(j)
+
+            if i < len(inputFiles) - 1:
+                # remove z min
+                cleanList2 = []
+                for j in cleanList:
+                    if abs(j[2] - zMin) > 1e-2:
+                        cleanList2.append(j)
+            else:
+                cleanList2 = cleanList
+
+            allSectionContours.append(cleanList2)
 
         # zComp = allCoordinates[0][2]
         # allContours = []
@@ -145,12 +172,13 @@ class MeshType_3d_vaguscontours1(Scaffold_base):
         nodetemplate.setValueNumberOfVersions(coordinates, -1, Node.VALUE_LABEL_D_DS1, 1)
 
         nodeIdentifier = 1
-        for i in range(len(cleanList)):
-            node = nodes.createNode(nodeIdentifier, nodetemplate)
-            cache.setNode(node)
-            coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, cleanList[i])
-            coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS1, 1, [0.0, 0.0, 0.0])
-            nodeIdentifier += 1
+        for s in range(len(allSectionContours)):
+            for i in range(len(allSectionContours[s])):
+                node = nodes.createNode(nodeIdentifier, nodetemplate)
+                cache.setNode(node)
+                coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, allSectionContours[s][i])
+                coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS1, 1, [0.0, 0.0, 0.0])
+                nodeIdentifier += 1
 
         # # Create elements
         # mesh = fm.findMeshByDimension(1)
@@ -175,6 +203,7 @@ class MeshType_3d_vaguscontours1(Scaffold_base):
         #         coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, allContours[c][n])
         #         # coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_D_DS1, 1, dx_ds1)
         #         nodeIdentifier += 1
+
 
         fm.endChange()
 
