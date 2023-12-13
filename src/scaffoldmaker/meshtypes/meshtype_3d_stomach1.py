@@ -1060,6 +1060,17 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_greaterCurvature_CMLM = fm.createFieldAnd(is_greaterCurvature, is_CMLMInterface)
             is_lesserCurvature_CMLM = fm.createFieldAnd(is_lesserCurvature, is_CMLMInterface)
 
+            outerLongitudinalMuscleGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term("Outermost longitudinal muscle of stomach"))
+            is_outerLongitudinal = fm.createFieldAnd(is_LM, is_exterior_face_outer)
+            outerLongitudinalMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_outerLongitudinal)
+
+            innerCircularMuscleGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                          get_stomach_term("Innermost circular muscle of stomach"))
+            is_innerCircular = fm.createFieldAnd(is_CM, is_exterior_face_inner)
+            innerCircularMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_innerCircular)
+
             dorsalStomach_CMLMGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                 "circular-longitudinal muscle interface of dorsal stomach"))
             ventralStomach_CMLMGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
