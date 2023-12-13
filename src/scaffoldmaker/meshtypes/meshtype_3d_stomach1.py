@@ -1065,11 +1065,34 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_outerLongitudinal = fm.createFieldAnd(is_LM, is_exterior_face_outer)
             outerLongitudinalMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_outerLongitudinal)
 
+            submucosaGroup = \
+                getAnnotationGroupForTerm(annotationGroups, get_stomach_term("submucosa of stomach"))
+            is_submucosa = submucosaGroup.getGroup()
             innerCircularMuscleGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region,
                                           get_stomach_term("Innermost circular muscle of stomach"))
-            is_innerCircular = fm.createFieldAnd(is_CM, is_exterior_face_inner)
+            is_innerCircular = fm.createFieldAnd(is_CM, is_submucosa)
             innerCircularMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_innerCircular)
+
+            ventral_outerLongitudinalMuscleGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                                   get_stomach_term("Outermost longitudinal muscle of ventral stomach"))
+            is_ventral_outerLongitudinal = fm.createFieldAnd(is_ventral, is_outerLongitudinal)
+            ventral_outerLongitudinalMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_ventral_outerLongitudinal)
+
+            ventral_innerCircularMuscleGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                                   get_stomach_term("Innermost circular muscle of ventral stomach"))
+            is_ventral_innerCircular = fm.createFieldAnd(is_ventral, is_innerCircular)
+            ventral_innerCircularMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_ventral_innerCircular)
+
+            is_curvatures_outerLongitudinal = fm.createFieldAnd(is_curvatures, is_outerLongitudinal)
+            is_greaterCurvature_outerLongitudinal = fm.createFieldAnd(is_greaterCurvature, is_outerLongitudinal)
+            is_lesserCurvature_outerLongitudinal = fm.createFieldAnd(is_lesserCurvature, is_outerLongitudinal)
+
+            is_curvatures_innerCircular = fm.createFieldAnd(is_curvatures, is_innerCircular)
+            is_greaterCurvature_innerCircular = fm.createFieldAnd(is_greaterCurvature, is_innerCircular)
+            is_lesserCurvature_innerCircular = fm.createFieldAnd(is_lesserCurvature, is_innerCircular)
 
             dorsalStomach_CMLMGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                 "circular-longitudinal muscle interface of dorsal stomach"))
@@ -1112,10 +1135,68 @@ class MeshType_3d_stomach1(Scaffold_base):
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                     "circular-longitudinal muscle interface of pyloric canal along the lesser curvature"))
 
+            # Outermost
+            bodyCurvaturesOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of body of stomach along the greater curvature"))
+            esoCurvaturesOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of esophagus on cut margin"))
+            fundusCurvaturesOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of fundus of stomach along the greater curvature"))
+            antrumGreaterCurvatureOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of pyloric antrum along the greater curvature"))
+            antrumLesserCurvatureOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of pyloric antrum along the lesser curvature"))
+            pylorusGreaterCurvatureOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of pyloric canal along the greater curvature"))
+            pylorusLesserCurvatureOuterLongitudinalGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Outermost longitudinal muscle of pyloric canal along the lesser curvature"))
+
+            # Innermost
+            bodyCurvaturesInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of body of stomach along the greater curvature"))
+            esoCurvaturesInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of esophagus on cut margin"))
+            fundusCurvaturesInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of fundus of stomach along the greater curvature"))
+            antrumGreaterCurvatureInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of pyloric antrum along the greater curvature"))
+            antrumLesserCurvatureInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of pyloric antrum along the lesser curvature"))
+            pylorusGreaterCurvatureInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of pyloric canal along the greater curvature"))
+            pylorusLesserCurvatureInnerCircularGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost circular muscle of pyloric canal along the lesser curvature"))
+
             sectionCurvaturesCMLMGroups = [None, bodyCurvaturesCMLMGroup, None, duodenumCurvaturesCMLMGroup,
                                            esoCurvaturesCMLMGroup, fundusCurvaturesCMLMGroup,
                                            antrumGreaterCurvatureCMLMGroup, pylorusGreaterCurvatureCMLMGroup,
                                            antrumLesserCurvatureCMLMGroup, pylorusLesserCurvatureCMLMGroup]
+
+            sectionCurvaturesOuterLongitudinalGroups = \
+                [None, bodyCurvaturesOuterLongitudinalGroup, None, None, esoCurvaturesOuterLongitudinalGroup,
+                 fundusCurvaturesOuterLongitudinalGroup, antrumGreaterCurvatureOuterLongitudinalGroup,
+                 pylorusGreaterCurvatureOuterLongitudinalGroup, antrumLesserCurvatureOuterLongitudinalGroup,
+                 pylorusLesserCurvatureOuterLongitudinalGroup]
+
+            sectionCurvaturesInnerCircularGroups = \
+                [None, bodyCurvaturesInnerCircularGroup, None, None, esoCurvaturesInnerCircularGroup,
+                 fundusCurvaturesInnerCircularGroup, antrumGreaterCurvatureInnerCircularGroup,
+                 pylorusGreaterCurvatureInnerCircularGroup, antrumLesserCurvatureInnerCircularGroup,
+                 pylorusLesserCurvatureInnerCircularGroup]
 
         sectionGroups = [stomachGroup, bodyGroup, cardiaGroup, duodenumGroup, esoGroup, fundusGroup, antrumGroup,
                          pylorusGroup]
@@ -1137,16 +1218,38 @@ class MeshType_3d_stomach1(Scaffold_base):
                 if sectionGroups[i] is antrumGroup or sectionGroups[i] is pylorusGroup:
                     is_sectionGreaterCurvatureCMLM = fm.createFieldAnd(is_section, is_greaterCurvature_CMLM)
                     is_sectionLesserCurvatureCMLM = fm.createFieldAnd(is_section, is_lesserCurvature_CMLM)
+                    is_sectionGreaterCurvatureOuterLongitudinal = fm.createFieldAnd(is_section, is_greaterCurvature_outerLongitudinal)
+                    is_sectionLesserCurvatureOuterLongitudinal = fm.createFieldAnd(is_section, is_lesserCurvature_outerLongitudinal)
+                    is_sectionGreaterCurvatureInnerCircular = fm.createFieldAnd(is_section,
+                                                                                    is_greaterCurvature_innerCircular)
+                    is_sectionLesserCurvatureInnerCircular = fm.createFieldAnd(is_section,
+                                                                                   is_lesserCurvature_innerCircular)
                     if sectionCurvaturesCMLMGroups[i]:
                         sectionCurvaturesCMLMGroups[i].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionGreaterCurvatureCMLM)
                         sectionCurvaturesCMLMGroups[i+2].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionLesserCurvatureCMLM)
+                        sectionCurvaturesOuterLongitudinalGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionGreaterCurvatureOuterLongitudinal)
+                        sectionCurvaturesOuterLongitudinalGroups[i + 2].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionLesserCurvatureOuterLongitudinal)
+                        sectionCurvaturesInnerCircularGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionGreaterCurvatureInnerCircular)
+                        sectionCurvaturesInnerCircularGroups[i + 2].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionLesserCurvatureInnerCircular)
                 else:
                     is_sectionCurvaturesCMLM = fm.createFieldAnd(is_section, is_curvatures_CMLM)
+                    is_sectionCurvaturesOuterLongitudinal = fm.createFieldAnd(is_section, is_curvatures_outerLongitudinal)
+                    is_sectionCurvaturesInnerCircular = fm.createFieldAnd(is_section,
+                                                                              is_curvatures_innerCircular)
                     if sectionCurvaturesCMLMGroups[i]:
                         sectionCurvaturesCMLMGroups[i].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionCurvaturesCMLM)
+                    if sectionCurvaturesOuterLongitudinalGroups[i]:
+                        sectionCurvaturesOuterLongitudinalGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionCurvaturesOuterLongitudinal)
+                        sectionCurvaturesInnerCircularGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionCurvaturesInnerCircular)
 
         if limitingRidge:
             limitingRidgeGroup = \
