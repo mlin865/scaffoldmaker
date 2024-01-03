@@ -1019,6 +1019,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                                                                          get_stomach_term("gastroduodenal junction"))
 
         fm = region.getFieldmodule()
+        mesh3d = fm.findMeshByDimension(3)
         mesh2d = fm.findMeshByDimension(2)
         mesh1d = fm.findMeshByDimension(1)
 
@@ -1059,6 +1060,13 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_curvatures_CMLM = fm.createFieldAnd(is_curvatures, is_CMLMInterface)
             is_greaterCurvature_CMLM = fm.createFieldAnd(is_greaterCurvature, is_CMLMInterface)
             is_lesserCurvature_CMLM = fm.createFieldAnd(is_lesserCurvature, is_CMLMInterface)
+
+            ventral_circularLongitudinalMuscleGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                                   get_stomach_term("circular and longitudinal muscles of ventral stomach"))
+            is_circularLongitudinal = fm.createFieldOr(is_CM, is_LM)
+            is_ventralCircularLongitudinal = fm.createFieldAnd(is_circularLongitudinal, is_ventral)
+            ventral_circularLongitudinalMuscleGroup.getMeshGroup(mesh3d).addElementsConditional(is_ventralCircularLongitudinal)
 
             outerLongitudinalMuscleGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term("Outermost longitudinal muscle of stomach"))
@@ -1147,16 +1155,16 @@ class MeshType_3d_stomach1(Scaffold_base):
                     "Outermost longitudinal muscle of fundus of stomach along the greater curvature"))
             antrumGreaterCurvatureOuterLongitudinalGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Outermost longitudinal muscle of pyloric antrum along the greater curvature"))
+                    "Outermost longitudinal muscle of pyloric antrum of stomach along the greater curvature"))
             antrumLesserCurvatureOuterLongitudinalGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Outermost longitudinal muscle of pyloric antrum along the lesser curvature"))
+                    "Outermost longitudinal muscle of pyloric antrum of stomach along the lesser curvature"))
             pylorusGreaterCurvatureOuterLongitudinalGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Outermost longitudinal muscle of pyloric canal along the greater curvature"))
+                    "Outermost longitudinal muscle of pyloric canal of stomach along the greater curvature"))
             pylorusLesserCurvatureOuterLongitudinalGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Outermost longitudinal muscle of pyloric canal along the lesser curvature"))
+                    "Outermost longitudinal muscle of pyloric canal of stomach along the lesser curvature"))
 
             # Innermost
             bodyCurvaturesInnerCircularGroup = \
@@ -1170,16 +1178,16 @@ class MeshType_3d_stomach1(Scaffold_base):
                     "Innermost circular muscle of fundus of stomach along the greater curvature"))
             antrumGreaterCurvatureInnerCircularGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Innermost circular muscle of pyloric antrum along the greater curvature"))
+                    "Innermost circular muscle of pyloric antrum of stomach along the greater curvature"))
             antrumLesserCurvatureInnerCircularGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Innermost circular muscle of pyloric antrum along the lesser curvature"))
+                    "Innermost circular muscle of pyloric antrum of stomach along the lesser curvature"))
             pylorusGreaterCurvatureInnerCircularGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Innermost circular muscle of pyloric canal along the greater curvature"))
+                    "Innermost circular muscle of pyloric canal of stomach along the greater curvature"))
             pylorusLesserCurvatureInnerCircularGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
-                    "Innermost circular muscle of pyloric canal along the lesser curvature"))
+                    "Innermost circular muscle of pyloric canal of stomach along the lesser curvature"))
 
             sectionCurvaturesCMLMGroups = [None, bodyCurvaturesCMLMGroup, None, duodenumCurvaturesCMLMGroup,
                                            esoCurvaturesCMLMGroup, fundusCurvaturesCMLMGroup,
