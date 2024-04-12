@@ -230,6 +230,107 @@ def getDefaultNetworkLayoutScaffoldPackage(cls, parameterSetName):
                 },
             ]
         })
+    elif "Rat 1" in parameterSetName:
+        return ScaffoldPackage(MeshType_1d_network_layout1, {
+            'scaffoldSettings': {
+                "Structure": "1-2-3-4-5,6-7-8-9-10, 5-11.1, 10-11.2, 11.3-12, 12-13, 13-14-15-16",
+                "Define inner coordinates": True,
+            },
+            'meshEdits': exnode_string_from_nodeset_field_parameters(
+                ["coordinates", "inner coordinates"],
+                [Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2, Node.VALUE_LABEL_D2_DS1DS2, Node.VALUE_LABEL_D_DS3, Node.VALUE_LABEL_D2_DS1DS3], [[
+                    (1, [[-25.00,71.53,0.00], [-0.06,-11.85,0.00], [2.27,-0.01,-0.09], [0.16,0.10,0.06], [0.09,-0.00,2.33], [-0.08,0.02,-0.75]]),
+                    (2, [[-23.55,59.29,0.00], [2.96,-12.51,0.00], [2.27,0.54,-0.04], [-0.14,0.46,0.04], [0.03,0.01,1.91], [-0.04,-0.00,-0.09]]),
+                    (3, [[-19.03,46.76,0.00], [6.24,-11.74,0.00], [1.96,1.04,-0.01], [-0.39,0.78,-0.00], [0.01,0.00,2.16], [0.01,-0.00,0.20]]),
+                    (4, [[-11.24,36.09,0.00], [7.34,-8.06,0.09], [1.77,1.61,-0.05], [-0.23,0.40,-0.02], [0.02,0.05,2.32], [-0.06,0.10,0.08]]),
+                    (5, [[-4.85,30.44,0.14], [5.80,-3.93,-0.03], [1.34,1.98,-0.05], [-0.46,0.25,0.03], [0.04,0.03,2.32], [0.14,-0.10,0.06]]),
+                    (6, [[25.00,71.53,0.00], [0.06,-11.85,0.00], [2.27,0.01,-0.09], [0.16,-0.10,0.06], [0.09,0.00,2.33], [-0.08,-0.02,-0.75]]),
+                    (7, [[23.55,59.29,0.00], [-2.96,-12.51,0.00], [2.27,-0.54,-0.04], [-0.14,-0.46,0.04], [0.03,-0.01,1.91], [-0.04,0.00,-0.09]]),
+                    (8, [[19.03,46.76,0.00], [-6.24,-11.74,0.00], [1.96,-1.04,-0.01], [-0.39,-0.78,-0.01], [0.01,-0.00,2.16], [0.00,-0.02,0.20]]),
+                    (9, [[11.24,36.09,0.00], [-7.34,-8.06,0.09], [1.77,-1.61,-0.05], [-0.23,-0.40,-0.02], [0.05,-0.02,2.32], [0.08,0.06,0.08]]),
+                    (10, [[4.85,30.44,0.14], [-5.80,-3.93,-0.03], [1.34,-1.98,-0.05], [-0.45,-0.25,0.02], [0.02,-0.05,2.32], [-0.18,-0.07,0.06]]),
+                    (11, [[0.00,28.00,0.00], [[3.79,-0.93,-0.24],[-3.79,-0.93,-0.24],[0.00,-4.00,-0.00]], [[0.55,2.26,0.01],[0.55,-2.26,-0.01],[0.00,0.00,2.60]], [[-0.88,0.13,0.08],[-0.89,-0.14,0.08],[0.00,0.00,0.00]], [[0.14,-0.05,2.44],[-0.14,-0.05,2.44],[-4.65,-0.00,0.00]], [[0.06,-0.07,0.17],[-0.08,0.08,0.17],[0.00,0.00,-0.00]]]),
+                    (12, [[0.00,24.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,2.60], [0.00,0.00,-0.00], [-4.65,0.00,0.00], [0.00,0.00,0.00]]),
+                    (13, [[0.00,20.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,2.60], [0.00,0.00,-0.00], [-4.65,0.00,0.00], [0.00,0.00,0.00]]),
+                    (14, [[0.00,12.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,2.60], [0.00,0.00,-0.00], [-4.65,0.00,0.00], [0.00,0.00,0.00]]),
+                    (15, [[0.00,6.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,2.60], [0.00,0.00,-0.00], [-4.65,0.00,0.00], [0.00,0.00,0.00]]),
+                    (16, [[0.00,0.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,2.60], [-0.00,-0.00,-0.00], [-4.65,0.00,0.00], [0.00,-0.00,-0.00]])], [
+                    (1, [[-25.00,71.53,0.00], [-0.06,-11.85,0.00], [1.13,-0.01,-0.05], [0.08,0.05,0.03], [0.05,-0.00,1.16], [-0.04,0.01,-0.38]]),
+                    (2, [[-23.55,59.29,0.00], [2.96,-12.51,0.00], [1.14,0.27,-0.02], [-0.07,0.23,0.02], [0.02,0.00,0.95], [-0.02,-0.00,-0.04]]),
+                    (3, [[-19.03,46.76,0.00], [6.24,-11.74,0.00], [0.98,0.52,-0.01], [-0.19,0.39,-0.00], [0.00,0.00,1.08], [0.00,-0.00,0.10]]),
+                    (4, [[-11.24,36.09,0.00], [7.34,-8.06,0.09], [0.89,0.81,-0.02], [-0.12,0.20,-0.01], [0.01,0.02,1.16], [-0.03,0.05,0.04]]),
+                    (5, [[-4.85,30.44,0.14], [5.80,-3.93,-0.03], [0.67,0.99,-0.03], [-0.23,0.13,0.02], [0.02,0.02,1.16], [0.07,-0.05,0.03]]),
+                    (6, [[25.00,71.53,0.00], [0.06,-11.85,0.00], [1.13,0.01,-0.05], [0.08,-0.05,0.03], [0.05,0.00,1.16], [-0.04,-0.01,-0.38]]),
+                    (7, [[23.55,59.29,0.00], [-2.96,-12.51,0.00], [1.14,-0.27,-0.02], [-0.07,-0.23,0.02], [0.02,-0.00,0.95], [-0.02,0.00,-0.04]]),
+                    (8, [[19.03,46.76,0.00], [-6.24,-11.74,0.00], [0.98,-0.52,-0.01], [-0.19,-0.39,-0.00], [0.00,-0.00,1.08], [0.00,-0.01,0.10]]),
+                    (9, [[11.24,36.09,0.00], [-7.34,-8.06,0.09], [0.89,-0.81,-0.03], [-0.12,-0.20,-0.01], [0.02,-0.01,1.16], [0.04,0.03,0.04]]),
+                    (10, [[4.85,30.44,0.14], [-5.80,-3.93,-0.03], [0.67,-0.99,-0.02], [-0.23,-0.12,0.01], [0.01,-0.02,1.16], [-0.09,-0.04,0.03]]),
+                    (11, [[0.00,28.00,0.00], [[3.79,-0.93,-0.24],[-3.79,-0.93,-0.24],[0.00,-4.00,-0.00]], [[0.28,1.13,0.01],[0.28,-1.13,-0.01],[0.00,0.00,1.30]], [[-0.44,0.07,0.04],[-0.45,-0.07,0.04],[0.00,0.00,0.00]], [[0.07,-0.02,1.22],[-0.07,-0.02,1.22],[-1.30,-0.00,0.00]], [[0.03,-0.03,0.09],[-0.04,0.04,0.09],[0.00,0.00,-0.00]]]),
+                    (12, [[0.00,24.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,1.30], [0.00,0.00,-0.00], [-1.30,0.00,0.00], [0.00,0.00,0.00]]),
+                    (13, [[0.00,20.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,1.30], [0.00,0.00,-0.00], [-1.30,0.00,0.00], [0.00,0.00,0.00]]),
+                    (14, [[0.00,12.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,1.30], [0.00,0.00,-0.00], [-1.30,0.00,0.00], [0.00,0.00,0.00]]),
+                    (15, [[0.00,6.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,1.30], [0.00,0.00,-0.00], [-1.30,0.00,0.00], [0.00,0.00,0.00]]),
+                    (16, [[0.00,0.00,-0.00], [0.00,-4.00,0.00], [0.00,0.00,1.30], [-0.00,-0.00,-0.00], [-1.30,0.00,0.00], [0.00,-0.00,-0.00]])]]),
+
+            'userAnnotationGroups': [
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '1-15',
+                    'name': get_uterus_term('uterus')[0],
+                    'ontId': get_uterus_term('uterus')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '1-4',
+                    'name': get_uterus_term('left uterine horn')[0],
+                    'ontId': get_uterus_term('left uterine horn')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '5-8',
+                    'name': get_uterus_term('right uterine horn')[0],
+                    'ontId': get_uterus_term('right uterine horn')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '9-11',
+                    'name': get_uterus_term('body of uterus')[0],
+                    'ontId': get_uterus_term('body of uterus')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '12',
+                    'name': get_uterus_term('uterine cervix')[0],
+                    'ontId': get_uterus_term('uterine cervix')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '13-15',
+                    'name': get_uterus_term('vagina')[0],
+                    'ontId': get_uterus_term('vagina')[1]
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '1-10',
+                    'name': 'pre-bifurcation segments',
+                    'ontId': 'None'
+                },
+                {
+                    '_AnnotationGroup': True,
+                    'dimension': 1,
+                    'identifierRanges': '11-15',
+                    'name': 'post-bifurcation segments',
+                    'ontId': 'None'
+                }
+            ]
+        })
 
 
 class MeshType_3d_uterus2(Scaffold_base):
@@ -248,7 +349,8 @@ class MeshType_3d_uterus2(Scaffold_base):
         return [
             'Default',
             'Human 1',
-            'Mouse 1']
+            'Mouse 1',
+            'Rat 1']
 
     @classmethod
     def getDefaultOptions(cls, parameterSetName='Default'):
@@ -259,9 +361,10 @@ class MeshType_3d_uterus2(Scaffold_base):
             'Number of elements around': 10,
             'Number of elements around horns': 8,
             'Number of elements through wall': 1,
-            "Annotation elements counts around": [0],
+            'Annotation elements counts around': [0],
             'Target element density along longest segment': 5.0,
-            "Serendipity": True,
+            'Double uterus': False,
+            'Serendipity': True,
             'Use linear through wall': True,
             'Use cross derivatives': False,
             'Refine': False,
@@ -273,6 +376,11 @@ class MeshType_3d_uterus2(Scaffold_base):
             options['Number of elements around'] = 8
             options['Target element density along longest segment'] = 10.0
 
+        if 'Rat' in parameterSetName:
+            options['Number of elements around'] = 8
+            options['Target element density along longest segment'] = 10.0
+            options['Double uterus'] = True
+
         return options
 
     @staticmethod
@@ -283,7 +391,8 @@ class MeshType_3d_uterus2(Scaffold_base):
             'Number of elements around horns',
             'Number of elements through wall',
             'Target element density along longest segment',
-            "Serendipity",
+            'Double uterus',
+            'Serendipity',
             'Refine',
             'Refine number of elements along',
             'Refine number of elements around',
@@ -367,9 +476,10 @@ class MeshType_3d_uterus2(Scaffold_base):
         annotationElementsCountsAround = [0, 0, elementsCountAroundPostBifurcation, elementsCountAroundPreBifurcation]
         targetElementDensityAlongLongestSegment = options['Target element density along longest segment']
         useCrossDerivatives = options['Use cross derivatives']
-        serendipity = options["Serendipity"]
+        serendipity = options['Serendipity']
         showIntersectionCurves = False
         showTrimSurfaces = False # options["Show trim surfaces"]
+        doubleUterus = options['Double uterus']
 
         # Geometric coordinates
         layoutRegion = region.createRegion()
