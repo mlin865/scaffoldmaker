@@ -18,7 +18,8 @@ from scaffoldmaker.meshtypes.meshtype_1d_network_layout1 import MeshType_1d_netw
 from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 from scaffoldmaker.scaffoldpackage import ScaffoldPackage
 from scaffoldmaker.utils.bifurcation import SegmentTubeData, \
-    TubeBifurcationData, generateTube, generateTubeBifurcation, generateCurveMesh, blendNetworkNodeCoordinates
+    TubeBifurcationData, generateTube, generateTubeBifurcation, generateCurveMesh, blendNetworkNodeCoordinates, \
+    generateDoubleTube, generateDoubleTubeBifurcation
 from scaffoldmaker.utils.networkmesh import getPathRawTubeCoordinates, resampleTubeCoordinates
 from scaffoldmaker.utils.zinc_utils import exnode_string_from_nodeset_field_parameters
 from scaffoldmaker.utils.zinc_utils import get_nodeset_path_ordered_field_parameters
@@ -518,6 +519,12 @@ class MeshType_3d_uterus2(Scaffold_base):
                 annotationGroups.append(annotationGroup)
                 layoutAnnotationMeshGroupMap.append(
                     (layoutAnnotationGroup.getMeshGroup(layoutMesh), annotationGroup.getMeshGroup(mesh)))
+                if layoutAnnotationGroup.getTerm()[0] == "body of uterus":
+                    bodyLayoutGroup = layoutAnnotationGroup.getMeshGroup(layoutMesh)
+                if layoutAnnotationGroup.getTerm()[0] == "uterine cervix":
+                    cervixLayoutGroup = layoutAnnotationGroup.getMeshGroup(layoutMesh)
+                if layoutAnnotationGroup.getTerm()[0] == "vagina":
+                    vaginaLayoutGroup = layoutAnnotationGroup.getMeshGroup(layoutMesh)
 
         valueLabels = [
             Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1,
@@ -530,11 +537,19 @@ class MeshType_3d_uterus2(Scaffold_base):
         bodyMeshGroup = bodyGroup.getMeshGroup(mesh)
         cervixGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_uterus_term("uterine cervix"))
         cervixMeshGroup = cervixGroup.getMeshGroup(mesh)
+        vaginaGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_uterus_term("vagina"))
+        vaginaMeshGroup = vaginaGroup.getMeshGroup(mesh)
         uterusGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_uterus_term("uterus"))
 
         # map from NetworkSegment to SegmentTubeData
         outerSegmentTubeData = {}
         innerSegmentTubeData = {} if layoutInnerCoordinates else None
+        innerSegmentTube2Data = {} if layoutInnerCoordinates else None
+        doubleUterusSegments = []
+
+        if doubleUterus:
+            innerSegmentDoubleTubeData = {} if layoutInnerCoordinates else None
+
         longestSegmentLength = 0.0
         for networkSegment in networkSegments:
             pathParameters = get_nodeset_path_ordered_field_parameters(
@@ -559,14 +574,31 @@ class MeshType_3d_uterus2(Scaffold_base):
             if segmentLength > longestSegmentLength:
                 longestSegmentLength = segmentLength
 
+            if doubleUterus and (networkSegment.hasLayoutElementsInMeshGroup(bodyLayoutGroup) or
+                                 networkSegment.hasLayoutElementsInMeshGroup(cervixLayoutGroup) or
+                                 networkSegment.hasLayoutElementsInMeshGroup(vaginaLayoutGroup)):
+                doubleUterusSegments.append(networkSegment)
+
             if layoutInnerCoordinates:
                 innerPathParameters = get_nodeset_path_ordered_field_parameters(
                     layoutNodes, layoutInnerCoordinates, valueLabels,
                     networkSegment.getNodeIdentifiers(), networkSegment.getNodeVersions())
                 px, pd1, pd2, pd12 = getPathRawTubeCoordinates(innerPathParameters, elementsCountAround)
-                innerSegmentTubeData[networkSegment] = innerTubeData = SegmentTubeData(innerPathParameters,
-                                                                                       elementsCountAround)
-                innerTubeData.setRawTubeCoordinates((px, pd1, pd2, pd12))
+
+                if networkSegment in doubleUterusSegments:
+                    for i in range(2):
+                        for n2 in range(len(px)):
+                            # offset = [(-1.0 if i else 0.5) * c for c in pathParameters[2][n2]]
+                            offset = [0.0 * c for c in pathParameters[2][n2]]
+                            for n1 in range(len(px[n2])):
+                                px[n2][n1] = [px[n2][n1][c] + offset[c] for c in range(3)]
+                        (innerSegmentTube2Data if i else innerSegmentTubeData)[networkSegment] = innerTubeData = \
+                            SegmentTubeData(innerPathParameters, elementsCountAround)
+                        innerTubeData.setRawTubeCoordinates((px, pd1, pd2, pd12))
+                else:
+                    innerSegmentTubeData[networkSegment] = innerTubeData = SegmentTubeData(innerPathParameters,
+                                                                                           elementsCountAround)
+                    innerTubeData.setRawTubeCoordinates((px, pd1, pd2, pd12))
 
             for layoutAnnotationMeshGroup, annotationMeshGroup in layoutAnnotationMeshGroupMap:
                 if networkSegment.hasLayoutElementsInMeshGroup(layoutAnnotationMeshGroup):
@@ -685,34 +717,54 @@ class MeshType_3d_uterus2(Scaffold_base):
                         loop = (len(startInSegments) == 1) and (startInSegments[0] is networkSegment) and \
                                (networkSegment.getNodeVersions()[0] == networkSegment.getNodeVersions()[-1])
                         innerTubeData = innerSegmentTubeData[networkSegment] if layoutInnerCoordinates else None
-                        innerTubeCoordinates = innerTubeData.getSampledTubeCoordinates() if layoutInnerCoordinates else None
-                        startNodeIds = outerTubeData.getStartNodeIds(startSkipCount)
-                        if (not startNodeIds) and (startSkipCount == 0) and (startInSegments or startOutSegments):
-                            # discover start nodes from single adjacent segment
-                            if startInSegments:
-                                startNodeIds = outerSegmentTubeData[startInSegments[0]].getEndNodeIds(0)
-                            else:
-                                startNodeIds = outerSegmentTubeData[startOutSegments[0]].getStartNodeIds(0)
-                            if startNodeIds:
-                                outerTubeData.setStartNodeIds(startNodeIds, startSkipCount)
-                        endNodeIds = outerTubeData.getEndNodeIds(endSkipCount)
-                        if (not endNodeIds) and (endSkipCount == 0) and (endOutSegments or endInSegments):
-                            # discover end nodes from single adjacent segment
-                            if endOutSegments:
-                                endNodeIds = outerSegmentTubeData[endOutSegments[0]].getStartNodeIds(0)
-                            elif endInSegments:
-                                endNodeIds = outerSegmentTubeData[endInSegments[0]].getEndNodeIds(0)
-                            if endNodeIds:
-                                outerTubeData.setEndNodeIds(endNodeIds, endSkipCount)
-                        nodeIdentifier, elementIdentifier, startNodeIds, endNodeIds = generateTube(
-                            outerTubeCoordinates, innerTubeCoordinates, elementsCountThroughWall,
-                            region, fieldcache, coordinates, nodeIdentifier, elementIdentifier,
-                            startSkipCount=startSkipCount, endSkipCount=endSkipCount,
-                            startNodeIds=startNodeIds, endNodeIds=endNodeIds,
-                            annotationMeshGroups=outerTubeData.getAnnotationMeshGroups(),
-                            loop=loop, serendipity=serendipity)
-                        outerTubeData.setStartNodeIds(startNodeIds, startSkipCount)
-                        outerTubeData.setEndNodeIds(endNodeIds, endSkipCount)
+
+                        # if doubleUterus and (bodyMeshGroup in outerTubeData.getAnnotationMeshGroups()):
+                        #     pass
+
+                        if doubleUterus and (cervixMeshGroup in outerTubeData.getAnnotationMeshGroups() or
+                                               vaginaMeshGroup in outerTubeData.getAnnotationMeshGroups()):
+                            pass
+                            # innerTubeCoordinates = innerTubeData.getSampledTubeCoordinates() if layoutInnerCoordinates else None
+                            # # nodeIdentifier, elementIdentifier, startNodeIds, endNodeIds = generateDoubleTube(
+                            # # print(startNodeIds, endNodeIds, startSkipCount, endSkipCount)
+                            # nodeIdentifier, elementIdentifier = generateDoubleTube(
+                            #     outerTubeCoordinates, innerTubeCoordinates, elementsCountThroughWall,
+                            #     region, fieldcache, coordinates, nodeIdentifier, elementIdentifier,
+                            #     startSkipCount=startSkipCount, endSkipCount=endSkipCount,
+                            #     startNodeIds=startNodeIds, endNodeIds=endNodeIds,
+                            #     annotationMeshGroups=outerTubeData.getAnnotationMeshGroups(),
+                            #     loop=loop, serendipity=serendipity)[0:2]
+                        else:
+                            # print(startSegmentNode.getNodeIdentifier(), endSegmentNode.getNodeIdentifier())
+                            innerTubeCoordinates = innerTubeData.getSampledTubeCoordinates() if layoutInnerCoordinates else None
+
+                            startNodeIds = outerTubeData.getStartNodeIds(startSkipCount)
+                            if (not startNodeIds) and (startSkipCount == 0) and (startInSegments or startOutSegments):
+                                # discover start nodes from single adjacent segment
+                                if startInSegments:
+                                    startNodeIds = outerSegmentTubeData[startInSegments[0]].getEndNodeIds(0)
+                                else:
+                                    startNodeIds = outerSegmentTubeData[startOutSegments[0]].getStartNodeIds(0)
+                                if startNodeIds:
+                                    outerTubeData.setStartNodeIds(startNodeIds, startSkipCount)
+                            endNodeIds = outerTubeData.getEndNodeIds(endSkipCount)
+                            if (not endNodeIds) and (endSkipCount == 0) and (endOutSegments or endInSegments):
+                                # discover end nodes from single adjacent segment
+                                if endOutSegments:
+                                    endNodeIds = outerSegmentTubeData[endOutSegments[0]].getStartNodeIds(0)
+                                elif endInSegments:
+                                    endNodeIds = outerSegmentTubeData[endInSegments[0]].getEndNodeIds(0)
+                                if endNodeIds:
+                                    outerTubeData.setEndNodeIds(endNodeIds, endSkipCount)
+                            nodeIdentifier, elementIdentifier, startNodeIds, endNodeIds = generateTube(
+                                outerTubeCoordinates, innerTubeCoordinates, elementsCountThroughWall,
+                                region, fieldcache, coordinates, nodeIdentifier, elementIdentifier,
+                                startSkipCount=startSkipCount, endSkipCount=endSkipCount,
+                                startNodeIds=startNodeIds, endNodeIds=endNodeIds,
+                                annotationMeshGroups=outerTubeData.getAnnotationMeshGroups(),
+                                loop=loop, serendipity=serendipity)
+                            outerTubeData.setStartNodeIds(startNodeIds, startSkipCount)
+                            outerTubeData.setEndNodeIds(endNodeIds, endSkipCount)
 
                         if (len(startInSegments) == 1) and (startSkipCount == 0):
                             # copy startNodeIds to end of last segment
@@ -770,11 +822,18 @@ class MeshType_3d_uterus2(Scaffold_base):
                                 innerTubeCoordinates = innerTubeBifurcationData.getConnectingTubeCoordinates()
                                 innerMidCoordinates = innerTubeBifurcationData.getMidCoordinates()
                             annotationMeshGroups = [outerTubeData[s].getAnnotationMeshGroups() for s in range(3)]
-                            nodeIdentifier, elementIdentifier = generateTubeBifurcation(
-                                outerTubeCoordinates, innerTubeCoordinates, inward, elementsCountThroughWall,
-                                outerMidCoordinates, innerMidCoordinates, crossIndexes,
-                                region, fieldcache, coordinates, nodeIdentifier, elementIdentifier, tubeNodeIds,
-                                annotationMeshGroups, serendipity=serendipity)
+                            if doubleUterus:
+                                nodeIdentifier, elementIdentifier = generateDoubleTubeBifurcation(
+                                    outerTubeCoordinates, innerTubeCoordinates, inward, elementsCountThroughWall,
+                                    outerMidCoordinates, innerMidCoordinates, crossIndexes,
+                                    region, fieldcache, coordinates, nodeIdentifier, elementIdentifier, tubeNodeIds,
+                                    annotationMeshGroups, serendipity=serendipity)
+                            else:
+                                nodeIdentifier, elementIdentifier = generateTubeBifurcation(
+                                    outerTubeCoordinates, innerTubeCoordinates, inward, elementsCountThroughWall,
+                                    outerMidCoordinates, innerMidCoordinates, crossIndexes,
+                                    region, fieldcache, coordinates, nodeIdentifier, elementIdentifier, tubeNodeIds,
+                                    annotationMeshGroups, serendipity=serendipity)
 
                             for s in range(3):
                                 if inward[s]:
