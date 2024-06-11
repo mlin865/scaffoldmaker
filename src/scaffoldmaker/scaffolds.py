@@ -25,6 +25,7 @@ from scaffoldmaker.meshtypes.meshtype_3d_colon1 import MeshType_3d_colon1
 from scaffoldmaker.meshtypes.meshtype_3d_colonsegment1 import MeshType_3d_colonsegment1
 from scaffoldmaker.meshtypes.meshtype_3d_esophagus1 import MeshType_3d_esophagus1
 from scaffoldmaker.meshtypes.meshtype_3d_gastrointestinaltract1 import MeshType_3d_gastrointestinaltract1
+from scaffoldmaker.meshtypes.meshtype_3d_gridData1 import MeshType_3d_gridData1
 from scaffoldmaker.meshtypes.meshtype_3d_heart1 import MeshType_3d_heart1
 from scaffoldmaker.meshtypes.meshtype_3d_heart2 import MeshType_3d_heart2
 from scaffoldmaker.meshtypes.meshtype_3d_heartarterialroot1 import MeshType_3d_heartarterialroot1
@@ -42,6 +43,7 @@ from scaffoldmaker.meshtypes.meshtype_3d_lung2 import MeshType_3d_lung2
 from scaffoldmaker.meshtypes.meshtype_3d_musclefusiform1 import MeshType_3d_musclefusiform1
 from scaffoldmaker.meshtypes.meshtype_3d_ostium1 import MeshType_3d_ostium1
 from scaffoldmaker.meshtypes.meshtype_3d_ostium2 import MeshType_3d_ostium2
+from scaffoldmaker.meshtypes.meshtype_3d_sampleDensity1 import MeshType_3d_sampleDensity1
 from scaffoldmaker.meshtypes.meshtype_3d_smallintestine1 import MeshType_3d_smallintestine1
 from scaffoldmaker.meshtypes.meshtype_3d_solidcylinder1 import MeshType_3d_solidcylinder1
 from scaffoldmaker.meshtypes.meshtype_3d_solidsphere1 import MeshType_3d_solidsphere1
@@ -86,6 +88,7 @@ class Scaffolds(object):
             MeshType_3d_colonsegment1,
             MeshType_3d_esophagus1,
             MeshType_3d_gastrointestinaltract1,
+            MeshType_3d_gridData1,
             MeshType_3d_heart1,
             MeshType_3d_heart2,
             MeshType_3d_heartarterialroot1,
@@ -103,6 +106,7 @@ class Scaffolds(object):
             MeshType_3d_musclefusiform1,
             MeshType_3d_ostium1,
             MeshType_3d_ostium2,
+            MeshType_3d_sampleDensity1,
             MeshType_3d_smallintestine1,
             MeshType_3d_solidcylinder1,
             MeshType_3d_solidsphere1,
