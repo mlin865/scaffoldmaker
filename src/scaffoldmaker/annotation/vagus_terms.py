@@ -13,6 +13,7 @@ vagus_terms = [
     ("centroid of level of laryngeal prominence on the vagal trunk", "None"),
     ("centroid of level of superior border of clavicle on the vagal trunk", "None"),
     ("centroid of level of jugular notch on the vagal trunk", "None"),
+    ("centroid of level of carina on the vagal trunk", "None"),
     ("centroid of level of sternal angle on the vagal trunk", "None"),
     ("centroid of 1 cm superior to esophageal plexus on the vagal trunk", "None"),
     ("centroid of level of esophageal hiatus on the vagal trunk", "None"),
