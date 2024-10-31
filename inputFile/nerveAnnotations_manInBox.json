@@ -35279,7 +35279,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right medial cutaneous nerve of forearm where anterior branch of right medial cutaneous nerve of forearm starts (waypoint 3)",
+    "group": "Point on right medial cutaneous nerve of forearm where anterior branch of right medial cutaneous nerve of forearm starts (waypoint 4)",
     "region": "__annotation/Right medial cutaneous nerve of forearm"
   },
   {
@@ -35372,7 +35372,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right medial cutaneous nerve of forearm where posterior branch of right medial cutaneous nerve of forearm starts (waypoint 2)",
+    "group": "Point on right medial cutaneous nerve of forearm where posterior branch of right medial cutaneous nerve of forearm starts (waypoint 3)",
     "region": "__annotation/Right medial cutaneous nerve of forearm"
   },
   {
@@ -35403,7 +35403,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left medial cutaneous nerve of forearm where anterior branch of left medial cutaneous nerve of forearm starts (waypoint 3)",
+    "group": "Point on left medial cutaneous nerve of forearm where anterior branch of left medial cutaneous nerve of forearm starts (waypoint 4)",
     "region": "__annotation/Left medial cutaneous nerve of forearm"
   },
   {
@@ -35434,7 +35434,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left medial cutaneous nerve of forearm where posterior branch of left medial cutaneous nerve of forearm starts (waypoint 2)",
+    "group": "Point on left medial cutaneous nerve of forearm where posterior branch of left medial cutaneous nerve of forearm starts (waypoint 3)",
     "region": "__annotation/Left medial cutaneous nerve of forearm"
   },
   {
@@ -35651,7 +35651,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right ulnar nerve in relation to medial epicondyle of humerus (waypoint 1)",
+    "group": "Point on right ulnar nerve in relation to medial epicondyle of humerus (waypoint 3)",
     "region": "__annotation/Right ulnar nerve"
   },
   {
@@ -35682,7 +35682,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left ulnar nerve in relation to medial epicondyle of humerus (waypoint 1)",
+    "group": "Point on left ulnar nerve in relation to medial epicondyle of humerus (waypoint 3)",
     "region": "__annotation/Left ulnar nerve"
   },
   {
@@ -35713,7 +35713,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left ulnar nerve where superficial branch of left ulnar nerve starts (waypoint 4)",
+    "group": "Point on left ulnar nerve where superficial branch of left ulnar nerve starts (waypoint 7)",
     "region": "__annotation/Left ulnar nerve"
   },
   {
@@ -35806,7 +35806,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right ulnar nerve where superficial branch of right ulnar nerve starts (waypoint 4)",
+    "group": "Point on right ulnar nerve where superficial branch of right ulnar nerve starts (waypoint 7)",
     "region": "__annotation/Right ulnar nerve"
   },
   {
@@ -35837,7 +35837,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right ulnar nerve where palmar cutaneous branch of right ulnar nerve starts (waypoint 3)",
+    "group": "Point on right ulnar nerve where palmar cutaneous branch of right ulnar nerve starts (waypoint 6)",
     "region": "__annotation/Right ulnar nerve"
   },
   {
@@ -35930,7 +35930,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left ulnar nerve where palmar cutaneous branch of left ulnar nerve starts (waypoint 3)",
+    "group": "Point on left ulnar nerve where palmar cutaneous branch of left ulnar nerve starts (waypoint 6)",
     "region": "__annotation/Left ulnar nerve"
   },
   {
@@ -36054,7 +36054,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right ulnar nerve where dorsal branch of right ulnar nerve starts (waypoint 2)",
+    "group": "Point on right ulnar nerve where dorsal branch of right ulnar nerve starts (waypoint 5)",
     "region": "__annotation/Right ulnar nerve"
   },
   {
@@ -36085,7 +36085,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left ulnar nerve where dorsal branch of left ulnar nerve starts (waypoint 2)",
+    "group": "Point on left ulnar nerve where dorsal branch of left ulnar nerve starts (waypoint 5)",
     "region": "__annotation/Left ulnar nerve"
   },
   {
@@ -46511,7 +46511,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve in relation to right brachial artery (waypoint 2)",
+    "group": "Point on right median nerve in relation to right brachial artery (waypoint 3)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -46542,7 +46542,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve in relation to left brachial artery (waypoint 2)",
+    "group": "Point on left median nerve in relation to left brachial artery (waypoint 3)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -46573,7 +46573,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve in relation to short head of biceps brachii (waypoint 3)",
+    "group": "Point on right median nerve in relation to short head of biceps brachii (waypoint 4)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -46604,7 +46604,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve in relation to short head of biceps brachii (waypoint 3)",
+    "group": "Point on left median nerve in relation to short head of biceps brachii (waypoint 4)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -46635,7 +46635,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve in relation to humeral head of pronator teres (waypoint 4)",
+    "group": "Point on right median nerve in relation to humeral head of pronator teres (waypoint 5)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -46666,7 +46666,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve in relation to humeral head of pronator teres (waypoint 4)",
+    "group": "Point on left median nerve in relation to humeral head of pronator teres (waypoint 5)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -47007,7 +47007,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve in relation to palmar carpal ligament (waypoint 6)",
+    "group": "Point on right median nerve in relation to palmar carpal ligament (waypoint 7)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -47038,7 +47038,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve in relation to palmar carpal ligament (waypoint 6)",
+    "group": "Point on left median nerve in relation to palmar carpal ligament (waypoint 7)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -47100,7 +47100,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nmerve where palmar branch of right median nerve starts (waypoint 7)",
+    "group": "Point on right median nmerve where palmar branch of right median nerve starts (waypoint 8)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -47162,7 +47162,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve where palmar branch of left median nerve starts (waypoint 7)",
+    "group": "Point on left median nerve where palmar branch of left median nerve starts (waypoint 8)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -47441,7 +47441,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve where lateral portion of right median nerve starts (waypoint 9)",
+    "group": "Point on right median nerve where lateral portion of right median nerve starts (waypoint 10)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -47472,7 +47472,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve where medial portion of right median nerve starts (waypoint 8)",
+    "group": "Point on right median nerve where medial portion of right median nerve starts (waypoint 9)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -49332,7 +49332,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve where medial portion of left median nerve starts (waypoint 8)",
+    "group": "Point on left median nerve where medial portion of left median nerve starts (waypoint 9)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -49363,7 +49363,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve where lateral portion of left median nerve starts (waypoint 9)",
+    "group": "Point on left median nerve where lateral portion of left median nerve starts (waypoint 10)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -77738,7 +77738,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right median nerve where right anterior interosseous nerve starts (waypoint 5)",
+    "group": "Point on right median nerve where right anterior interosseous nerve starts (waypoint 6)",
     "region": "__annotation/Right median nerve"
   },
   {
@@ -77862,7 +77862,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left median nerve where left anterior interosseous nerve starts (waypoint 5)",
+    "group": "Point on left median nerve where left anterior interosseous nerve starts (waypoint 6)",
     "region": "__annotation/Left median nerve"
   },
   {
@@ -82834,7 +82834,7 @@
       "geometry": {
         "coordinates": [
           [
-            -131.27330017089844,
+            -139.61729431152344,
             -88.08033752441406,
             1291.472412109375
           ]
@@ -83981,7 +83981,7 @@
       "geometry": {
         "coordinates": [
           [
-            133.74954223632812,
+			142.08753967285156,
             -88.14078521728516,
             1292.1334228515625
           ]
@@ -92423,5 +92423,563 @@
     },
     "group": "Point on right L2 spinal nerve where right L2 spinal nerve branch to right femoral nerve starts (origin)",
     "region": "__annotation/Right L2 spinal nerve branch to right femoral nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left musculocutaneous nerve/Point on left musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left musculocutaneous nerve/Point on left musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            151.7034912109375,
+            -94.6006088256836,
+            1282.6365966796875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)",
+    "region": "__annotation/Left musculocutaneous nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left musculocutaneous nerve/Point on left musculocutaneous nerve in relation to brachialis muscle (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left musculocutaneous nerve/Point on left musculocutaneous nerve in relation to brachialis muscle (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            190.4761199951172,
+            -79.95100402832031,
+            1170.5838623046875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left musculocutaneous nerve in relation to brachialis muscle (waypoint 2)",
+    "region": "__annotation/Left musculocutaneous nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right musculocutaneous nerve/Point on right musculocutaneous nerve in relation to brachialis muscle (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right musculocutaneous nerve/Point on right musculocutaneous nerve in relation to brachialis muscle (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -190.0016632080078,
+            -76.12602996826172,
+            1168.81591796875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right musculocutaneous nerve in relation to brachialis muscle (waypoint 2)",
+    "region": "__annotation/Right musculocutaneous nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right musculocutaneous nerve/Point on right musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right musculocutaneous nerve/Point on right musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -148.41464233398438,
+            -95.0184326171875,
+            1289.9967041015625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right musculocutaneous nerve in relation to coracobrachialis muscle (waypoint 1)",
+    "region": "__annotation/Right musculocutaneous nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            226.1048583984375,
+            -79.80286407470703,
+            1022.4849853515625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)",
+    "region": "__annotation/Left ulnar nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to humerus (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to humerus (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            160.1140899658203,
+            -82.96302032470703,
+            1283.5888671875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left ulnar nerve in relation to humerus (waypoint 1)",
+    "region": "__annotation/Left ulnar nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to lower humerus (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left ulnar nerve/Point on left ulnar nerve in relation to lower humerus (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            186.6539306640625,
+            -72.26287841796875,
+            1153.20703125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left ulnar nerve in relation to lower humerus (waypoint 2)",
+    "region": "__annotation/Left ulnar nerve"
+  },
+ {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to humerus (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to humerus (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -162.531494140625,
+            -85.68244934082031,
+            1285.675048828125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right ulnar nerve in relation to humerus (waypoint 1)",
+    "region": "__annotation/Right ulnar nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to lower humerus (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to lower humerus (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -196.36050415039062,
+            -70.7782974243164,
+            1101.772216796875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right ulnar nerve in relation to lower humerus (waypoint 2)",
+    "region": "__annotation/Right ulnar nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right ulnar nerve/Point on right ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -225.69837951660156,
+            -78.48821258544922,
+            1021.8344116210938
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right ulnar nerve in relation to flexor digitorum profundus muscle (waypoint 4)",
+    "region": "__annotation/Right ulnar nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left medial cutaneous nerve of forearm/Point on left medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left medial cutaneous nerve of forearm/Point on left medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            151.0334014892578,
+            -78.09994506835938,
+            1250.930908203125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)",
+    "region": "__annotation/Left medial cutaneous nerve of forearm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right medial cutaneous nerve of forearm/Point on right medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right medial cutaneous nerve of forearm/Point on right medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -157.0184783935547,
+            -76.37980651855469,
+            1231.6209716796875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right medial cutaneous nerve of forearm in relation to brachial artery (waypoint 2)",
+    "region": "__annotation/Right medial cutaneous nerve of forearm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left median nerve/Point on left median nerve in relation to coracobrachialis muscle (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left median nerve/Point on left median nerve in relation to coracobrachialis muscle (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            142.69656372070312,
+            -94.30916595458984,
+            1288.52490234375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left median nerve in relation to coracobrachialis muscle (waypoint 2)",
+    "region": "__annotation/Left median nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right median nerve/Point on right median nerve in relation to coracobrachialis muscle (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right median nerve/Point on right median nerve in relation to coracobrachialis muscle (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -142.43663024902344,
+            -90.6656723022461,
+            1284.2554931640625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right median nerve in relation to coracobrachialis muscle (waypoint 2)",
+    "region": "__annotation/Right median nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left posterior cutaneous nerve of arm/Point on left posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left posterior cutaneous nerve of arm/Point on left posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            164.33538818359375,
+            -25.82251739501953,
+            1239.224609375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)",
+    "region": "__annotation/Left posterior cutaneous nerve of arm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right posterior cutaneous nerve of arm/Point on right posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right posterior cutaneous nerve of arm/Point on right posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -172.27151489257812,
+            -27.145740509033203,
+            1238.3721923828125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right posterior cutaneous nerve of arm in relation to long head of triceps brachii muscle (waypoint 1)",
+    "region": "__annotation/Right posterior cutaneous nerve of arm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Left medial cutaneous nerve of arm/Point on left medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left medial cutaneous nerve of arm/Point on left medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            144.18185424804688,
+            -81.29684448242188,
+            1268.536865234375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on left medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)",
+    "region": "__annotation/Left medial cutaneous nerve of arm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/47032a1c-0982-40e1-a21a-9df6b98db863",
+    "item": {
+      "id": "__annotation/Right medial cutaneous nerve of arm/Point on right medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right medial cutaneous nerve of arm/Point on right medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -143.13601684570312,
+            -81.78482818603516,
+            1271.224365234375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on right medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)",
+    "region": "__annotation/Right medial cutaneous nerve of arm"
   }
 ]
