@@ -25303,7 +25303,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F52242171-fac5-4f86-8726-c3462be4eb9e",
     "item": {
-      "id": "__annotation/Right common fibular part of sciatic nerve/Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 1)"
+      "id": "__annotation/Right common fibular part of sciatic nerve/Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 2)"
     },
     "body": {
       "evidence": [
@@ -25312,7 +25312,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right common fibular part of sciatic nerve/Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 1)",
+      "id": "__annotation/Right common fibular part of sciatic nerve/Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 2)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -25328,7 +25328,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 1)",
+    "group": "Point on right common fibular part of sciatic nerve where right sciatic nerve starts (waypoint 2)",
     "region": "__annotation/Right common fibular part of sciatic nerve"
   },
   {
@@ -29333,7 +29333,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F7276651b-e698-4344-b331-91030deed9ef",
     "item": {
-      "id": "__annotation/Left common fibular part of sciatic nerve/Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 1)"
+      "id": "__annotation/Left common fibular part of sciatic nerve/Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 2)"
     },
     "body": {
       "evidence": [
@@ -29342,7 +29342,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left common fibular part of sciatic nerve/Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 1)",
+      "id": "__annotation/Left common fibular part of sciatic nerve/Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 2)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -29358,7 +29358,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 1)",
+    "group": "Point on left common fibular part of sciatic nerve where left sciatic nerve starts (waypoint 2)",
     "region": "__annotation/Left common fibular part of sciatic nerve"
   },
   {
@@ -39821,7 +39821,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F18cfeeaa-a16a-460e-b41c-5cb6c387a3a1",
     "item": {
-      "id": "__annotation/Right lateral calcaneal branch A of right sural nerve/Point on skin of plantar region of foot innervated by right lateral clcaneal branch A of right sural nerve (destination)"
+      "id": "__annotation/Right lateral calcaneal branch A of right sural nerve/Point on skin of plantar region of foot innervated by right lateral calcaneal branch A of right sural nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -39830,7 +39830,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right lateral calcaneal branch A of right sural nerve/Point on skin of plantar region of foot innervated by right lateral clcaneal branch A of right sural nerve (destination)",
+      "id": "__annotation/Right lateral calcaneal branch A of right sural nerve/Point on skin of plantar region of foot innervated by right lateral calcaneal branch A of right sural nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -39846,7 +39846,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on skin of plantar region of foot innervated by right lateral clcaneal branch A of right sural nerve (destination)",
+    "group": "Point on skin of plantar region of foot innervated by right lateral calcaneal branch A of right sural nerve (destination)",
     "region": "__annotation/Right lateral calcaneal branch A of right sural nerve"
   },
   {
@@ -60043,7 +60043,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0482bfb0-d1ac-47e6-b836-b8efec821e6e",
     "item": {
-      "id": "__annotation/Right common fibular part of sciatic nerve/Point a short distance along right common fibular part of sciatic nerve (waypoint 2)"
+      "id": "__annotation/Right common fibular part of sciatic nerve/Point a short distance along right common fibular part of sciatic nerve (waypoint 1)"
     },
     "body": {
       "evidence": [
@@ -60052,7 +60052,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right common fibular part of sciatic nerve/Point a short distance along right common fibular part of sciatic nerve (waypoint 2)",
+      "id": "__annotation/Right common fibular part of sciatic nerve/Point a short distance along right common fibular part of sciatic nerve (waypoint 1)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -60068,13 +60068,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point a short distance along right common fibular part of sciatic nerve (waypoint 2)",
+    "group": "Point a short distance along right common fibular part of sciatic nerve (waypoint 1)",
     "region": "__annotation/Right common fibular part of sciatic nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0482bfb0-d1ac-47e6-b836-b8efec821e6e",
     "item": {
-      "id": "__annotation/Left common fibular part of sciatic nerve/Point a short distance along left common fibular part of sciatic nerve (waypoint 2)"
+      "id": "__annotation/Left common fibular part of sciatic nerve/Point a short distance along left common fibular part of sciatic nerve (waypoint 1)"
     },
     "body": {
       "evidence": [
@@ -60083,7 +60083,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left common fibular part of sciatic nerve/Point a short distance along left common fibular part of sciatic nerve (waypoint 2)",
+      "id": "__annotation/Left common fibular part of sciatic nerve/Point a short distance along left common fibular part of sciatic nerve (waypoint 1)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -60099,7 +60099,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point a short distance along left common fibular part of sciatic nerve (waypoint 2)",
+    "group": "Point a short distance along left common fibular part of sciatic nerve (waypoint 1)",
     "region": "__annotation/Left common fibular part of sciatic nerve"
   },
   {
