@@ -16096,37 +16096,6 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
     "item": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            0.6733427047729492,
-            -79.1564712524414,
-            1215.4530029296875
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (origin)",
-    "region": "__annotation/Anterior esophageal vagus trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
       "id": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus/Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)"
     },
     "body": {
@@ -16154,130 +16123,6 @@
     },
     "group": "Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)",
     "region": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -0.11560836434364319,
-            -69.73253631591797,
-            1207.3896484375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (origin)",
-    "region": "__annotation/Posterior esophageal vagus trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            7.483911991119385,
-            -103.03653717041016,
-            1131.1719970703125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)",
-    "region": "__annotation/Posterior esophageal vagus trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            1.6013054847717285,
-            -96.23467254638672,
-            1168.398681640625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 1)",
-    "region": "__annotation/Anterior esophageal vagus trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 3)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 3)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            22.61412239074707,
-            -147.50453186035156,
-            1106.367431640625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 3)",
-    "region": "__annotation/Anterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16340,37 +16185,6 @@
     },
     "group": "Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (origin)",
     "region": "__annotation/Greater posterior gastric nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 3)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 3)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            31.380956649780273,
-            -99.54481506347656,
-            1105.601318359375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 3)",
-    "region": "__annotation/Posterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16654,37 +16468,6 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
     "item": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 2)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 2)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            27.865446090698242,
-            -102.03722381591797,
-            1111.9937744140625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 2)",
-    "region": "__annotation/Posterior esophageal vagus trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
       "id": "__annotation/Coeliac branch of posterior vagal trunk/Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)"
     },
     "body": {
@@ -16743,37 +16526,6 @@
     },
     "group": "Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (origin)",
     "region": "__annotation/Hepatic branch of anterior vagal trunk"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
-    "item": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 2)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 2)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            2.679999828338623,
-            -105.01649475097656,
-            1151.1766357421875
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 2)",
-    "region": "__annotation/Anterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -19506,68 +19258,6 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
     "item": {
-      "id": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion/Point on left recurrent laryngeal nerve where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion/Point on left recurrent laryngeal nerve where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            10.052770614624023,
-            -97.99879455566406,
-            1391.4058837890625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left recurrent laryngeal nerve where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion starts (origin)",
-    "region": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
-    "item": {
-      "id": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion/Point on superior cervical ganglion where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion/Point on superior cervical ganglion where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            11.381529808044434,
-            -86.5655746459961,
-            1437.857666015625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on superior cervical ganglion where communicating branch of left recurrent laryngeal nerve with superior cervical ganglion ends (destination)",
-    "region": "__annotation/Communicating branch of left recurrent laryngeal nerve with superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
-    "item": {
       "id": "__annotation/Vagal branch to left carotid body/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)"
     },
     "body": {
@@ -19626,68 +19316,6 @@
     },
     "group": "Point on left inferior laryngeal nerve where external branch of left inferior laryngeal nerve starts (waypoint 2)",
     "region": "__annotation/Left inferior laryngeal nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
-    "item": {
-      "id": "__annotation/External branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where external branch of left inferior laryngeal nerve starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/External branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where external branch of left inferior laryngeal nerve starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            7.948705196380615,
-            -93.78511047363281,
-            1394.963623046875
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left inferior laryngeal nerve where external branch of left inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/External branch of left inferior laryngeal nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
-    "item": {
-      "id": "__annotation/External branch of left inferior laryngeal nerve/Point on larynx wall innervated by external branch of left inferior laryngeal nerve (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Position Updated"
-    },
-    "feature": {
-      "id": "__annotation/External branch of left inferior laryngeal nerve/Point on larynx wall innervated by external branch of left inferior laryngeal nerve (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            11.702216148376465,
-            -97.01625061035156,
-            1399.2783203125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on larynx wall innervated by external branch of left inferior laryngeal nerve (destination)",
-    "region": "__annotation/External branch of left inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
@@ -20277,68 +19905,6 @@
     },
     "group": "Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)",
     "region": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
-    "item": {
-      "id": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion/Point on superior cervical ganglion where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion/Point on superior cervical ganglion where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -9.71546745300293,
-            -86.2403335571289,
-            1441.12158203125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on superior cervical ganglion where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion ends (destination)",
-    "region": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
-    "item": {
-      "id": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion/Point on right recurrent laryngeal nerve where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Position Updated"
-    },
-    "feature": {
-      "id": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion/Point on right recurrent laryngeal nerve where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -10.845755577087402,
-            -98.55081939697266,
-            1391.8970947265625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right recurrent laryngeal nerve where communicating branch of right recurrent laryngeal nerve with superior cervical ganglion starts (origin)",
-    "region": "__annotation/Communicating branch of right recurrent laryngeal nerve with superior cervical ganglion"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
@@ -21056,37 +20622,6 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
     "item": {
-      "id": "__annotation/External branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where external branch of right inferior laryngeal nerve starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Position Updated"
-    },
-    "feature": {
-      "id": "__annotation/External branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where external branch of right inferior laryngeal nerve starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -10.226736068725586,
-            -97.2345962524414,
-            1393.2454833984375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right inferior laryngeal nerve where external branch of right inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/External branch of right inferior laryngeal nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
-    "item": {
       "id": "__annotation/Right inferior laryngeal nerve/Point on right inferior laryngeal nerve where external branch of right inferior laryngeal nerve starts (waypoint 2)"
     },
     "body": {
@@ -21114,37 +20649,6 @@
     },
     "group": "Point on right inferior laryngeal nerve where external branch of right inferior laryngeal nerve starts (waypoint 2)",
     "region": "__annotation/Right inferior laryngeal nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
-    "item": {
-      "id": "__annotation/External branch of right inferior laryngeal nerve/Point on larynx wall innervated by external branch of right inferior laryngeal nerve (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Position Updated"
-    },
-    "feature": {
-      "id": "__annotation/External branch of right inferior laryngeal nerve/Point on larynx wall innervated by external branch of right inferior laryngeal nerve (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -7.810807228088379,
-            -92.88738250732422,
-            1399.4857177734375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on larynx wall innervated by external branch of right inferior laryngeal nerve (destination)",
-    "region": "__annotation/External branch of right inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2efb8005-dc03-48b9-bfdd-e002313770ab",
@@ -55474,130 +54978,6 @@
     "region": "__annotation/Right accessory nerve"
   },
   {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2babddb0-23ba-42b2-a0be-c0f155874f88",
-    "item": {
-      "id": "__annotation/Left Lobstein's Anastomosis/Point on left accessory nerve where left Lobstein's Anastomosis starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Left Lobstein's Anastomosis/Point on left accessory nerve where left Lobstein's Anastomosis starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            27.144777297973633,
-            -69.87666320800781,
-            1491.894287109375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left accessory nerve where left Lobstein's Anastomosis starts (origin)",
-    "region": "__annotation/Left Lobstein's Anastomosis"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2babddb0-23ba-42b2-a0be-c0f155874f88",
-    "item": {
-      "id": "__annotation/Left Lobstein's Anastomosis/Point on left vagus nerve where left Lobstein's Anastomosis ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Left Lobstein's Anastomosis/Point on left vagus nerve where left Lobstein's Anastomosis ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            28.705364227294922,
-            -66.97769927978516,
-            1491.1929931640625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left vagus nerve where left Lobstein's Anastomosis ends (destination)",
-    "region": "__annotation/Left Lobstein's Anastomosis"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F5ac69a0f-74bf-4d1f-8247-ad50b8878f91",
-    "item": {
-      "id": "__annotation/Right Lobstein's Anastomosis/Point on right vagus nerve where right Lobstein's Anastomosis ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Right Lobstein's Anastomosis/Point on right vagus nerve where right Lobstein's Anastomosis ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -23.944908142089844,
-            -66.66383361816406,
-            1493.0093994140625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right vagus nerve where right Lobstein's Anastomosis ends (destination)",
-    "region": "__annotation/Right Lobstein's Anastomosis"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F5ac69a0f-74bf-4d1f-8247-ad50b8878f91",
-    "item": {
-      "id": "__annotation/Right Lobstein's Anastomosis/Point on right accessory nerve where right Lobstein's Anastomosis starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Right Lobstein's Anastomosis/Point on right accessory nerve where right Lobstein's Anastomosis starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -27.713356018066406,
-            -70.29655456542969,
-            1490.216064453125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right accessory nerve where right Lobstein's Anastomosis starts (origin)",
-    "region": "__annotation/Right Lobstein's Anastomosis"
-  },
-  {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F5ac69a0f-74bf-4d1f-8247-ad50b8878f91",
     "item": {
       "id": "__annotation/Right accessory nerve/Point on right accessory nerve where right Lobstein's Anastomosis starts (destination)"
@@ -81794,68 +81174,6 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
     "item": {
-      "id": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion/Point on left external laryngeal nerve where left external laryngeal nerve branch to superior cervical ganglion starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion/Point on left external laryngeal nerve where left external laryngeal nerve branch to superior cervical ganglion starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            27.745864868164062,
-            -89.29097747802734,
-            1411.427001953125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left external laryngeal nerve where left external laryngeal nerve branch to superior cervical ganglion starts (origin)",
-    "region": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
-    "item": {
-      "id": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion/Point on superior cervical ganglion where left external laryngeal nerve branch to superior cervical ganglion ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion/Point on superior cervical ganglion where left external laryngeal nerve branch to superior cervical ganglion ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            11.368967056274414,
-            -86.29143524169922,
-            1440.1798095703125
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on superior cervical ganglion where left external laryngeal nerve branch to superior cervical ganglion ends (destination)",
-    "region": "__annotation/Left external laryngeal nerve branch to superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
-    "item": {
       "id": "__annotation/Left external laryngeal nerve/Point on left external laryngeal nerve where left external laryngeal nerve branch to pharyngeal plexus starts (waypoint 2)"
     },
     "body": {
@@ -82131,68 +81449,6 @@
     },
     "group": "Point on cricothyroid muscle innervated by left external laryngeal nerve (destination)",
     "region": "__annotation/Left external laryngeal nerve"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
-    "item": {
-      "id": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion/Point on right external laryngeal nerve where right external laryngeal nerve branch to superior cervical ganglion starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion/Point on right external laryngeal nerve where right external laryngeal nerve branch to superior cervical ganglion starts (origin)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -25.516109466552734,
-            -84.78199005126953,
-            1401.85009765625
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right external laryngeal nerve where right external laryngeal nerve branch to superior cervical ganglion starts (origin)",
-    "region": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
-    "item": {
-      "id": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion/Point on superior cervical ganglion where right external laryngeal nerve branch to superior cervical ganglion ends (destination)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion/Point on superior cervical ganglion where right external laryngeal nerve branch to superior cervical ganglion ends (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -11.754998207092285,
-            -87.418212890625,
-            1440.806396484375
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on superior cervical ganglion where right external laryngeal nerve branch to superior cervical ganglion ends (destination)",
-    "region": "__annotation/Right external laryngeal nerve branch to superior cervical ganglion"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F6122186f-1179-4cf2-95b1-3f124357fcd6",
