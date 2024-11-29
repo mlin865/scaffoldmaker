@@ -13492,7 +13492,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fc22ce239-64ad-46a1-a150-f4ef70008c5b",
     "item": {
-      "id": "__annotation/Right meningeal branch of right vagus nerve/Point on right vagus nerve where meningeal branch of right vagus nerve starts (origin)"
+      "id": "__annotation/Meningeal branch of right vagus nerve/Point on right vagus nerve where meningeal branch of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -13501,7 +13501,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right meningeal branch of right vagus nerve/Point on right vagus nerve where meningeal branch of right vagus nerve starts (origin)",
+      "id": "__annotation/Meningeal branch of right vagus nerve/Point on right vagus nerve where meningeal branch of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13518,7 +13518,7 @@
       }
     },
     "group": "Point on right vagus nerve where meningeal branch of right vagus nerve starts (origin)",
-    "region": "__annotation/Right meningeal branch of right vagus nerve"
+    "region": "__annotation/Meningeal branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4ca6c394-9095-4cf6-974c-289dee89b8c1",
@@ -13554,7 +13554,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4ca6c394-9095-4cf6-974c-289dee89b8c1",
     "item": {
-      "id": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve/Point on right vagus nerve where communicating branch of right vagus nerve with right glossopharyngeal nerve starts (origin)"
+      "id": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve/Point on right vagus nerve where communicating branch of right vagus nerve with right glossopharyngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -13563,7 +13563,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve/Point on right vagus nerve where communicating branch of right vagus nerve with right glossopharyngeal nerve starts (origin)",
+      "id": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve/Point on right vagus nerve where communicating branch of right vagus nerve with right glossopharyngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13580,7 +13580,7 @@
       }
     },
     "group": "Point on right vagus nerve where communicating branch of right vagus nerve with right glossopharyngeal nerve starts (origin)",
-    "region": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve"
+    "region": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4ca6c394-9095-4cf6-974c-289dee89b8c1",
@@ -13616,7 +13616,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4ca6c394-9095-4cf6-974c-289dee89b8c1",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on right vagus nerve where auricular branch of right vagus nerve starts (origin)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on right vagus nerve where auricular branch of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -13625,7 +13625,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on right vagus nerve where auricular branch of right vagus nerve starts (origin)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on right vagus nerve where auricular branch of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13642,7 +13642,7 @@
       }
     },
     "group": "Point on right vagus nerve where auricular branch of right vagus nerve starts (origin)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fada640ff-edd1-429b-913a-06907f9f8eda",
@@ -13678,7 +13678,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fada640ff-edd1-429b-913a-06907f9f8eda",
     "item": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on right vagus nerve where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus starts (origin)"
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on right vagus nerve where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus starts (origin)"
     },
     "body": {
       "evidence": [
@@ -13687,7 +13687,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on right vagus nerve where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus starts (origin)",
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on right vagus nerve where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13704,7 +13704,7 @@
       }
     },
     "group": "Point on right vagus nerve where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus starts (origin)",
-    "region": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fada640ff-edd1-429b-913a-06907f9f8eda",
@@ -13740,7 +13740,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fada640ff-edd1-429b-913a-06907f9f8eda",
     "item": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on right vagus nerve where vagal branch to right carotid body starts (origin)"
+      "id": "__annotation/Vagal branch to right carotid body/Point on right vagus nerve where vagal branch to right carotid body starts (origin)"
     },
     "body": {
       "evidence": [
@@ -13749,7 +13749,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on right vagus nerve where vagal branch to right carotid body starts (origin)",
+      "id": "__annotation/Vagal branch to right carotid body/Point on right vagus nerve where vagal branch to right carotid body starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13766,7 +13766,7 @@
       }
     },
     "group": "Point on right vagus nerve where vagal branch to right carotid body starts (origin)",
-    "region": "__annotation/Branch of right vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to right carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fada640ff-edd1-429b-913a-06907f9f8eda",
@@ -13926,7 +13926,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff6e7e3bf-fed7-4547-9a93-bbcded59272b",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on skin of right ear innervated by auricular branch of right vagus nerve (destination)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on skin of right ear innervated by auricular branch of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -13935,7 +13935,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on skin of right ear innervated by auricular branch of right vagus nerve (destination)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on skin of right ear innervated by auricular branch of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13952,12 +13952,12 @@
       }
     },
     "group": "Point on skin of right ear innervated by auricular branch of right vagus nerve (destination)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4d261eeb-cc32-4b16-80f1-dc32f5274430",
     "item": {
-      "id": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve/Point on heart innervated by cardiopulmonary branch A of right vagus nerve (destination)"
+      "id": "__annotation/Cardiopulmonary branch A of right vagus nerve/Point on heart innervated by cardiopulmonary branch A of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -13966,7 +13966,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve/Point on heart innervated by cardiopulmonary branch A of right vagus nerve (destination)",
+      "id": "__annotation/Cardiopulmonary branch A of right vagus nerve/Point on heart innervated by cardiopulmonary branch A of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13983,12 +13983,12 @@
       }
     },
     "group": "Point on heart innervated by cardiopulmonary branch A of right vagus nerve (destination)",
-    "region": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch A of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4d261eeb-cc32-4b16-80f1-dc32f5274430",
     "item": {
-      "id": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of right vagus nerve with right glossopharyngeal nerve ends (destination)"
+      "id": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of right vagus nerve with right glossopharyngeal nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -13997,7 +13997,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of right vagus nerve with right glossopharyngeal nerve ends (destination)",
+      "id": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of right vagus nerve with right glossopharyngeal nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14014,12 +14014,12 @@
       }
     },
     "group": "Point on inferior glossopharyngeal ganglion where communicating branch of right vagus nerve with right glossopharyngeal nerve ends (destination)",
-    "region": "__annotation/Right branch between vagus nerve and glossopharyngeal nerve"
+    "region": "__annotation/Communicating branch of right vagus nerve with right glossopharyngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4d261eeb-cc32-4b16-80f1-dc32f5274430",
     "item": {
-      "id": "__annotation/Right branch between vagus nerve and superior cervical ganglion/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with right vagus nerve ends (destination)"
+      "id": "__annotation/Communicating branch of superior cervical ganglion with right vagus nerve/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with right vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -14028,7 +14028,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right branch between vagus nerve and superior cervical ganglion/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with right vagus nerve ends (destination)",
+      "id": "__annotation/Communicating branch of superior cervical ganglion with right vagus nerve/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with right vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14050,7 +14050,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F4d261eeb-cc32-4b16-80f1-dc32f5274430",
     "item": {
-      "id": "__annotation/Right meningeal branch of right vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of right vagus nerve (destination)"
+      "id": "__annotation/Meningeal branch of right vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -14059,7 +14059,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right meningeal branch of right vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of right vagus nerve (destination)",
+      "id": "__annotation/Meningeal branch of right vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14076,7 +14076,7 @@
       }
     },
     "group": "Point on dura mater of hindbrain innervated by meningeal branch of right vagus nerve (destination)",
-    "region": "__annotation/Right meningeal branch of right vagus nerve"
+    "region": "__annotation/Meningeal branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F780b371b-06ae-4c3f-9cb7-ab1ebc6b9f45",
@@ -14174,7 +14174,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F780b371b-06ae-4c3f-9cb7-ab1ebc6b9f45",
     "item": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on right carotid body where vagal branch to right carotid body ends (destination)"
+      "id": "__annotation/Vagal branch to right carotid body/Point on right carotid body where vagal branch to right carotid body ends (destination)"
     },
     "body": {
       "evidence": [
@@ -14183,7 +14183,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on right carotid body where vagal branch to right carotid body ends (destination)",
+      "id": "__annotation/Vagal branch to right carotid body/Point on right carotid body where vagal branch to right carotid body ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14200,7 +14200,7 @@
       }
     },
     "group": "Point on right carotid body where vagal branch to right carotid body ends (destination)",
-    "region": "__annotation/Branch of right vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to right carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
@@ -14422,7 +14422,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
     "item": {
-      "id": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (origin)"
+      "id": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (origin)"
     },
     "body": {
       "evidence": [
@@ -14431,7 +14431,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (origin)",
+      "id": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14448,7 +14448,7 @@
       }
     },
     "group": "Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (origin)",
-    "region": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus"
+    "region": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
@@ -14484,7 +14484,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Left meningeal branch of left vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of left vagus nerve (destination)"
+      "id": "__annotation/Meningeal branch of left vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -14493,7 +14493,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left meningeal branch of left vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of left vagus nerve (destination)",
+      "id": "__annotation/Meningeal branch of left vagus nerve/Point on dura mater of hindbrain innervated by meningeal branch of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14510,12 +14510,12 @@
       }
     },
     "group": "Point on dura mater of hindbrain innervated by meningeal branch of left vagus nerve (destination)",
-    "region": "__annotation/Left meningeal branch of left vagus nerve"
+    "region": "__annotation/Meningeal branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Left meningeal branch of left vagus nerve/Point on left vagus nerve where meningeal branch of left vagus nerve starts (origin)"
+      "id": "__annotation/Meningeal branch of left vagus nerve/Point on left vagus nerve where meningeal branch of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -14524,7 +14524,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left meningeal branch of left vagus nerve/Point on left vagus nerve where meningeal branch of left vagus nerve starts (origin)",
+      "id": "__annotation/Meningeal branch of left vagus nerve/Point on left vagus nerve where meningeal branch of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14541,7 +14541,7 @@
       }
     },
     "group": "Point on left vagus nerve where meningeal branch of left vagus nerve starts (origin)",
-    "region": "__annotation/Left meningeal branch of left vagus nerve"
+    "region": "__annotation/Meningeal branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
@@ -14608,7 +14608,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve/Point on left vagus nerve where communicating branch of left vagus nerve with left glossopharyngeal nerve starts (origin)"
+      "id": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve/Point on left vagus nerve where communicating branch of left vagus nerve with left glossopharyngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -14617,7 +14617,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve/Point on left vagus nerve where communicating branch of left vagus nerve with left glossopharyngeal nerve starts (origin)",
+      "id": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve/Point on left vagus nerve where communicating branch of left vagus nerve with left glossopharyngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14634,12 +14634,12 @@
       }
     },
     "group": "Point on left vagus nerve where communicating branch of left vagus nerve with left glossopharyngeal nerve starts (origin)",
-    "region": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve"
+    "region": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on left vagus nerve where auricular branch of left vagus nerve starts (origin)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on left vagus nerve where auricular branch of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -14648,7 +14648,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on left vagus nerve where auricular branch of left vagus nerve starts (origin)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on left vagus nerve where auricular branch of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14665,7 +14665,7 @@
       }
     },
     "group": "Point on left vagus nerve where auricular branch of left vagus nerve starts (origin)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
@@ -14701,7 +14701,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus ends (destination)"
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus ends (destination)"
     },
     "body": {
       "evidence": [
@@ -14710,7 +14710,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus ends (destination)",
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14727,12 +14727,12 @@
       }
     },
     "group": "Point on pharyngeal nerve plexus where pharyngeal branch of right vagus nerve to pharyngeal nerve plexus ends (destination)",
-    "region": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
     "item": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on left vagus nerve where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus starts (origin) "
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on left vagus nerve where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus starts (origin) "
     },
     "body": {
       "evidence": [
@@ -14741,7 +14741,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on left vagus nerve where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus starts (origin) ",
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on left vagus nerve where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus starts (origin) ",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14758,7 +14758,7 @@
       }
     },
     "group": "Point on left vagus nerve where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus starts (origin) ",
-    "region": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff4534336-4b49-4565-b606-9737c1dd7b78",
@@ -14794,7 +14794,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F48994436-1f57-4944-9bf3-66be1916ad5b",
     "item": {
-      "id": "__annotation/Left branch between vagus nerve and superior cervical ganglion/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with left vagus nerve ends (destination)"
+      "id": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with left vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -14803,7 +14803,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left branch between vagus nerve and superior cervical ganglion/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with left vagus nerve ends (destination)",
+      "id": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve/Point on superior cervical ganglion where communicating branch of superior cervical ganglion with left vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14820,7 +14820,7 @@
       }
     },
     "group": "Point on superior cervical ganglion where communicating branch of superior cervical ganglion with left vagus nerve ends (destination)",
-    "region": "__annotation/Left branch between vagus nerve and superior cervical ganglion"
+    "region": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F48994436-1f57-4944-9bf3-66be1916ad5b",
@@ -14887,7 +14887,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F48994436-1f57-4944-9bf3-66be1916ad5b",
     "item": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on left vagus nerve where vagal branch to left carotid body starts (origin)"
+      "id": "__annotation/Vagal branch to left carotid body/Point on left vagus nerve where vagal branch to left carotid body starts (origin)"
     },
     "body": {
       "evidence": [
@@ -14896,7 +14896,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on left vagus nerve where vagal branch to left carotid body starts (origin)",
+      "id": "__annotation/Vagal branch to left carotid body/Point on left vagus nerve where vagal branch to left carotid body starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14913,7 +14913,7 @@
       }
     },
     "group": "Point on left vagus nerve where vagal branch to left carotid body starts (origin)",
-    "region": "__annotation/Branch of left vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to left carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F48994436-1f57-4944-9bf3-66be1916ad5b",
@@ -14949,7 +14949,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F48994436-1f57-4944-9bf3-66be1916ad5b",
     "item": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on left carotid body where vagal branch to left carotid body ends (destination)"
+      "id": "__annotation/Vagal branch to left carotid body/Point on left carotid body where vagal branch to left carotid body ends (destination)"
     },
     "body": {
       "evidence": [
@@ -14958,7 +14958,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on left carotid body where vagal branch to left carotid body ends (destination)",
+      "id": "__annotation/Vagal branch to left carotid body/Point on left carotid body where vagal branch to left carotid body ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14975,12 +14975,12 @@
       }
     },
     "group": "Point on left carotid body where vagal branch to left carotid body ends (destination)",
-    "region": "__annotation/Branch of left vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to left carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on skin of left ear innervated by auricular branch of left vagus nerve (destination)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on skin of left ear innervated by auricular branch of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -14989,7 +14989,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on skin of left ear innervated by auricular branch of left vagus nerve (destination)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on skin of left ear innervated by auricular branch of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15006,12 +15006,12 @@
       }
     },
     "group": "Point on skin of left ear innervated by auricular branch of left vagus nerve (destination)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (origin)"
+      "id": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (origin)"
     },
     "body": {
       "evidence": [
@@ -15020,7 +15020,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (origin)",
+      "id": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15037,7 +15037,7 @@
       }
     },
     "group": "Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (origin)",
-    "region": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus"
+    "region": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
@@ -15073,7 +15073,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus/Point on oesophageal nerve plexus where branch of left vagus nerve to oesophageal nerve plexus ends (destination)"
+      "id": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus/Point on oesophageal nerve plexus where branch of left vagus nerve to oesophageal nerve plexus ends (destination)"
     },
     "body": {
       "evidence": [
@@ -15082,7 +15082,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus/Point on oesophageal nerve plexus where branch of left vagus nerve to oesophageal nerve plexus ends (destination)",
+      "id": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus/Point on oesophageal nerve plexus where branch of left vagus nerve to oesophageal nerve plexus ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15099,12 +15099,12 @@
       }
     },
     "group": "Point on oesophageal nerve plexus where branch of left vagus nerve to oesophageal nerve plexus ends (destination)",
-    "region": "__annotation/Left branch of left vagus nerve to esophageal nerve plexus"
+    "region": "__annotation/Branch of left vagus nerve to oesophageal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (origin)"
+      "id": "__annotation/Cardiopulmonary branch A of right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -15113,7 +15113,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (origin)",
+      "id": "__annotation/Cardiopulmonary branch A of right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15130,12 +15130,12 @@
       }
     },
     "group": "Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (origin)",
-    "region": "__annotation/Right A cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch A of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (origin)"
+      "id": "__annotation/Cardiopulmonary branch A of left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -15144,7 +15144,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (origin)",
+      "id": "__annotation/Cardiopulmonary branch A of left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15161,7 +15161,7 @@
       }
     },
     "group": "Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (origin)",
-    "region": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch A of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
@@ -15197,7 +15197,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve/Point on heart innervated by cardiopulmonary branch A of left vagus nerve (destination)"
+      "id": "__annotation/Cardiopulmonary branch A of left vagus nerve/Point on heart innervated by cardiopulmonary branch A of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -15206,7 +15206,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve/Point on heart innervated by cardiopulmonary branch A of left vagus nerve (destination)",
+      "id": "__annotation/Cardiopulmonary branch A of left vagus nerve/Point on heart innervated by cardiopulmonary branch A of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15223,12 +15223,12 @@
       }
     },
     "group": "Point on heart innervated by cardiopulmonary branch A of left vagus nerve (destination)",
-    "region": "__annotation/Left A cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch A of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (origin)"
+      "id": "__annotation/Cardiopulmonary branch B of right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -15237,7 +15237,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (origin)",
+      "id": "__annotation/Cardiopulmonary branch B of right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15254,7 +15254,7 @@
       }
     },
     "group": "Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (origin)",
-    "region": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch B of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
@@ -15321,7 +15321,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (origin)"
+      "id": "__annotation/Cardiopulmonary branch B of left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -15330,7 +15330,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (origin)",
+      "id": "__annotation/Cardiopulmonary branch B of left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15347,7 +15347,7 @@
       }
     },
     "group": "Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (origin)",
-    "region": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch B of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
@@ -15383,7 +15383,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve/Point on right pulmonary nerve plexus where cardiopulmonary branch B of right vagus nerve ends (destination)"
+      "id": "__annotation/Cardiopulmonary branch B of right vagus nerve/Point on right pulmonary nerve plexus where cardiopulmonary branch B of right vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -15392,7 +15392,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve/Point on right pulmonary nerve plexus where cardiopulmonary branch B of right vagus nerve ends (destination)",
+      "id": "__annotation/Cardiopulmonary branch B of right vagus nerve/Point on right pulmonary nerve plexus where cardiopulmonary branch B of right vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15409,12 +15409,12 @@
       }
     },
     "group": "Point on right pulmonary nerve plexus where cardiopulmonary branch B of right vagus nerve ends (destination)",
-    "region": "__annotation/Right B cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch B of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve/Point on left pulmonary nerve plexus where cardiopulmonary branch B of left vagus nerve ends (destination)"
+      "id": "__annotation/Cardiopulmonary branch B of left vagus nerve/Point on left pulmonary nerve plexus where cardiopulmonary branch B of left vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -15423,7 +15423,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve/Point on left pulmonary nerve plexus where cardiopulmonary branch B of left vagus nerve ends (destination)",
+      "id": "__annotation/Cardiopulmonary branch B of left vagus nerve/Point on left pulmonary nerve plexus where cardiopulmonary branch B of left vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15440,12 +15440,12 @@
       }
     },
     "group": "Point on left pulmonary nerve plexus where cardiopulmonary branch B of left vagus nerve ends (destination)",
-    "region": "__annotation/Left B cervical cardiopulmonary branch of vagus nerve"
+    "region": "__annotation/Cardiopulmonary branch B of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of left vagus nerve with left glossopharyngeal nerve ends (destination) "
+      "id": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of left vagus nerve with left glossopharyngeal nerve ends (destination) "
     },
     "body": {
       "evidence": [
@@ -15454,7 +15454,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of left vagus nerve with left glossopharyngeal nerve ends (destination) ",
+      "id": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve/Point on inferior glossopharyngeal ganglion where communicating branch of left vagus nerve with left glossopharyngeal nerve ends (destination) ",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15471,7 +15471,7 @@
       }
     },
     "group": "Point on inferior glossopharyngeal ganglion where communicating branch of left vagus nerve with left glossopharyngeal nerve ends (destination) ",
-    "region": "__annotation/Left branch between vagus nerve and glossopharyngeal nerve"
+    "region": "__annotation/Communicating branch of left vagus nerve with left glossopharyngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
@@ -15724,7 +15724,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus ends (destination)"
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus ends (destination)"
     },
     "body": {
       "evidence": [
@@ -15733,7 +15733,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus ends (destination)",
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal nerve plexus where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15750,7 +15750,7 @@
       }
     },
     "group": "Point on pharyngeal nerve plexus where pharyngeal branch of left vagus nerve to pharyngeal nerve plexus ends (destination)",
-    "region": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F9b3db605-6e0b-439a-a9a8-23c17daa969d",
@@ -16096,7 +16096,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
     "item": {
-      "id": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus/Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)"
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (waypoint 1)"
     },
     "body": {
       "evidence": [
@@ -16105,7 +16105,38 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus/Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)",
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            0.6733427047729492,
+            -79.1564712524414,
+            1215.4530029296875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on oesophageal nerve plexus where anterior esophageal vagus trunk starts (waypoint 1)",
+    "region": "__annotation/Anterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus/Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus/Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16122,7 +16153,131 @@
       }
     },
     "group": "Point on oesophageal nerve plexus where branch of right vagus nerve to oesophageal nerve plexus ends (destination)",
-    "region": "__annotation/Right branch of right vagus nerve to esophageal nerve plexus"
+    "region": "__annotation/Branch of right vagus nerve to oesophageal nerve plexus"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (waypoint 1)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (waypoint 1)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -0.11560836434364319,
+            -69.73253631591797,
+            1207.3896484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on oesophageal nerve plexus where posterior esophageal vagus trunk starts (waypoint 1)",
+    "region": "__annotation/Posterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            7.483911991119385,
+            -103.03653717041016,
+            1131.1719970703125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point along posterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)",
+    "region": "__annotation/Posterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            1.6013054847717285,
+            -96.23467254638672,
+            1168.398681640625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point along anterior esophageal vagus trunk in relation to oesophageal hiatus (waypoint 2)",
+    "region": "__annotation/Anterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            22.61412239074707,
+            -147.50453186035156,
+            1106.367431640625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on anterior esophageal vagus trunk where greater anterior gastric nerve starts (waypoint 4)",
+    "region": "__annotation/Anterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16185,6 +16340,37 @@
     },
     "group": "Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (origin)",
     "region": "__annotation/Greater posterior gastric nerve"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            31.380956649780273,
+            -99.54481506347656,
+            1105.601318359375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on posterior esophageal vagus trunk where greater posterior gastric nerve starts (waypoint 4)",
+    "region": "__annotation/Posterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16437,7 +16623,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
     "item": {
-      "id": "__annotation/Celiac branch of posterior vagal trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (origin)"
+      "id": "__annotation/Coeliac branch of posterior vagal trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (origin)"
     },
     "body": {
       "evidence": [
@@ -16446,7 +16632,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Celiac branch of posterior vagal trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (origin)",
+      "id": "__annotation/Coeliac branch of posterior vagal trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16463,12 +16649,12 @@
       }
     },
     "group": "Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (origin)",
-    "region": "__annotation/Celiac branch of posterior vagal trunk"
+    "region": "__annotation/Coeliac branch of posterior vagal trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
     "item": {
-      "id": "__annotation/Celiac branch of posterior vagal trunk/Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)"
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 3)"
     },
     "body": {
       "evidence": [
@@ -16477,7 +16663,38 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Celiac branch of posterior vagal trunk/Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)",
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 3)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            27.865446090698242,
+            -102.03722381591797,
+            1111.9937744140625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on posterior esophageal vagus trunk where coeliac branch of posterior vagal trunk starts (waypoint 3)",
+    "region": "__annotation/Posterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Coeliac branch of posterior vagal trunk/Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Coeliac branch of posterior vagal trunk/Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16494,7 +16711,7 @@
       }
     },
     "group": "Point on coeliac nerve plexus where coeliac branch of posterior vagal trunk ends (destination)",
-    "region": "__annotation/Celiac branch of posterior vagal trunk"
+    "region": "__annotation/Coeliac branch of posterior vagal trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16526,6 +16743,37 @@
     },
     "group": "Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (origin)",
     "region": "__annotation/Hepatic branch of anterior vagal trunk"
+  },
+  {
+    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
+    "item": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 3)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 3)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            2.679999828338623,
+            -105.01649475097656,
+            1151.1766357421875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on anterior esophageal vagus trunk where hepatic branch of anterior vagal trunk starts (waypoint 3)",
+    "region": "__annotation/Anterior esophageal vagus trunk"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fd626c1bf-b044-4259-9a55-2744ba830a83",
@@ -16592,7 +16840,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of left vagus nerve to pharyngeal nerve plexus where lingual branch of left vagus nerve starts (waypoint)"
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of left vagus nerve to pharyngeal nerve plexus where lingual branch of left vagus nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -16601,7 +16849,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of left vagus nerve to pharyngeal nerve plexus where lingual branch of left vagus nerve starts (waypoint)",
+      "id": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of left vagus nerve to pharyngeal nerve plexus where lingual branch of left vagus nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16618,7 +16866,7 @@
       }
     },
     "group": "Point on pharyngeal branch of left vagus nerve to pharyngeal nerve plexus where lingual branch of left vagus nerve starts (waypoint)",
-    "region": "__annotation/Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of left vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
@@ -16654,7 +16902,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of right vagus nerve to pharyngeal nerve plexus where lingual branch of right vagus nerve starts (waypoint)"
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of right vagus nerve to pharyngeal nerve plexus where lingual branch of right vagus nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -16663,7 +16911,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of right vagus nerve to pharyngeal nerve plexus where lingual branch of right vagus nerve starts (waypoint)",
+      "id": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus/Point on pharyngeal branch of right vagus nerve to pharyngeal nerve plexus where lingual branch of right vagus nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16680,7 +16928,7 @@
       }
     },
     "group": "Point on pharyngeal branch of right vagus nerve to pharyngeal nerve plexus where lingual branch of right vagus nerve starts (waypoint)",
-    "region": "__annotation/Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
+    "region": "__annotation/Pharyngeal branch of right vagus nerve to pharyngeal nerve plexus"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
@@ -16747,7 +16995,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Superior branch of right internal laryngeal nerve/Point on epiglottis innervated by superior ramus of right internal laryngeal nerve (destination)"
+      "id": "__annotation/Superior ramus of right internal laryngeal nerve/Point on epiglottis innervated by superior ramus of right internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16756,7 +17004,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Superior branch of right internal laryngeal nerve/Point on epiglottis innervated by superior ramus of right internal laryngeal nerve (destination)",
+      "id": "__annotation/Superior ramus of right internal laryngeal nerve/Point on epiglottis innervated by superior ramus of right internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16773,12 +17021,12 @@
       }
     },
     "group": "Point on epiglottis innervated by superior ramus of right internal laryngeal nerve (destination)",
-    "region": "__annotation/Superior branch of right internal laryngeal nerve"
+    "region": "__annotation/Superior ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Superior branch of left internal laryngeal nerve/Point on epiglottis innervated by superior ramus of left internal laryngeal nerve (destination)"
+      "id": "__annotation/Superior ramus of left internal laryngeal nerve/Point on epiglottis innervated by superior ramus of left internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16787,7 +17035,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Superior branch of left internal laryngeal nerve/Point on epiglottis innervated by superior ramus of left internal laryngeal nerve (destination)",
+      "id": "__annotation/Superior ramus of left internal laryngeal nerve/Point on epiglottis innervated by superior ramus of left internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16804,12 +17052,12 @@
       }
     },
     "group": "Point on epiglottis innervated by superior ramus of left internal laryngeal nerve (destination)",
-    "region": "__annotation/Superior branch of left internal laryngeal nerve"
+    "region": "__annotation/Superior ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Middle branch of right internal laryngeal nerve/Point on epiglottis innervated by middle ramus of right internal laryngeal nerve (destination)"
+      "id": "__annotation/Middle ramus of right internal laryngeal nerve/Point on epiglottis innervated by middle ramus of right internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16818,7 +17066,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Middle branch of right internal laryngeal nerve/Point on epiglottis innervated by middle ramus of right internal laryngeal nerve (destination)",
+      "id": "__annotation/Middle ramus of right internal laryngeal nerve/Point on epiglottis innervated by middle ramus of right internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16835,12 +17083,12 @@
       }
     },
     "group": "Point on epiglottis innervated by middle ramus of right internal laryngeal nerve (destination)",
-    "region": "__annotation/Middle branch of right internal laryngeal nerve"
+    "region": "__annotation/Middle ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Middle branch of left internal laryngeal nerve/Point on epiglottis innervated by middle ramus of left internal laryngeal nerve (destination)"
+      "id": "__annotation/Middle ramus of left internal laryngeal nerve/Point on epiglottis innervated by middle ramus of left internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16849,7 +17097,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Middle branch of left internal laryngeal nerve/Point on epiglottis innervated by middle ramus of left internal laryngeal nerve (destination)",
+      "id": "__annotation/Middle ramus of left internal laryngeal nerve/Point on epiglottis innervated by middle ramus of left internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16866,12 +17114,12 @@
       }
     },
     "group": "Point on epiglottis innervated by middle ramus of left internal laryngeal nerve (destination)",
-    "region": "__annotation/Middle branch of left internal laryngeal nerve"
+    "region": "__annotation/Middle ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of right internal laryngeal nerve (destination)"
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of right internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16880,7 +17128,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of right internal laryngeal nerve (destination)",
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of right internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16897,12 +17145,12 @@
       }
     },
     "group": "Point on epiglottis innervated by inferior ramus of right internal laryngeal nerve (destination)",
-    "region": "__annotation/Inferior branch of right internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of left internal laryngeal nerve (destination)"
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of left internal laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -16911,7 +17159,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of left internal laryngeal nerve (destination)",
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on epiglottis innervated by inferior ramus of left internal laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16928,12 +17176,12 @@
       }
     },
     "group": "Point on epiglottis innervated by inferior ramus of left internal laryngeal nerve (destination)",
-    "region": "__annotation/Inferior branch of left internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where inferior ramus of left internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where inferior ramus of left internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -16942,7 +17190,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where inferior ramus of left internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where inferior ramus of left internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16959,12 +17207,12 @@
       }
     },
     "group": "Point on left internal laryngeal nerve where inferior ramus of left internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Inferior branch of left internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Middle branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where middle ramus of left internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Middle ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where middle ramus of left internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -16973,7 +17221,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Middle branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where middle ramus of left internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Middle ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where middle ramus of left internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -16990,12 +17238,12 @@
       }
     },
     "group": "Point on left internal laryngeal nerve where middle ramus of left internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Middle branch of left internal laryngeal nerve"
+    "region": "__annotation/Middle ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Superior branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where superior ramus of left internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Superior ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where superior ramus of left internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17004,7 +17252,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Superior branch of left internal laryngeal nerve/Point on left internal laryngeal nerve where superior ramus of left internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Superior ramus of left internal laryngeal nerve/Point on left internal laryngeal nerve where superior ramus of left internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17021,7 +17269,7 @@
       }
     },
     "group": "Point on left internal laryngeal nerve where superior ramus of left internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Superior branch of left internal laryngeal nerve"
+    "region": "__annotation/Superior ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
@@ -17212,7 +17460,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Superior branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where superior ramus of right internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Superior ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where superior ramus of right internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17221,7 +17469,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Superior branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where superior ramus of right internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Superior ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where superior ramus of right internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17238,12 +17486,12 @@
       }
     },
     "group": "Point on right internal laryngeal nerve where superior ramus of right internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Superior branch of right internal laryngeal nerve"
+    "region": "__annotation/Superior ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Middle branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where middle ramus of right internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Middle ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where middle ramus of right internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17252,7 +17500,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Middle branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where middle ramus of right internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Middle ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where middle ramus of right internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17269,12 +17517,12 @@
       }
     },
     "group": "Point on right internal laryngeal nerve where middle ramus of right internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Middle branch of right internal laryngeal nerve"
+    "region": "__annotation/Middle ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where inferior ramus of right internal laryngeal nerve starts (origin)"
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where inferior ramus of right internal laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17283,7 +17531,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on right internal laryngeal nerve where inferior ramus of right internal laryngeal nerve starts (origin)",
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on right internal laryngeal nerve where inferior ramus of right internal laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17300,12 +17548,12 @@
       }
     },
     "group": "Point on right internal laryngeal nerve where inferior ramus of right internal laryngeal nerve starts (origin)",
-    "region": "__annotation/Inferior branch of right internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on external acoustic meatus innervated by auricular branch of right vagus nerve (waypoint 4)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on external acoustic meatus innervated by auricular branch of right vagus nerve (waypoint 4)"
     },
     "body": {
       "evidence": [
@@ -17314,7 +17562,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on external acoustic meatus innervated by auricular branch of right vagus nerve (waypoint 4)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on external acoustic meatus innervated by auricular branch of right vagus nerve (waypoint 4)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17331,12 +17579,12 @@
       }
     },
     "group": "Point on external acoustic meatus innervated by auricular branch of right vagus nerve (waypoint 4)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F1ab0752d-ebc2-44bb-ae9d-6ec5b42428c2",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on external acoustic meatus innervated by auricular branch of left vagus nerve (waypoint 4)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on external acoustic meatus innervated by auricular branch of left vagus nerve (waypoint 4)"
     },
     "body": {
       "evidence": [
@@ -17345,7 +17593,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on external acoustic meatus innervated by auricular branch of left vagus nerve (waypoint 4)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on external acoustic meatus innervated by auricular branch of left vagus nerve (waypoint 4)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17362,7 +17610,7 @@
       }
     },
     "group": "Point on external acoustic meatus innervated by auricular branch of left vagus nerve (waypoint 4)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fff929681-f913-41e7-8aa7-ea5b9906d811",
@@ -17398,7 +17646,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fff929681-f913-41e7-8aa7-ea5b9906d811",
     "item": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on inferior ramus of right internal laryngeal nerve where communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve starts (waypoint)"
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on inferior ramus of right internal laryngeal nerve where communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -17407,7 +17655,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of right internal laryngeal nerve/Point on inferior ramus of right internal laryngeal nerve where communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve starts (waypoint)",
+      "id": "__annotation/Inferior ramus of right internal laryngeal nerve/Point on inferior ramus of right internal laryngeal nerve where communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17424,7 +17672,7 @@
       }
     },
     "group": "Point on inferior ramus of right internal laryngeal nerve where communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve starts (waypoint)",
-    "region": "__annotation/Inferior branch of right internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of right internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fff929681-f913-41e7-8aa7-ea5b9906d811",
@@ -17522,7 +17770,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fff929681-f913-41e7-8aa7-ea5b9906d811",
     "item": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on inferior ramus of left internal laryngeal nerve where communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve starts (waypoint)"
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on inferior ramus of left internal laryngeal nerve where communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -17531,7 +17779,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Inferior branch of left internal laryngeal nerve/Point on inferior ramus of left internal laryngeal nerve where communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve starts (waypoint)",
+      "id": "__annotation/Inferior ramus of left internal laryngeal nerve/Point on inferior ramus of left internal laryngeal nerve where communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17548,7 +17796,7 @@
       }
     },
     "group": "Point on inferior ramus of left internal laryngeal nerve where communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve starts (waypoint)",
-    "region": "__annotation/Inferior branch of left internal laryngeal nerve"
+    "region": "__annotation/Inferior ramus of left internal laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -17677,7 +17925,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch A of the vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch A or right vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch A of right vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch A or right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -17686,7 +17934,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch A of the vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch A or right vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch A of right vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch A or right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17703,12 +17951,12 @@
       }
     },
     "group": "Point on superior lobe of right lung innervated by pulmonary branch A or right vagus nerve (destination)",
-    "region": "__annotation/Right pulmonary branch A of the vagus nerve"
+    "region": "__annotation/Pulmonary branch A of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch A of the vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch A of right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17717,7 +17965,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch A of the vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch A of right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17734,7 +17982,7 @@
       }
     },
     "group": "Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (origin)",
-    "region": "__annotation/Right pulmonary branch A of the vagus nerve"
+    "region": "__annotation/Pulmonary branch A of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -17801,7 +18049,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch A of the vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch A of left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17810,7 +18058,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch A of the vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch A of left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17827,12 +18075,12 @@
       }
     },
     "group": "Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (origin)",
-    "region": "__annotation/Left pulmonary branch A of the vagus nerve"
+    "region": "__annotation/Pulmonary branch A of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch A of the vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch A of left vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch A of left vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch A of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -17841,7 +18089,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch A of the vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch A of left vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch A of left vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch A of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17858,12 +18106,12 @@
       }
     },
     "group": "Point on superior lobe of left lung innervated by pulmonary branch A of left vagus nerve (destination)",
-    "region": "__annotation/Left pulmonary branch A of the vagus nerve"
+    "region": "__annotation/Pulmonary branch A of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch B of the vagus nerve/Point on right anterior pulmonary nerve plexus where pulmonary branch B of right vagus nerve ends (destination)"
+      "id": "__annotation/Pulmonary branch B of right vagus nerve/Point on right anterior pulmonary nerve plexus where pulmonary branch B of right vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -17872,7 +18120,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch B of the vagus nerve/Point on right anterior pulmonary nerve plexus where pulmonary branch B of right vagus nerve ends (destination)",
+      "id": "__annotation/Pulmonary branch B of right vagus nerve/Point on right anterior pulmonary nerve plexus where pulmonary branch B of right vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17889,12 +18137,12 @@
       }
     },
     "group": "Point on right anterior pulmonary nerve plexus where pulmonary branch B of right vagus nerve ends (destination)",
-    "region": "__annotation/Right pulmonary branch B of the vagus nerve"
+    "region": "__annotation/Pulmonary branch B of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch B of the vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch B of right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17903,7 +18151,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch B of the vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch B of right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -17920,7 +18168,7 @@
       }
     },
     "group": "Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (origin)",
-    "region": "__annotation/Right pulmonary branch B of the vagus nerve"
+    "region": "__annotation/Pulmonary branch B of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -17987,7 +18235,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch C of the vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch C of right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -17996,7 +18244,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch C of the vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch C of right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18013,12 +18261,12 @@
       }
     },
     "group": "Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (origin)",
-    "region": "__annotation/Right pulmonary branch C of the vagus nerve"
+    "region": "__annotation/Pulmonary branch C of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch C of the vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch C of right vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch C of right vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch C of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18027,7 +18275,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch C of the vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch C of right vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch C of right vagus nerve/Point on superior lobe of right lung innervated by pulmonary branch C of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18044,7 +18292,7 @@
       }
     },
     "group": "Point on superior lobe of right lung innervated by pulmonary branch C of right vagus nerve (destination)",
-    "region": "__annotation/Right pulmonary branch C of the vagus nerve"
+    "region": "__annotation/Pulmonary branch C of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18080,7 +18328,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch D of the vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch D of right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18089,7 +18337,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch D of the vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch D of right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18106,12 +18354,12 @@
       }
     },
     "group": "Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (origin)",
-    "region": "__annotation/Right pulmonary branch D of the vagus nerve"
+    "region": "__annotation/Pulmonary branch D of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch D of the vagus nerve/Point on middle lobe of right lung innervated by pulmonary branch D of right vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch D of right vagus nerve/Point on middle lobe of right lung innervated by pulmonary branch D of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18120,7 +18368,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch D of the vagus nerve/Point on middle lobe of right lung innervated by pulmonary branch D of right vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch D of right vagus nerve/Point on middle lobe of right lung innervated by pulmonary branch D of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18137,12 +18385,12 @@
       }
     },
     "group": "Point on middle lobe of right lung innervated by pulmonary branch D of right vagus nerve (destination)",
-    "region": "__annotation/Right pulmonary branch D of the vagus nerve"
+    "region": "__annotation/Pulmonary branch D of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch E of the vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch E of right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18151,7 +18399,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch E of the vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch E of right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18168,7 +18416,7 @@
       }
     },
     "group": "Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (origin)",
-    "region": "__annotation/Right pulmonary branch E of the vagus nerve"
+    "region": "__annotation/Pulmonary branch E of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18204,7 +18452,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right pulmonary branch E of the vagus nerve/Point on inferior lobe of right lung innervated by pulmonary branch E of right vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch E of right vagus nerve/Point on inferior lobe of right lung innervated by pulmonary branch E of right vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18213,7 +18461,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right pulmonary branch E of the vagus nerve/Point on inferior lobe of right lung innervated by pulmonary branch E of right vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch E of right vagus nerve/Point on inferior lobe of right lung innervated by pulmonary branch E of right vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18230,12 +18478,12 @@
       }
     },
     "group": "Point on inferior lobe of right lung innervated by pulmonary branch E of right vagus nerve (destination)",
-    "region": "__annotation/Right pulmonary branch E of the vagus nerve"
+    "region": "__annotation/Pulmonary branch E of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch B of the vagus nerve/Point on left anterior pulmonary nerve plexus where pulmonary branch B of left vagus nerve ends (destination)"
+      "id": "__annotation/Pulmonary branch B of left vagus nerve/Point on left anterior pulmonary nerve plexus where pulmonary branch B of left vagus nerve ends (destination)"
     },
     "body": {
       "evidence": [
@@ -18244,7 +18492,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch B of the vagus nerve/Point on left anterior pulmonary nerve plexus where pulmonary branch B of left vagus nerve ends (destination)",
+      "id": "__annotation/Pulmonary branch B of left vagus nerve/Point on left anterior pulmonary nerve plexus where pulmonary branch B of left vagus nerve ends (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18261,12 +18509,12 @@
       }
     },
     "group": "Point on left anterior pulmonary nerve plexus where pulmonary branch B of left vagus nerve ends (destination)",
-    "region": "__annotation/Left pulmonary branch B of the vagus nerve"
+    "region": "__annotation/Pulmonary branch B of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch B of the vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch B of left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18275,7 +18523,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch B of the vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch B of left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18292,7 +18540,7 @@
       }
     },
     "group": "Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (origin)",
-    "region": "__annotation/Left pulmonary branch B of the vagus nerve"
+    "region": "__annotation/Pulmonary branch B of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18359,7 +18607,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch C of the vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch C of left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18368,7 +18616,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch C of the vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch C of left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18385,12 +18633,12 @@
       }
     },
     "group": "Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (origin)",
-    "region": "__annotation/Left pulmonary branch C of the vagus nerve"
+    "region": "__annotation/Pulmonary branch C of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch C of the vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch C of left vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch C of left vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch C of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18399,7 +18647,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch C of the vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch C of left vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch C of left vagus nerve/Point on superior lobe of left lung innervated by pulmonary branch C of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18416,12 +18664,12 @@
       }
     },
     "group": "Point on superior lobe of left lung innervated by pulmonary branch C of left vagus nerve (destination)",
-    "region": "__annotation/Left pulmonary branch C of the vagus nerve"
+    "region": "__annotation/Pulmonary branch C of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch D of the vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (origin)"
+      "id": "__annotation/Pulmonary branch D of left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18430,7 +18678,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch D of the vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (origin)",
+      "id": "__annotation/Pulmonary branch D of left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18447,7 +18695,7 @@
       }
     },
     "group": "Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (origin)",
-    "region": "__annotation/Left pulmonary branch D of the vagus nerve"
+    "region": "__annotation/Pulmonary branch D of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18483,7 +18731,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left pulmonary branch D of the vagus nerve/Point on inferior lobe of left lung innervated by pulmonary branch D of left vagus nerve (destination)"
+      "id": "__annotation/Pulmonary branch D of left vagus nerve/Point on inferior lobe of left lung innervated by pulmonary branch D of left vagus nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18492,7 +18740,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left pulmonary branch D of the vagus nerve/Point on inferior lobe of left lung innervated by pulmonary branch D of left vagus nerve (destination)",
+      "id": "__annotation/Pulmonary branch D of left vagus nerve/Point on inferior lobe of left lung innervated by pulmonary branch D of left vagus nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18509,7 +18757,7 @@
       }
     },
     "group": "Point on inferior lobe of left lung innervated by pulmonary branch D of left vagus nerve (destination)",
-    "region": "__annotation/Left pulmonary branch D of the vagus nerve"
+    "region": "__annotation/Pulmonary branch D of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18731,7 +18979,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Esophageal branch of left recurrent laryngeal nerve/Point on left recurrent laryngeal nerve where oesophageal branch of left recurrent laryngeal nerve starts (origin)"
+      "id": "__annotation/Oesophageal branch of left recurrent laryngeal nerve/Point on left recurrent laryngeal nerve where oesophageal branch of left recurrent laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18740,7 +18988,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Esophageal branch of left recurrent laryngeal nerve/Point on left recurrent laryngeal nerve where oesophageal branch of left recurrent laryngeal nerve starts (origin)",
+      "id": "__annotation/Oesophageal branch of left recurrent laryngeal nerve/Point on left recurrent laryngeal nerve where oesophageal branch of left recurrent laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18757,7 +19005,7 @@
       }
     },
     "group": "Point on left recurrent laryngeal nerve where oesophageal branch of left recurrent laryngeal nerve starts (origin)",
-    "region": "__annotation/Esophageal branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Oesophageal branch of left recurrent laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18793,7 +19041,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Esophageal branch of left recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of left recurrent laryngeal nerve (destination)"
+      "id": "__annotation/Oesophageal branch of left recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of left recurrent laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18802,7 +19050,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Esophageal branch of left recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of left recurrent laryngeal nerve (destination)",
+      "id": "__annotation/Oesophageal branch of left recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of left recurrent laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18819,12 +19067,12 @@
       }
     },
     "group": "Point on oesophagus innervated by oesophageal branch of left recurrent laryngeal nerve (destination)",
-    "region": "__annotation/Esophageal branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Oesophageal branch of left recurrent laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Esophageal branch of right recurrent laryngeal nerve/Point on right recurrent laryngeal nerve where oesophageal branch of right recurrent laryngeal nerve starts (origin)"
+      "id": "__annotation/Oesophageal branch of right recurrent laryngeal nerve/Point on right recurrent laryngeal nerve where oesophageal branch of right recurrent laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -18833,7 +19081,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Esophageal branch of right recurrent laryngeal nerve/Point on right recurrent laryngeal nerve where oesophageal branch of right recurrent laryngeal nerve starts (origin)",
+      "id": "__annotation/Oesophageal branch of right recurrent laryngeal nerve/Point on right recurrent laryngeal nerve where oesophageal branch of right recurrent laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18850,7 +19098,7 @@
       }
     },
     "group": "Point on right recurrent laryngeal nerve where oesophageal branch of right recurrent laryngeal nerve starts (origin)",
-    "region": "__annotation/Esophageal branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Oesophageal branch of right recurrent laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
@@ -18886,7 +19134,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Esophageal branch of right recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of right recurrent laryngeal nerve (destination)"
+      "id": "__annotation/Oesophageal branch of right recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of right recurrent laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -18895,7 +19143,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Esophageal branch of right recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of right recurrent laryngeal nerve (destination)",
+      "id": "__annotation/Oesophageal branch of right recurrent laryngeal nerve/Point on oesophagus innervated by oesophageal branch of right recurrent laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18912,12 +19160,12 @@
       }
     },
     "group": "Point on oesophagus innervated by oesophageal branch of right recurrent laryngeal nerve (destination)",
-    "region": "__annotation/Esophageal branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Oesophageal branch of right recurrent laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F77e598d5-1386-42b1-acd3-6c59a57e709e",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on right tympanic membrane innervated by auricular branch of right vagus nerve (waypoint 3)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on right tympanic membrane innervated by auricular branch of right vagus nerve (waypoint 3)"
     },
     "body": {
       "evidence": [
@@ -18926,7 +19174,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on right tympanic membrane innervated by auricular branch of right vagus nerve (waypoint 3)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on right tympanic membrane innervated by auricular branch of right vagus nerve (waypoint 3)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18943,12 +19191,12 @@
       }
     },
     "group": "Point on right tympanic membrane innervated by auricular branch of right vagus nerve (waypoint 3)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F77e598d5-1386-42b1-acd3-6c59a57e709e",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on left tympanic membrane innervated by auricular branch of left vagus nerve (waypoint 3)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on left tympanic membrane innervated by auricular branch of left vagus nerve (waypoint 3)"
     },
     "body": {
       "evidence": [
@@ -18957,7 +19205,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on left tympanic membrane innervated by auricular branch of left vagus nerve (waypoint 3)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on left tympanic membrane innervated by auricular branch of left vagus nerve (waypoint 3)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18974,7 +19222,7 @@
       }
     },
     "group": "Point on left tympanic membrane innervated by auricular branch of left vagus nerve (waypoint 3)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2f6e54ae-7c58-49bc-97bf-a6dc688422eb",
@@ -19165,7 +19413,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2f6e54ae-7c58-49bc-97bf-a6dc688422eb",
     "item": {
-      "id": "__annotation/Anterior branch of left recurrent laryngeal nerve/Point on left inferior laryngeal nerve where anterior branch of left inferior laryngeal nerve starts (origin)"
+      "id": "__annotation/Anterior branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where anterior branch of left inferior laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -19174,7 +19422,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Anterior branch of left recurrent laryngeal nerve/Point on left inferior laryngeal nerve where anterior branch of left inferior laryngeal nerve starts (origin)",
+      "id": "__annotation/Anterior branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where anterior branch of left inferior laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19191,12 +19439,12 @@
       }
     },
     "group": "Point on left inferior laryngeal nerve where anterior branch of left inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/Anterior branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Anterior branch of left inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2f6e54ae-7c58-49bc-97bf-a6dc688422eb",
     "item": {
-      "id": "__annotation/Posterior branch of left recurrent laryngeal nerve/Point on left inferior laryngeal nerve where posterior branch of left inferior laryngeal nerve starts (origin)"
+      "id": "__annotation/Posterior branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where posterior branch of left inferior laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -19205,7 +19453,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Posterior branch of left recurrent laryngeal nerve/Point on left inferior laryngeal nerve where posterior branch of left inferior laryngeal nerve starts (origin)",
+      "id": "__annotation/Posterior branch of left inferior laryngeal nerve/Point on left inferior laryngeal nerve where posterior branch of left inferior laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19222,7 +19470,7 @@
       }
     },
     "group": "Point on left inferior laryngeal nerve where posterior branch of left inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/Posterior branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Posterior branch of left inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F2f6e54ae-7c58-49bc-97bf-a6dc688422eb",
@@ -19258,7 +19506,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
     "item": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)"
+      "id": "__annotation/Vagal branch to left carotid body/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -19267,7 +19515,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Branch of left vagus nerve to carotid body/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)",
+      "id": "__annotation/Vagal branch to left carotid body/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19284,7 +19532,7 @@
       }
     },
     "group": "Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (waypoint)",
-    "region": "__annotation/Branch of left vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to left carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
@@ -19413,7 +19661,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on auricular branch of left vagus nerve where communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve starts (waypoint 1)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on auricular branch of left vagus nerve where communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve starts (waypoint 1)"
     },
     "body": {
       "evidence": [
@@ -19422,7 +19670,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point on auricular branch of left vagus nerve where communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve starts (waypoint 1)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point on auricular branch of left vagus nerve where communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve starts (waypoint 1)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19439,7 +19687,7 @@
       }
     },
     "group": "Point on auricular branch of left vagus nerve where communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve starts (waypoint 1)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
@@ -19568,7 +19816,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
     "item": {
-      "id": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx/Point on left recurrent laryngeal nerve where extra-laryngeal branch of left recurrent laryngeal nerve to larynx starts (origin)"
+      "id": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx/Point on left recurrent laryngeal nerve where extra-laryngeal branch of left recurrent laryngeal nerve to larynx starts (origin)"
     },
     "body": {
       "evidence": [
@@ -19577,7 +19825,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx/Point on left recurrent laryngeal nerve where extra-laryngeal branch of left recurrent laryngeal nerve to larynx starts (origin)",
+      "id": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx/Point on left recurrent laryngeal nerve where extra-laryngeal branch of left recurrent laryngeal nerve to larynx starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19594,12 +19842,12 @@
       }
     },
     "group": "Point on left recurrent laryngeal nerve where extra-laryngeal branch of left recurrent laryngeal nerve to larynx starts (origin)",
-    "region": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx"
+    "region": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe11c3767-82ce-412c-958e-9567b951d660",
     "item": {
-      "id": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of left recurrent laryngeal nerve to larynx (destination)"
+      "id": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of left recurrent laryngeal nerve to larynx (destination)"
     },
     "body": {
       "evidence": [
@@ -19608,7 +19856,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of left recurrent laryngeal nerve to larynx (destination)",
+      "id": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of left recurrent laryngeal nerve to larynx (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19625,7 +19873,7 @@
       }
     },
     "group": "Point on wall of larynx innervated by extra-laryngeal branch of left recurrent laryngeal nerve to larynx (destination)",
-    "region": "__annotation/Extra laryngeal branch of left recurrent laryngeal nerve to larynx"
+    "region": "__annotation/Extra-laryngeal branch of left recurrent laryngeal nerve to larynx"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F21259608-111f-4700-a33b-d0835b6c4e52",
@@ -19661,7 +19909,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F21259608-111f-4700-a33b-d0835b6c4e52",
     "item": {
-      "id": "__annotation/Anterior branch of left recurrent laryngeal nerve/Point on wall of larynx innervated by anterior branch of left inferior laryngeal nerve (destination)"
+      "id": "__annotation/Anterior branch of left inferior laryngeal nerve/Point on wall of larynx innervated by anterior branch of left inferior laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -19670,7 +19918,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Anterior branch of left recurrent laryngeal nerve/Point on wall of larynx innervated by anterior branch of left inferior laryngeal nerve (destination)",
+      "id": "__annotation/Anterior branch of left inferior laryngeal nerve/Point on wall of larynx innervated by anterior branch of left inferior laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19687,12 +19935,12 @@
       }
     },
     "group": "Point on wall of larynx innervated by anterior branch of left inferior laryngeal nerve (destination)",
-    "region": "__annotation/Anterior branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Anterior branch of left inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F21259608-111f-4700-a33b-d0835b6c4e52",
     "item": {
-      "id": "__annotation/Posterior branch of left recurrent laryngeal nerve/Point on wall of larynx innervated by posterior branch of left inferior laryngeal nerve (destination)"
+      "id": "__annotation/Posterior branch of left inferior laryngeal nerve/Point on wall of larynx innervated by posterior branch of left inferior laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -19701,7 +19949,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Posterior branch of left recurrent laryngeal nerve/Point on wall of larynx innervated by posterior branch of left inferior laryngeal nerve (destination)",
+      "id": "__annotation/Posterior branch of left inferior laryngeal nerve/Point on wall of larynx innervated by posterior branch of left inferior laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19718,7 +19966,7 @@
       }
     },
     "group": "Point on wall of larynx innervated by posterior branch of left inferior laryngeal nerve (destination)",
-    "region": "__annotation/Posterior branch of left recurrent laryngeal nerve"
+    "region": "__annotation/Posterior branch of left inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F21259608-111f-4700-a33b-d0835b6c4e52",
@@ -19816,7 +20064,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (waypoint)"
+      "id": "__annotation/Vagal branch to right carotid body/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (waypoint)"
     },
     "body": {
       "evidence": [
@@ -19825,7 +20073,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Branch of right vagus nerve to carotid body/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (waypoint)",
+      "id": "__annotation/Vagal branch to right carotid body/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19842,12 +20090,12 @@
       }
     },
     "group": "Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (waypoint)",
-    "region": "__annotation/Branch of right vagus nerve to carotid body"
+    "region": "__annotation/Vagal branch to right carotid body"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Right branch between vagus nerve and superior cervical ganglion/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (origin)"
+      "id": "__annotation/Communicating branch of superior cervical ganglion with right vagus nerve/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -19856,7 +20104,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right branch between vagus nerve and superior cervical ganglion/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (origin)",
+      "id": "__annotation/Communicating branch of superior cervical ganglion with right vagus nerve/Point on vagal branch to right carotid body where communicating branch of superior cervical ganglion with right vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19878,7 +20126,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Left branch between vagus nerve and superior cervical ganglion/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)"
+      "id": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -19887,7 +20135,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left branch between vagus nerve and superior cervical ganglion/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)",
+      "id": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve/Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -19904,7 +20152,7 @@
       }
     },
     "group": "Point on vagal branch to left carotid body where communicating branch of superior cervical ganglion with left vagus nerve starts (origin)",
-    "region": "__annotation/Left branch between vagus nerve and superior cervical ganglion"
+    "region": "__annotation/Communicating branch of superior cervical ganglion with left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
@@ -20188,7 +20436,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx/Point on right recurrent laryngeal nerve where extra-laryngeal branch of right recurrent laryngeal nerve to larynx starts (origin)"
+      "id": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx/Point on right recurrent laryngeal nerve where extra-laryngeal branch of right recurrent laryngeal nerve to larynx starts (origin)"
     },
     "body": {
       "evidence": [
@@ -20197,7 +20445,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx/Point on right recurrent laryngeal nerve where extra-laryngeal branch of right recurrent laryngeal nerve to larynx starts (origin)",
+      "id": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx/Point on right recurrent laryngeal nerve where extra-laryngeal branch of right recurrent laryngeal nerve to larynx starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20214,12 +20462,12 @@
       }
     },
     "group": "Point on right recurrent laryngeal nerve where extra-laryngeal branch of right recurrent laryngeal nerve to larynx starts (origin)",
-    "region": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx"
+    "region": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of right recurrent laryngeal nerve to larynx (destination)"
+      "id": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of right recurrent laryngeal nerve to larynx (destination)"
     },
     "body": {
       "evidence": [
@@ -20228,7 +20476,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of right recurrent laryngeal nerve to larynx (destination)",
+      "id": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx/Point on wall of larynx innervated by extra-laryngeal branch of right recurrent laryngeal nerve to larynx (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20245,7 +20493,7 @@
       }
     },
     "group": "Point on wall of larynx innervated by extra-laryngeal branch of right recurrent laryngeal nerve to larynx (destination)",
-    "region": "__annotation/Extra laryngeal branch of right recurrent laryngeal nerve to larynx"
+    "region": "__annotation/Extra-laryngeal branch of right recurrent laryngeal nerve to larynx"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
@@ -20343,7 +20591,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Anterior branch of right recurrent laryngeal nerve/Point on right inferior laryngeal nerve where anterior branch of right inferior laryngeal nerve starts (origin)"
+      "id": "__annotation/Anterior branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where anterior branch of right inferior laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -20352,7 +20600,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Anterior branch of right recurrent laryngeal nerve/Point on right inferior laryngeal nerve where anterior branch of right inferior laryngeal nerve starts (origin)",
+      "id": "__annotation/Anterior branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where anterior branch of right inferior laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20369,12 +20617,12 @@
       }
     },
     "group": "Point on right inferior laryngeal nerve where anterior branch of right inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/Anterior branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Anterior branch of right inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
     "item": {
-      "id": "__annotation/Posterior branch of right recurrent laryngeal nerve/Point on right inferior laryngeal nerve where posterior branch of right inferior laryngeal nerve starts (origin)"
+      "id": "__annotation/Posterior branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where posterior branch of right inferior laryngeal nerve starts (origin)"
     },
     "body": {
       "evidence": [
@@ -20383,7 +20631,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Posterior branch of right recurrent laryngeal nerve/Point on right inferior laryngeal nerve where posterior branch of right inferior laryngeal nerve starts (origin)",
+      "id": "__annotation/Posterior branch of right inferior laryngeal nerve/Point on right inferior laryngeal nerve where posterior branch of right inferior laryngeal nerve starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20400,7 +20648,7 @@
       }
     },
     "group": "Point on right inferior laryngeal nerve where posterior branch of right inferior laryngeal nerve starts (origin)",
-    "region": "__annotation/Posterior branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Posterior branch of right inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff168ba06-6db2-4dab-94cb-fa7e97db5167",
@@ -20436,7 +20684,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
     "item": {
-      "id": "__annotation/Anterior branch of right recurrent laryngeal nerve/Point on wall of larynx innervated by anterior branch of right inferior laryngeal nerve (destination)"
+      "id": "__annotation/Anterior branch of right inferior laryngeal nerve/Point on wall of larynx innervated by anterior branch of right inferior laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -20445,7 +20693,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Anterior branch of right recurrent laryngeal nerve/Point on wall of larynx innervated by anterior branch of right inferior laryngeal nerve (destination)",
+      "id": "__annotation/Anterior branch of right inferior laryngeal nerve/Point on wall of larynx innervated by anterior branch of right inferior laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20462,12 +20710,12 @@
       }
     },
     "group": "Point on wall of larynx innervated by anterior branch of right inferior laryngeal nerve (destination)",
-    "region": "__annotation/Anterior branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Anterior branch of right inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
     "item": {
-      "id": "__annotation/Posterior branch of right recurrent laryngeal nerve/Point on wall of larynx innervated by posterior branch of right inferior laryngeal nerve (destination)"
+      "id": "__annotation/Posterior branch of right inferior laryngeal nerve/Point on wall of larynx innervated by posterior branch of right inferior laryngeal nerve (destination)"
     },
     "body": {
       "evidence": [
@@ -20476,7 +20724,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Posterior branch of right recurrent laryngeal nerve/Point on wall of larynx innervated by posterior branch of right inferior laryngeal nerve (destination)",
+      "id": "__annotation/Posterior branch of right inferior laryngeal nerve/Point on wall of larynx innervated by posterior branch of right inferior laryngeal nerve (destination)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20493,12 +20741,12 @@
       }
     },
     "group": "Point on wall of larynx innervated by posterior branch of right inferior laryngeal nerve (destination)",
-    "region": "__annotation/Posterior branch of right recurrent laryngeal nerve"
+    "region": "__annotation/Posterior branch of right inferior laryngeal nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on auricular branch of right vagus nerve where communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve starts (waypoint 1)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on auricular branch of right vagus nerve where communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve starts (waypoint 1)"
     },
     "body": {
       "evidence": [
@@ -20507,7 +20755,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point on auricular branch of right vagus nerve where communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve starts (waypoint 1)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point on auricular branch of right vagus nerve where communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve starts (waypoint 1)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20524,7 +20772,7 @@
       }
     },
     "group": "Point on auricular branch of right vagus nerve where communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve starts (waypoint 1)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F80571229-aecf-446d-bb80-5b62dfd50d57",
@@ -39511,7 +39759,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
     "item": {
-      "id": "__annotation/Right common plantar digital nerve A/Point on right medial plantar nerve where right common plantar digital nerve A starts (origin)"
+      "id": "__annotation/Right proper plantar digital nerve A/Point on right medial plantar nerve where right proper plantar digital nerve A starts (origin)"
     },
     "body": {
       "evidence": [
@@ -39520,7 +39768,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right common plantar digital nerve A/Point on right medial plantar nerve where right common plantar digital nerve A starts (origin)",
+      "id": "__annotation/Right proper plantar digital nerve A/Point on right medial plantar nerve where right proper plantar digital nerve A starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -39536,8 +39784,8 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right medial plantar nerve where right common plantar digital nerve A starts (origin)",
-    "region": "__annotation/Right common plantar digital nerve A"
+    "group": "Point on right medial plantar nerve where right proper plantar digital nerve A starts (origin)",
+    "region": "__annotation/Right proper plantar digital nerve A"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
@@ -40007,7 +40255,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
     "item": {
-      "id": "__annotation/Left common plantar digital nerve A/Point on left medial plantar nerve where left common plantar digital nerve A starts (origin)"
+      "id": "__annotation/Left proper plantar digital nerve A/Point on left medial plantar nerve where left proper plantar digital nerve A starts (origin)"
     },
     "body": {
       "evidence": [
@@ -40016,7 +40264,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left common plantar digital nerve A/Point on left medial plantar nerve where left common plantar digital nerve A starts (origin)",
+      "id": "__annotation/Left proper plantar digital nerve A/Point on left medial plantar nerve where left proper plantar digital nerve A starts (origin)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -40032,8 +40280,8 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left medial plantar nerve where left common plantar digital nerve A starts (origin)",
-    "region": "__annotation/Left common plantar digital nerve A"
+    "group": "Point on left medial plantar nerve where left proper plantar digital nerve A starts (origin)",
+    "region": "__annotation/Left proper plantar digital nerve A"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
@@ -40131,7 +40379,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
     "item": {
-      "id": "__annotation/Left common plantar digital nerve A/Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (destination)"
+      "id": "__annotation/Left proper plantar digital nerve A/Point along left common plantar digital nerve A (waypoint)"
     },
     "body": {
       "evidence": [
@@ -40140,38 +40388,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left common plantar digital nerve A/Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            89.10359954833984,
-            -198.92384338378906,
-            -58.00545883178711
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (destination)",
-    "region": "__annotation/Left common plantar digital nerve A"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F95989a93-e836-43b8-aed3-df43c97bc723",
-    "item": {
-      "id": "__annotation/Left proper plantar digital nerve A/Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Left proper plantar digital nerve A/Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (origin)",
+      "id": "__annotation/Left proper plantar digital nerve A/Point along left common plantar digital nerve A (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -40187,7 +40404,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left common plantar digital nerve A where left proper plantar digital nerve A starts (origin)",
+    "group": "Point along left common plantar digital nerve A (waypoint)",
     "region": "__annotation/Left proper plantar digital nerve A"
   },
   {
@@ -40751,7 +40968,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe67554ef-7c5d-431d-b61c-761417eeafe4",
     "item": {
-      "id": "__annotation/Right common plantar digital nerve A/Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (destination)"
+      "id": "__annotation/Right proper plantar digital nerve A/Point along right common plantar digital nerve A (waypoint)"
     },
     "body": {
       "evidence": [
@@ -40760,38 +40977,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right common plantar digital nerve A/Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (destination)",
-      "properties": {
-        "drawn": true,
-        "label": "Drawn annotation"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -87.51819610595703,
-            -180.77317810058594,
-            -47.795143127441406
-          ]
-        ],
-        "type": "MultiPoint"
-      }
-    },
-    "group": "Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (destination)",
-    "region": "__annotation/Right common plantar digital nerve A"
-  },
-  {
-    "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe67554ef-7c5d-431d-b61c-761417eeafe4",
-    "item": {
-      "id": "__annotation/Right proper plantar digital nerve A/Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (origin)"
-    },
-    "body": {
-      "evidence": [
-        
-      ],
-      "comment": "Create"
-    },
-    "feature": {
-      "id": "__annotation/Right proper plantar digital nerve A/Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (origin)",
+      "id": "__annotation/Right proper plantar digital nerve A/Point along right common plantar digital nerve A (waypoint)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -40807,7 +40993,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right common plantar digital nerve A where right proper plantar digital nerve A starts (origin)",
+    "group": "Point along right common plantar digital nerve A (waypoint)",
     "region": "__annotation/Right proper plantar digital nerve A"
   },
   {
@@ -78415,7 +78601,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fddc1ef5f-12f3-41bb-b6d9-2c40fc9cc319",
     "item": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point where communicating branch of left glossopharyngeal nerve with auricular branch of left vagus nerve and auricular branch of left vagus nerve meet (waypoint 2)"
+      "id": "__annotation/Auricular branch of left vagus nerve/Point where communicating branch of left glossopharyngeal nerve with auricular branch of left vagus nerve and auricular branch of left vagus nerve meet (waypoint 2)"
     },
     "body": {
       "evidence": [
@@ -78424,7 +78610,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left auricular branch of left vagus nerve/Point where communicating branch of left glossopharyngeal nerve with auricular branch of left vagus nerve and auricular branch of left vagus nerve meet (waypoint 2)",
+      "id": "__annotation/Auricular branch of left vagus nerve/Point where communicating branch of left glossopharyngeal nerve with auricular branch of left vagus nerve and auricular branch of left vagus nerve meet (waypoint 2)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -78441,7 +78627,7 @@
       }
     },
     "group": "Point where communicating branch of left glossopharyngeal nerve with auricular branch of left vagus nerve and auricular branch of left vagus nerve meet (waypoint 2)",
-    "region": "__annotation/Left auricular branch of left vagus nerve"
+    "region": "__annotation/Auricular branch of left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fddc1ef5f-12f3-41bb-b6d9-2c40fc9cc319",
@@ -78508,7 +78694,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fddc1ef5f-12f3-41bb-b6d9-2c40fc9cc319",
     "item": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point where communicating branch of right glossopharyngeal nerve with auricular branch of right vagus nerve and auricular branch of right vagus nerve meet (waypoint 2)"
+      "id": "__annotation/Auricular branch of right vagus nerve/Point where communicating branch of right glossopharyngeal nerve with auricular branch of right vagus nerve and auricular branch of right vagus nerve meet (waypoint 2)"
     },
     "body": {
       "evidence": [
@@ -78517,7 +78703,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right auricular branch of right vagus nerve/Point where communicating branch of right glossopharyngeal nerve with auricular branch of right vagus nerve and auricular branch of right vagus nerve meet (waypoint 2)",
+      "id": "__annotation/Auricular branch of right vagus nerve/Point where communicating branch of right glossopharyngeal nerve with auricular branch of right vagus nerve and auricular branch of right vagus nerve meet (waypoint 2)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -78534,7 +78720,7 @@
       }
     },
     "group": "Point where communicating branch of right glossopharyngeal nerve with auricular branch of right vagus nerve and auricular branch of right vagus nerve meet (waypoint 2)",
-    "region": "__annotation/Right auricular branch of right vagus nerve"
+    "region": "__annotation/Auricular branch of right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F18655d8c-6971-4420-92b6-698ccb9055c2",
@@ -90811,5 +90997,129 @@
     },
     "group": "Point on right medial cutaneous nerve of arm in relation to axillary artery (waypoint 1)",
     "region": "__annotation/Right medial cutaneous nerve of arm"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 20)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 20)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+			12.689011573791504,
+			-73.46512603759766,
+			1242.4290771484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on esophageal plexus (waypoint 20)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 19)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 19)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+			12.689011573791504,
+			-73.46512603759766,
+			1242.4290771484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on esophageal plexus (waypoint 19)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
+    "item": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on esophageal plexus (origin)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Anterior esophageal vagus trunk/Point on esophageal plexus (origin)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+			12.689011573791504,
+			-73.46512603759766,
+			1242.4290771484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on esophageal plexus (origin)",
+    "region": "__annotation/Anterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
+    "item": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on esophageal plexus (origin)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Posterior esophageal vagus trunk/Point on esophageal plexus (origin)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+			12.689011573791504,
+			-73.46512603759766,
+			1242.4290771484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point on esophageal plexus (origin)",
+    "region": "__annotation/Posterior esophageal vagus trunk"
   }
 ]
