@@ -5,6 +5,8 @@ Generates a 1-D nerve path mesh.
 from __future__ import division
 
 import json
+import openpyxl
+
 from cmlibs.utils.zinc.field import findOrCreateFieldStoredMeshLocation
 from cmlibs.zinc.element import Element, Elementbasis
 from cmlibs.zinc.field import Field
@@ -50,6 +52,24 @@ class MeshType_1d_nervepath1(Scaffold_base):
         elementIdentifier = 1
 
         filename1 = "C:\\Users\\mlin865\\map\\packages\\sparc\\scaffoldmaker\\inputFile\\nerveAnnotations_manInBox.json"
+        excelFile = "C:\\Users\\mlin865\\map\\packages\\sparc\\scaffoldmaker\\inputFile\\M2.6 Origin, destination and components for major nerve pathways for 3D whole-body.xlsx"
+
+        # Extract identifiers
+        wb = openpyxl.load_workbook(excelFile)
+        ws = wb['Sheet1']
+        namesInMIB = []
+        termIDs = []
+        for i in range(1, ws.max_row):
+            if ws.cell(row=i, column=1).value == 'Yes':
+                branchName = ws.cell(row=i, column=2).value
+                # remove second name
+                namesInMIB.append(branchName.split(" (")[0])  # parse to get term used in man-in-box
+                contentFromIDColumn = ws.cell(row=i, column=3).value
+                if contentFromIDColumn == "REQUESTED":
+                    termIDs.append('None')
+                else:
+                    termIDs.append(ws.cell(row=i, column=3).value)
+
 
         marker_data = {}
         marker_data_group = {}
@@ -94,9 +114,6 @@ class MeshType_1d_nervepath1(Scaffold_base):
             waypointsOrder = []
             destinations = []
 
-            # Create annotation group
-            branchGroup = AnnotationGroup(region,  (marker_group, "None"))
-
             # Check for duplicate groups
             groupNotInList = 1
             for group in cleanGroupList:
@@ -106,6 +123,18 @@ class MeshType_1d_nervepath1(Scaffold_base):
                     break
             if groupNotInList:
                 cleanGroupList.append(marker_group)
+
+                # Create annotation group
+                # Find branch name identifiers
+                branchID = []
+                for i in range(len(namesInMIB)):
+                    if marker_group == namesInMIB[i]:
+                        branchID = termIDs[i]
+                if branchID:
+                    pass
+                else:
+                    print('Branch has no ID -', marker_group)
+                branchGroup = AnnotationGroup(region, (marker_group, branchID if branchID else 'None'))
 
             # if marker_group in ["Left obturator nerve"]:
             # Discover markers in each group (duplicate included)
@@ -240,6 +269,7 @@ class MeshType_1d_nervepath1(Scaffold_base):
             else:
                 print('Code could not deal with this -', marker_group, len(origins), len(waypoints), len(destinations))
 
+
         # Make markers
         markerGroup = findOrCreateFieldGroup(fieldmodule, "marker")
         markerName = findOrCreateFieldStoredString(fieldmodule, name="marker_name")
@@ -282,13 +312,92 @@ class MeshType_1d_nervepath1(Scaffold_base):
         # with open(modFile, 'w') as f:
         #     json.dump(d, f)
 
-        # # Extract groups of nerves from annotation file for Jen
-        # reducedFile = "C:\\Users\\mlin865\\manInBox\\files from Jen\\L2SpinalNerves.json"
-        # extractNerveList = ['Left L2 spinal nerve', 'Right L2 spinal nerve',
-        #                     'Left femoral nerve', 'Right femoral nerve',
-        #                     'Left obturator nerve', 'Right obturator nerve',
-        #                     'Left lateral femoral cutaneous nerve', 'Right lateral femoral cutaneous nerve'
-        #                     ]
+        # # # # Extract groups of nerves from annotation file for Jen
+        # reducedFile = "C:\\Users\\mlin865\\manInBox\\files from Jen\\leftVagusNerves.json"
+        # extractNerveList = ['Left meningeal branch of left vagus nerve',
+        #                     'Left branch between vagus nerve and glossopharyngeal nerve',
+        #                     'Left auricular branch of left vagus nerve',
+        #                     'Communicating branch of auricular branch of left vagus nerve with left facial nerve',
+        #                     'Communicating branch of auricular branch of left vagus nerve with left posterior auricular nerve',
+        #                     'Left pharyngeal branch of left vagus nerve to pharyngeal nerve plexus',
+        #                     'Lingual branch of left vagus nerve',
+        #                     'Left pharyngeal branch of left vagus nerve to superior cervical ganglion',
+        #                     'Branch of left vagus nerve to carotid body',
+        #                     'Left branch between vagus nerve and superior cervical ganglion',
+        #                     'Left superior laryngeal nerve',
+        #                     'Left internal laryngeal nerve',
+        #                     'Left external laryngeal nerve',
+        #                     'Superior branch of left internal laryngeal nerve',
+        #                     'Middle branch of left internal laryngeal nerve',
+        #                     'Inferior branch of left internal laryngeal nerve',
+        #                     'Communicating branch of left internal laryngeal nerve with left recurrent laryngeal nerve',
+        #                     'Communicating branch of left external laryngeal nerve with left superior cardiac nerve',
+        #                     'Left A cervical cardiopulmonary branch of vagus nerve',
+        #                     'Left B cervical cardiopulmonary branch of vagus nerve',
+        #                     'Left pulmonary branch A of the vagus nerve',
+        #                     'Left pulmonary branch B of the vagus nerve',
+        #                     'Left pulmonary branch C of the vagus nerve',
+        #                     'Left pulmonary branch D of the vagus nerve',
+        #                     'Superior cervical cardiac branch of left vagus nerve',
+        #                     'Left recurrent laryngeal nerve',
+        #                     'Extra laryngeal branch of left recurrent laryngeal nerve to larynx',
+        #                     'Branch of left recurrent laryngeal nerve to muscle of larynx',
+        #                     'Esophageal branch of left recurrent laryngeal nerve',
+        #                     'Tracheal branch of left recurrent laryngeal nerve',
+        #                     'Anterior branch of left recurrent laryngeal nerve',
+        #                     'Posterior branch of left recurrent laryngeal nerve',
+        #                     'Inferior cervical cardiac branch of left recurrent laryngeal nerve',
+        #                     'Inferior cervical cardiac branch of left vagus nerve',
+        #                     'Thoracic cardiac branch of left vagus nerve',
+        #                     'Cardiac branch of left vagus to deep cardiac plexus',
+        #                     'Left branch of left vagus nerve to esophageal nerve plexus',
+        #                     'Celiac branch of posterior vagal trunk',
+        #                     'Greater posterior gastric nerve',
+        #                     'Pyloric branch of greater posterior gastric nerve']
+        #
+        # # extractNerveList = ['Right vagus X nerve trunk',
+        #                        # 'Right meningeal branch of right vagus nerve',
+        # #                     'Right branch between vagus nerve and glossopharyngeal nerve',
+        # #                     'Right auricular branch of right vagus nerve',
+        # #                     'Communicating branch of auricular branch of right vagus nerve with right facial nerve',
+        # #                     'Communicating branch of auricular branch of right vagus nerve with right posterior auricular nerve',
+        # #                     'Right pharyngeal branch of right vagus nerve to pharyngeal nerve plexus',
+        # #                     'Lingual branch of right vagus nerve',
+        # #                     'Right pharyngeal branch of right vagus nerve to superior cervical ganglion',
+        # #                     'Branch of right vagus nerve to carotid body',
+        # #                     'Right branch between vagus nerve and superior cervical ganglion',
+        # #                     'Right superior laryngeal nerve',
+        # #                     'Right internal laryngeal nerve',
+        # #                     'Right external laryngeal nerve',
+        # #                     'Superior branch of right internal laryngeal nerve',
+        # #                     'Middle branch of right internal laryngeal nerve',
+        # #                     'Inferior branch of right internal laryngeal nerve',
+        # #                     'Communicating branch of right internal laryngeal nerve with right recurrent laryngeal nerve',
+        # #                     'Communicating branch of right external laryngeal nerve with right superior cardiac nerve',
+        # #                     'Right A cervical cardiopulmonary branch of vagus nerve',
+        # #                     'Right B cervical cardiopulmonary branch of vagus nerve',
+        # #                     'Right pulmonary branch A of the vagus nerve',
+        # #                     'Right pulmonary branch B of the vagus nerve',
+        # #                     'Right pulmonary branch C of the vagus nerve',
+        # #                     'Right pulmonary branch D of the vagus nerve',
+        # #                     'Right pulmonary branch E of the vagus nerve',
+        # #                     'Superior cervical cardiac branch of right vagus nerve',
+        # #                     'Right recurrent laryngeal nerve',
+        # #                     'Extra laryngeal branch of right recurrent laryngeal nerve to larynx',
+        # #                     'Branch of right recurrent laryngeal nerve to muscle of larynx',
+        # #                     'Esophageal branch of right recurrent laryngeal nerve',
+        # #                     'Tracheal branch of right recurrent laryngeal nerve',
+        # #                     'Anterior branch of right recurrent laryngeal nerve',
+        # #                     'Posterior branch of right recurrent laryngeal nerve',
+        # #                     'Inferior cervical cardiac branch of right recurrent laryngeal nerve',
+        # #                     'Inferior cervical cardiac branch of right vagus nerve',
+        # #                     'Thoracic cardiac branch of right vagus nerve',
+        # #                     'Cardiac branch of right vagus to deep cardiac plexus',
+        # #                     'Branch of greater anterior gastric nerve to coeliac nerve plexus',
+        # #                     'Greater anterior gastric nerve',
+        # #                     'Hepatic branch of anterior vagal trunk',
+        # #                     'Right branch of right vagus nerve to esophageal nerve plexus'
+        # #                     ]
         # reducedList = []
         # for feature in d1:
         #     marker_group = feature['region'].replace('__annotation/', '')
