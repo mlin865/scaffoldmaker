@@ -18,6 +18,7 @@ from scaffoldmaker.meshtypes.meshtype_3d_bone1 import MeshType_3d_bone1
 from scaffoldmaker.meshtypes.meshtype_3d_box1 import MeshType_3d_box1
 from scaffoldmaker.meshtypes.meshtype_3d_boxhole1 import MeshType_3d_boxhole1
 from scaffoldmaker.meshtypes.meshtype_3d_boxnetwork1 import MeshType_3d_boxnetwork1
+from scaffoldmaker.meshtypes.meshtype_3d_boxwithacupoints1 import MeshType_3d_boxwithacupoints1
 from scaffoldmaker.meshtypes.meshtype_3d_brainstem import MeshType_3d_brainstem1
 from scaffoldmaker.meshtypes.meshtype_3d_cecum1 import MeshType_3d_cecum1
 from scaffoldmaker.meshtypes.meshtype_3d_colon1 import MeshType_3d_colon1
@@ -79,6 +80,7 @@ class Scaffolds(object):
             MeshType_3d_box1,
             MeshType_3d_boxhole1,
             MeshType_3d_boxnetwork1,
+            MeshType_3d_boxwithacupoints1,
             MeshType_3d_brainstem1,
             MeshType_3d_cecum1,
             MeshType_3d_colon1,
