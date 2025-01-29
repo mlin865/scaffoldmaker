@@ -6,14 +6,13 @@ from __future__ import division
 
 import math
 
+from cmlibs.maths.vectorops import normalize, dot, cross, magnitude, set_magnitude, axis_angle_to_rotation_matrix
 from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
 from cmlibs.zinc.element import Element
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
 from scaffoldmaker.annotation.annotationgroup import mergeAnnotationGroups
 from scaffoldmaker.utils import interpolation as interp
-from scaffoldmaker.utils import matrix
-from scaffoldmaker.utils import vector
 from scaffoldmaker.utils.eftfactory_bicubichermitelinear import eftfactory_bicubichermitelinear
 from scaffoldmaker.utils.eftfactory_tricubichermite import eftfactory_tricubichermite
 from scaffoldmaker.utils.eft_utils import remapEftNodeValueLabelsVersion
@@ -77,10 +76,10 @@ def getPlaneProjectionOnCentralPath(x, elementsCountAround, elementsCountAlong,
     sd2ProjectedListRef = []
 
     for n in range(len(sd2RefList)):
-        sd1Normalised = vector.normalise(sd1RefList[n])
-        dp = vector.dotproduct(sd2RefList[n], sd1Normalised)
+        sd1Normalised = normalize(sd1RefList[n])
+        dp = dot(sd2RefList[n], sd1Normalised)
         dpScaled = [dp * c for c in sd1Normalised]
-        sd2Projected = vector.normalise([sd2RefList[n][c] - dpScaled[c] for c in range(3)])
+        sd2Projected = normalize([sd2RefList[n][c] - dpScaled[c] for c in range(3)])
         sd2ProjectedListRef.append(sd2Projected)
 
     return sxRefList, sd1RefList, sd2ProjectedListRef, zRefList
@@ -118,20 +117,20 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
         centroid = [0.0, 0.0, refPointZ[nAlongSegment]]
 
         # Rotate to align segment axis with tangent of central line
-        unitTangent = vector.normalise(sd1[nAlongSegment])
-        cp = vector.crossproduct3(segmentAxis, unitTangent)
-        dp = vector.dotproduct(segmentAxis, unitTangent)
-        if vector.magnitude(cp)> 0.0: # path tangent not parallel to segment axis
-            axisRot = vector.normalise(cp)
-            thetaRot = math.acos(vector.dotproduct(segmentAxis, unitTangent))
-            rotFrame = matrix.getRotationMatrixFromAxisAngle(axisRot, thetaRot)
+        unitTangent = normalize(sd1[nAlongSegment])
+        cp = cross(segmentAxis, unitTangent)
+        dp = dot(segmentAxis, unitTangent)
+        if magnitude(cp)> 0.0: # path tangent not parallel to segment axis
+            axisRot = normalize(cp)
+            thetaRot = math.acos(dot(segmentAxis, unitTangent))
+            rotFrame = axis_angle_to_rotation_matrix(axisRot, thetaRot)
             centroidRot = [rotFrame[j][0]*centroid[0] + rotFrame[j][1]*centroid[1] + rotFrame[j][2]*centroid[2] for j in range(3)]
 
         else: # path tangent parallel to segment axis (z-axis)
             if dp == -1.0: # path tangent opposite direction to segment axis
                 thetaRot = math.pi
                 axisRot = [1.0, 0, 0]
-                rotFrame = matrix.getRotationMatrixFromAxisAngle(axisRot, thetaRot)
+                rotFrame = axis_angle_to_rotation_matrix(axisRot, thetaRot)
                 centroidRot = [rotFrame[j][0] * centroid[0] + rotFrame[j][1] * centroid[1] + rotFrame[j][2] * centroid[2] for j in range(3)]
 
             else: # segment axis in same direction as unit tangent
@@ -145,7 +144,7 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
             d1 = d1ElementAlongSegment[n1]
             d2 = d2ElementAlongSegment[n1]
 
-            if vector.magnitude(cp)> 0.0: # path tangent not parallel to segment axis
+            if magnitude(cp)> 0.0: # path tangent not parallel to segment axis
                 xRot1 = [rotFrame[j][0]*x[0] + rotFrame[j][1]*x[1] + rotFrame[j][2]*x[2] for j in range(3)]
                 d1Rot1 = [rotFrame[j][0]*d1[0] + rotFrame[j][1]*d1[1] + rotFrame[j][2]*d1[2] for j in range(3)]
                 d2Rot1 = [rotFrame[j][0]*d2[0] + rotFrame[j][1]*d2[1] + rotFrame[j][2]*d2[2] for j in range(3)]
@@ -159,15 +158,15 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
 
             if n1 == 0:  # Find angle between xCentroidRot and first node in the face
                 vectorToFirstNode = [xRot1[c] - centroidRot[c] for c in range(3)]
-                if vector.magnitude(vectorToFirstNode) > 0.0:
-                    cp = vector.crossproduct3(vector.normalise(vectorToFirstNode), vector.normalise(sd2[nAlongSegment]))
-                    if vector.magnitude(cp) > 1e-7:
-                        cp = vector.normalise(cp)
-                        signThetaRot2 = vector.dotproduct(unitTangent, cp)
+                if magnitude(vectorToFirstNode) > 0.0:
+                    cp = cross(normalize(vectorToFirstNode), normalize(sd2[nAlongSegment]))
+                    if magnitude(cp) > 1e-7:
+                        cp = normalize(cp)
+                        signThetaRot2 = dot(unitTangent, cp)
                         thetaRot2 = math.acos(
-                            vector.dotproduct(vector.normalise(vectorToFirstNode), vector.normalise(sd2[nAlongSegment])))
+                            dot(normalize(vectorToFirstNode), normalize(sd2[nAlongSegment])))
                         axisRot2 = unitTangent
-                        rotFrame2 = matrix.getRotationMatrixFromAxisAngle(axisRot2, signThetaRot2*thetaRot2)
+                        rotFrame2 = axis_angle_to_rotation_matrix(axisRot2, signThetaRot2*thetaRot2)
                     else:
                         rotFrame2 = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
                 else:
@@ -188,13 +187,13 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
         for n1 in range(elementsCountAround):
             n = nAlongSegment * elementsCountAround + n1
             # Calculate norm
-            sd1Normalised = vector.normalise(sd1[nAlongSegment])
+            sd1Normalised = normalize(sd1[nAlongSegment])
             v = [xWarpedList[n][c] - sx[nAlongSegment][c] for c in range(3)]
-            dp = vector.dotproduct(v, sd1Normalised)
+            dp = dot(v, sd1Normalised)
             dpScaled = [dp * c for c in sd1Normalised]
             vProjected = [v[c] - dpScaled[c] for c in range(3)]
-            if vector.magnitude(vProjected) > 0.0:
-                vProjectedNormalised = vector.normalise(vProjected)
+            if magnitude(vProjected) > 0.0:
+                vProjectedNormalised = normalize(vProjected)
             else:
                 vProjectedNormalised = [0.0, 0.0, 0.0]
 
@@ -212,7 +211,7 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
                                                                    vProjectedNormalised, 0.0))
             # Scale
             if nAlongSegment < elementsCountAlongSegment:
-                factor = 1.0 - curvature * vector.magnitude(v)
+                factor = 1.0 - curvature * magnitude(v)
                 d2 = [factor * c for c in d2WarpedList[n]]
                 d2WarpedListScaled.append(d2)
             else:
@@ -237,15 +236,15 @@ def warpSegmentPoints(xList, d1List, d2List, segmentAxis, sx, sd1, sd2, elements
 
     # Calculate unit d3
     for n in range(len(xWarpedList)):
-        d3Unit = vector.normalise(vector.crossproduct3(vector.normalise(d1WarpedList[n]),
-                                                       vector.normalise(d2WarpedListFinal[n])))
+        d3Unit = normalize(cross(normalize(d1WarpedList[n]),
+                                                       normalize(d2WarpedListFinal[n])))
         d3WarpedUnitList.append(d3Unit)
 
     return xWarpedList, d1WarpedList, d2WarpedListFinal, d3WarpedUnitList
 
-def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf,
-    wallThicknessList, relativeThicknessList, elementsCountAround,
-    elementsCountAlong, elementsCountThroughWall, transitElementList, outward=True):
+def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf, wallThicknessList, relativeThicknessList,
+                              elementsCountAround, elementsCountAlong, elementsCountThroughWall, transitElementList,
+                              outward=True, xProximal=[], d1Proximal=[], d2Proximal=[], d3Proximal=[]):
     """
     Generates extruded coordinates using coordinates and derivatives of a surface.
     :param xSurf: Coordinates on surface
@@ -260,6 +259,7 @@ def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf,
     :param transitElementList: stores true if element around is a transition
     element that is between a big and a small element.
     :param outward: Set to True to generate coordinates from inner to outer surface.
+    :param xProximal, d1Proximal, d2Proximal, d3Proximal: coordinates and derivatives of nodes to use on proximal end.
     return nodes and derivatives for mesh, and curvature along extruded surface.
     """
 
@@ -271,6 +271,12 @@ def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf,
     d1List = []
     d2List = []
     d3List = []
+    count = 0
+    localIdxDistal = []
+    xDistal = []
+    d1Distal = []
+    d2Distal = []
+    d3Distal = []
 
     if relativeThicknessList:
         xi3 = 0.0
@@ -293,9 +299,9 @@ def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf,
             prevIdx = n - 1 if (n1 != 0) else (n2 + 1)*elementsCountAround - 1
             nextIdx = n + 1 if (n1 < elementsCountAround - 1) else n2*elementsCountAround
             kappam = interp.getCubicHermiteCurvature(xSurf[prevIdx], d1Surf[prevIdx], xSurf[n], d1Surf[n],
-                                                     vector.normalise(d3Surf[n]), 1.0)
+                                                     normalize(d3Surf[n]), 1.0)
             kappap = interp.getCubicHermiteCurvature(xSurf[n], d1Surf[n], xSurf[nextIdx], d1Surf[nextIdx],
-                                                     vector.normalise(d3Surf[n]), 0.0)
+                                                     normalize(d3Surf[n]), 0.0)
             if not transitElementList[n1] and not transitElementList[(n1-1)%elementsCountAround]:
                 curvatureAround = 0.5*(kappam + kappap)
             elif transitElementList[n1]:
@@ -308,51 +314,80 @@ def extrudeSurfaceCoordinates(xSurf, d1Surf, d2Surf, d3Surf,
             if n2 == 0:
                 curvature = interp.getCubicHermiteCurvature(xSurf[n], d2Surf[n], xSurf[n + elementsCountAround],
                                                             d2Surf[n + elementsCountAround],
-                                                            vector.normalise(d3Surf[n]), 0.0)
+                                                            normalize(d3Surf[n]), 0.0)
             elif n2 == elementsCountAlong:
                 curvature = interp.getCubicHermiteCurvature(xSurf[n - elementsCountAround],
                                                             d2Surf[n - elementsCountAround],
-                                                            xSurf[n], d2Surf[n], vector.normalise(d3Surf[n]), 1.0)
+                                                            xSurf[n], d2Surf[n], normalize(d3Surf[n]), 1.0)
             else:
                 curvature = 0.5*(
                     interp.getCubicHermiteCurvature(xSurf[n - elementsCountAround], d2Surf[n - elementsCountAround],
-                                                    xSurf[n], d2Surf[n], vector.normalise(d3Surf[n]), 1.0) +
+                                                    xSurf[n], d2Surf[n], normalize(d3Surf[n]), 1.0) +
                     interp.getCubicHermiteCurvature(xSurf[n], d2Surf[n],
                                                     xSurf[n + elementsCountAround], d2Surf[n + elementsCountAround],
-                                                    vector.normalise(d3Surf[n]), 0.0))
+                                                    normalize(d3Surf[n]), 0.0))
             curvatureAlong.append(curvature)
 
         for n3 in range(elementsCountThroughWall + 1):
             xi3 = xi3List[n3] if relativeThicknessList else 1.0/elementsCountThroughWall * n3
+            xDistalAround = []
+            d1DistalAround = []
+            d2DistalAround = []
+            d3DistalAround = []
+            localIdxDistalAround = []
+
             for n1 in range(elementsCountAround):
-                n = n2*elementsCountAround + n1
-                norm = d3Surf[n]
-                surfx = xSurf[n]
-                extrudedx = xExtrudedSurf[n]
-                # x
-                dWall = [wallThickness * c for c in norm]
-                if outward:
-                    x = interp.interpolateCubicHermite(surfx, dWall, extrudedx, dWall, xi3)
+                if n2 == 0 and xProximal:
+                    xList.append(xProximal[n3][n1])
+                    d1List.append(d1Proximal[n3][n1])
+                    d2List.append(d2Proximal[n3][n1])
+                    d3List.append(d3Proximal[n3][n1])
+                    n = n2 * elementsCountAround + n1
+                    curvatureList.append(curvatureAlong[n])
                 else:
-                    x = interp.interpolateCubicHermite(extrudedx, dWall, surfx, dWall, xi3)
-                xList.append(x)
+                    n = n2*elementsCountAround + n1
+                    norm = d3Surf[n]
+                    surfx = xSurf[n]
+                    extrudedx = xExtrudedSurf[n]
+                    # x
+                    dWall = [wallThickness * c for c in norm]
+                    if outward:
+                        x = interp.interpolateCubicHermite(surfx, dWall, extrudedx, dWall, xi3)
+                    else:
+                        x = interp.interpolateCubicHermite(extrudedx, dWall, surfx, dWall, xi3)
+                    xList.append(x)
 
-                # dx_ds1
-                factor = 1.0 - wallOutwardDisplacement * (xi3 if outward else (1.0 - xi3)) * curvatureAroundSurf[n]
-                d1 = [factor*c for c in d1Surf[n]]
-                d1List.append(d1)
+                    # dx_ds1
+                    factor = 1.0 - wallOutwardDisplacement * (xi3 if outward else (1.0 - xi3)) * curvatureAroundSurf[n]
+                    d1 = [factor*c for c in d1Surf[n]]
+                    d1List.append(d1)
 
-                # dx_ds2
-                factor = 1.0 - wallOutwardDisplacement * (xi3 if outward else (1.0 - xi3)) * curvatureAlong[n]
-                d2 = [factor * c for c in d2Surf[n]]
-                d2List.append(d2)
-                curvatureList.append(curvatureAlong[n])
+                    # dx_ds2
+                    factor = 1.0 - wallOutwardDisplacement * (xi3 if outward else (1.0 - xi3)) * curvatureAlong[n]
+                    d2 = [factor * c for c in d2Surf[n]]
+                    d2List.append(d2)
+                    curvatureList.append(curvatureAlong[n])
 
-                # dx_ds3
-                d3 = [c * wallThickness * (relativeThicknessList[n3] if relativeThicknessList else 1.0/elementsCountThroughWall) for c in norm]
-                d3List.append(d3)
+                    # dx_ds3
+                    d3 = [c * wallThickness * (relativeThicknessList[n3] if relativeThicknessList else 1.0/elementsCountThroughWall) for c in norm]
+                    d3List.append(d3)
 
-    return xList, d1List, d2List, d3List, curvatureList
+                if n2 == elementsCountAlong:
+                    xDistalAround.append(x)
+                    d1DistalAround.append(d1)
+                    d2DistalAround.append(d2)
+                    d3DistalAround.append(d3)
+                    localIdxDistalAround.append(count)
+                count += 1
+
+            if n2 == elementsCountAlong:
+                xDistal.append(xDistalAround)
+                d1Distal.append(d1DistalAround)
+                d2Distal.append(d2DistalAround)
+                d3Distal.append(d3DistalAround)
+                localIdxDistal.append(localIdxDistalAround)
+
+    return xList, d1List, d2List, d3List, curvatureList, localIdxDistal, xDistal, d1Distal, d2Distal, d3Distal
 
 def createFlatCoordinates(xiList, lengthAroundList, totalLengthAlong, wallThickness, relativeThicknessList,
                           elementsCountAround, elementsCountAlong, elementsCountThroughWall, transitElementList):
@@ -415,11 +450,12 @@ def createFlatCoordinates(xiList, lengthAroundList, totalLengthAlong, wallThickn
                 v2 = xFlatList[nodeIdx]
                 d1 = d2 = [v1[i] - v2[i] for i in range(3)]
                 arclength = interp.computeCubicHermiteArcLength(v1, d1, v2, d2, True)
-                d2Flat = vector.setMagnitude(d1, arclength)
+                d2Flat = set_magnitude(d1, arclength)
                 d2FlatList.append(d2Flat)
     d2FlatList = d2FlatList + d2FlatList[-(elementsCountAround+1)*(elementsCountThroughWall+1):]
 
     return xFlatList, d1FlatList, d2FlatList
+
 
 def createOrganCoordinates(xiList, relativeThicknessList, lengthToDiameterRatio, wallThicknessToDiameterRatio,
                            elementsCountAround, elementsCountAlong, elementsCountThroughWall, transitElementList):
@@ -471,8 +507,8 @@ def createOrganCoordinates(xiList, relativeThicknessList, lengthToDiameterRatio,
             # To modify derivative along transition elements
             for i in range(len(transitElementList)):
                 if transitElementList[i]:
-                    d1List[i] = vector.setMagnitude(d1List[i], vector.magnitude(d1List[i - 1]))
-                    d1List[i + 1] = vector.setMagnitude(d1List[i+ 1], vector.magnitude(d1List[(i + 2) % elementsCountAround]))
+                    d1List[i] = set_magnitude(d1List[i], magnitude(d1List[i - 1]))
+                    d1List[i + 1] = set_magnitude(d1List[i+ 1], magnitude(d1List[(i + 2) % elementsCountAround]))
 
             d1OrganList += d1List
 
@@ -485,7 +521,7 @@ def createNodesAndElements(region,
     elementsCountAround, elementsCountAlong, elementsCountThroughWall,
     annotationGroupsAround, annotationGroupsAlong, annotationGroupsThroughWall,
     firstNodeIdentifier, firstElementIdentifier,
-    useCubicHermiteThroughWall, useCrossDerivatives, closedProximalEnd):
+    useCubicHermiteThroughWall, useCrossDerivatives, closedProximalEnd, localIdxDistal=[], nodeIdProximal=[]):
     """
     Create nodes and elements for the coordinates and flat coordinates fields.
     :param x, d1, d2, d3: coordinates and derivatives of coordinates field.
@@ -499,16 +535,23 @@ def createNodesAndElements(region,
     :param annotationGroupsAround: Annotation groups of elements around.
     :param annotationGroupsAlong: Annotation groups of elements along.
     :param annotationGroupsThroughWall: Annotation groups of elements through wall.
-    :param firstNodeIdentifier, firstElementIdentifier: first node and
-    element identifier to use.
+    :param firstNodeIdentifier, firstElementIdentifier: first node and element identifier to use.
     :param useCubicHermiteThroughWall: use linear when false
     :param useCrossDerivatives: use cross derivatives when true
-    :return nodeIdentifier, elementIdentifier, allAnnotationGroups
+    :param closedProximalEnd: Proximal end of tube is closed if true
+    :param localIdxDistal: local node identifiers for nodes on distal end of the tube.
+    :param nodeIdProximal: Node identifiers for nodes to use on proximal end of the tube.
+    :return nodeIdentifier, elementIdentifier, allAnnotationGroups, nodesDistal
     """
 
     nodeIdentifier = firstNodeIdentifier
     elementIdentifier = firstElementIdentifier
+    startNode = firstNodeIdentifier
     zero = [ 0.0, 0.0, 0.0 ]
+    nodesDistal = []
+
+    for i in range(len(localIdxDistal)):
+        nodesDistal.append([firstNodeIdentifier + c for c in localIdxDistal[i]])
 
     fm = region.getFieldmodule()
     fm.beginChange()
@@ -622,7 +665,19 @@ def createNodesAndElements(region,
 
     # Create nodes
     # Coordinates field
-    for n in range(len(x)):
+    if nodeIdProximal:
+        proximalNodesOffset = len(nodeIdProximal) * len(nodeIdProximal[0])
+        nodeList = []
+        newNodeList = []
+
+    if nodeIdProximal:
+        for n3 in range(len(nodeIdProximal)):
+            for n1 in range(len(nodeIdProximal[n3])):
+                nodeList.append(nodeIdentifier)
+                newNodeList.append(nodeIdProximal[n3][n1])
+                nodeIdentifier = nodeIdentifier + 1
+
+    for n in range(proximalNodesOffset if nodeIdProximal else 0, len(x)):
         node = nodes.createNode(nodeIdentifier, nodetemplate)
         cache.setNode(node)
         coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, x[n])
@@ -709,9 +764,9 @@ def createNodesAndElements(region,
                 eftApex = eftfactory.createEftShellPoleBottom(va * 100, vb * 100)
                 elementtemplateApex.defineField(coordinates, -1, eftApex)
                 element = mesh.createElement(elementIdentifier, elementtemplateApex)
-                bni1 = e3 + 1
-                bni2 = elementsCountThroughWall + 1 + elementsCountAround*e3 + e1 + 1
-                bni3 = elementsCountThroughWall + 1 + elementsCountAround*e3 + (e1 + 1) % elementsCountAround + 1
+                bni1 = e3 + 1 + startNode - 1
+                bni2 = elementsCountThroughWall + 1 + elementsCountAround*e3 + e1 + 1 + startNode - 1
+                bni3 = elementsCountThroughWall + 1 + elementsCountAround*e3 + (e1 + 1) % elementsCountAround + 1 + startNode - 1
                 nodeIdentifiers = [bni1, bni2, bni3, bni1 + 1, bni2 + elementsCountAround, bni3 + elementsCountAround]
                 element.setNodesByIdentifier(eftApex, nodeIdentifiers)
                 onOpening = e1 > elementsCountAround - 2
@@ -790,6 +845,13 @@ def createNodesAndElements(region,
                     bni21 = e2 * now + (e3 + 1) * elementsCountAround + e1 + 1
                     bni22 = e2 * now + (e3 + 1) * elementsCountAround + (e1 + 1) % elementsCountAround + 1
                 nodeIdentifiers = [bni11, bni12, bni11 + now, bni12 + now, bni21, bni22, bni21 + now, bni22 + now]
+                nodeIdentifiers = [startNode - 1 + c for c in nodeIdentifiers]
+                if e2 == 0 and nodeIdProximal:
+                    for m in range(len(nodeIdentifiers)):
+                        if nodeIdentifiers[m] in nodeList:
+                            idx = nodeList.index(nodeIdentifiers[m])
+                            nodeIdentifiers[m] = newNodeList[idx]
+
                 onOpening = e1 > elementsCountAround - 2
                 element = mesh.createElement(elementIdentifier, elementtemplate)
                 element.setNodesByIdentifier(eft, nodeIdentifiers)
@@ -811,34 +873,34 @@ def createNodesAndElements(region,
 
     fm.endChange()
 
-    return nodeIdentifier, elementIdentifier, allAnnotationGroups
+    return nodeIdentifier, elementIdentifier, allAnnotationGroups, nodesDistal
 
-class CylindricalSegmentTubeMeshInnerPoints:
+class CylindricalSegmentTubeMeshOuterPoints:
     """
-    Generates inner profile of a cylindrical segment for use by tubemesh.
+    Generates outer profile of a cylindrical segment for use by tubemesh.
     """
 
     def __init__(self, elementsCountAround, elementsCountAlongSegment,
-                 segmentLength, wallThickness, innerRadiusList, startPhase):
+                 segmentLength, wallThickness, outerRadiusList, startPhase):
 
         self._elementsCountAround = elementsCountAround
         self._elementsCountAlongSegment = elementsCountAlongSegment
         self._segmentLength = segmentLength
         self._wallThickness = wallThickness
-        self._innerRadiusList = innerRadiusList
+        self._outerRadiusList = outerRadiusList
         self._xiList = []
         self._flatWidthList = []
         self._startPhase = startPhase
 
-    def getCylindricalSegmentTubeMeshInnerPoints(self, nSegment):
+    def getCylindricalSegmentTubeMeshOuterPoints(self, nSegment):
 
         elementAlongStartIdx = nSegment * self._elementsCountAlongSegment
         elementAlongEndIdx = (nSegment + 1) * self._elementsCountAlongSegment
 
-        xInner, d1Inner, d2Inner, transitElementList, xiSegment, flatWidthSegment, segmentAxis, radiusAlongSegmentList \
-            = getCylindricalSegmentInnerPoints(self._elementsCountAround, self._elementsCountAlongSegment,
+        xOuter, d1Outer, d2Outer, transitElementList, xiSegment, flatWidthSegment, segmentAxis, radiusAlongSegmentList \
+            = getCylindricalSegmentOuterPoints(self._elementsCountAround, self._elementsCountAlongSegment,
                                                self._segmentLength, self._wallThickness,
-                                               self._innerRadiusList[elementAlongStartIdx: elementAlongEndIdx + 1],
+                                               self._outerRadiusList[elementAlongStartIdx: elementAlongEndIdx + 1],
                                                self._startPhase)
 
         startIdx = 0 if nSegment == 0 else 1
@@ -848,12 +910,12 @@ class CylindricalSegmentTubeMeshInnerPoints:
         flatWidth = flatWidthSegment[startIdx:self._elementsCountAlongSegment + 1]
         self._flatWidthList += flatWidth
 
-        return xInner, d1Inner, d2Inner, transitElementList, segmentAxis, radiusAlongSegmentList
+        return xOuter, d1Outer, d2Outer, transitElementList, segmentAxis, radiusAlongSegmentList
 
     def getFlatWidthAndXiList(self):
         return self._flatWidthList, self._xiList
 
-def getCylindricalSegmentInnerPoints(elementsCountAround, elementsCountAlongSegment, segmentLength,
+def getCylindricalSegmentOuterPoints(elementsCountAround, elementsCountAlongSegment, segmentLength,
                                      wallThickness, radiusList, startPhase):
     """
     Generates a 3-D cylindrical segment mesh with variable numbers of elements
@@ -862,7 +924,7 @@ def getCylindricalSegmentInnerPoints(elementsCountAround, elementsCountAlongSegm
     :param elementsCountAlongSegment: Number of elements along cylindrical segment.
     :param segmentLength: Length of a cylindrical segment.
     :param wallThickness: Thickness of wall.
-    :param radiusList: Inner radius at elements along tube length.
+    :param radiusList: Outer radius at elements along tube length.
     :param startPhase: Phase at start.
     :return coordinates, derivatives on inner surface of a cylindrical segment.
     :return transitElementList: stores true if element around is an element that
