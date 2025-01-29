@@ -11,7 +11,7 @@ from cmlibs.utils.zinc.field import findOrCreateFieldStoredMeshLocation
 from cmlibs.zinc.element import Element, Elementbasis
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from scaffoldmaker.annotation.annotationgroup import AnnotationGroup
+from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, findOrCreateAnnotationGroupForTerm
 from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates, findOrCreateFieldStoredString, findOrCreateFieldGroup
 from scaffoldmaker.utils.eftfactory_tricubichermite import eftfactory_tricubichermite
@@ -142,7 +142,9 @@ class MeshType_3d_boxwithacupoints1(Scaffold_base):
         markerTemplateInternal.defineField(markerName)
         markerTemplateInternal.defineField(markerLocation)
 
+        annotationGroups = []
         for i in range(len(nameList)):
+            group = findOrCreateAnnotationGroupForTerm(annotationGroups, region, (nameList[i], 'None'))
             markerPoint = markerPoints.createNode(nodeIdentifier, markerTemplateInternal)
             nodeIdentifier += 1
             cache.setNode(markerPoint)
@@ -150,6 +152,7 @@ class MeshType_3d_boxwithacupoints1(Scaffold_base):
             markerName.assignString(cache, nameList[i])
             element = mesh.findElementByIdentifier(1)
             markerLocation.assignMeshLocation(cache, element, xiList[i])
+            group.getNodesetGroup(nodes).addNode(markerPoint)
+            annotationGroups.append(group)
 
-        allAnnotationGroups = []
-        return allAnnotationGroups, None
+        return annotationGroups, None
