@@ -968,9 +968,19 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_outerLongitudinal = fm.createFieldAnd(is_LM, is_exterior_face_outer)
             outerLongitudinalMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_outerLongitudinal)
 
+            mucosaGroup = getAnnotationGroupForTerm(annotationGroups, get_stomach_term("mucosa of stomach"))
+            is_mucosa = mucosaGroup.getGroup()
+
             submucosaGroup = \
                 getAnnotationGroupForTerm(annotationGroups, get_stomach_term("submucosa of stomach"))
             is_submucosa = submucosaGroup.getGroup()
+            innerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                                   get_stomach_term("Innermost submucosa of stomach"))
+            is_innerSubmucosa = fm.createFieldOr(fm.createFieldAnd(is_mucosa, is_submucosa),
+                                                  fm.createFieldAnd(is_exterior_face_inner, is_submucosa))
+            innerSubmucosaGroup.getMeshGroup(mesh2d).addElementsConditional(is_innerSubmucosa)
+
             innerCircularMuscleGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region,
                                           get_stomach_term("Innermost circular muscle of stomach"))
@@ -989,6 +999,12 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_ventral_innerCircular = fm.createFieldAnd(is_ventral, is_innerCircular)
             ventral_innerCircularMuscleGroup.getMeshGroup(mesh2d).addElementsConditional(is_ventral_innerCircular)
 
+            ventral_innerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region,
+                                                   get_stomach_term("Innermost submucosa of ventral stomach"))
+            is_ventral_innerSubmucosa = fm.createFieldAnd(is_ventral, is_innerSubmucosa)
+            ventral_innerSubmucosaGroup.getMeshGroup(mesh2d).addElementsConditional(is_ventral_innerSubmucosa)
+
             is_curvatures_outerLongitudinal = fm.createFieldAnd(is_curvatures, is_outerLongitudinal)
             is_greaterCurvature_outerLongitudinal = fm.createFieldAnd(is_greaterCurvature, is_outerLongitudinal)
             is_lesserCurvature_outerLongitudinal = fm.createFieldAnd(is_lesserCurvature, is_outerLongitudinal)
@@ -996,6 +1012,10 @@ class MeshType_3d_stomach1(Scaffold_base):
             is_curvatures_innerCircular = fm.createFieldAnd(is_curvatures, is_innerCircular)
             is_greaterCurvature_innerCircular = fm.createFieldAnd(is_greaterCurvature, is_innerCircular)
             is_lesserCurvature_innerCircular = fm.createFieldAnd(is_lesserCurvature, is_innerCircular)
+
+            is_curvatures_innerSubmucosa = fm.createFieldAnd(is_curvatures, is_innerSubmucosa)
+            is_greaterCurvature_innerSubmucosa = fm.createFieldAnd(is_greaterCurvature, is_innerSubmucosa)
+            is_lesserCurvature_innerSubmucosa = fm.createFieldAnd(is_lesserCurvature, is_innerSubmucosa)
 
             dorsalStomach_CMLMGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                 "circular-longitudinal muscle interface of dorsal stomach"))
@@ -1061,7 +1081,7 @@ class MeshType_3d_stomach1(Scaffold_base):
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                     "Outermost longitudinal muscle of pyloric canal of stomach along the lesser curvature"))
 
-            # Innermost
+            # Innermost circular
             bodyCurvaturesInnerCircularGroup = \
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                     "Innermost circular muscle of body of stomach along the greater curvature"))
@@ -1084,6 +1104,29 @@ class MeshType_3d_stomach1(Scaffold_base):
                 findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
                     "Innermost circular muscle of pyloric canal of stomach along the lesser curvature"))
 
+            # Innermost submucosa
+            bodyCurvaturesInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of body of stomach along the greater curvature"))
+            esoCurvaturesInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of esophagus on cut margin"))
+            fundusCurvaturesInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of fundus of stomach along the greater curvature"))
+            antrumGreaterCurvatureInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of pyloric antrum of stomach along the greater curvature"))
+            antrumLesserCurvatureInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of pyloric antrum of stomach along the lesser curvature"))
+            pylorusGreaterCurvatureInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of pyloric canal of stomach along the greater curvature"))
+            pylorusLesserCurvatureInnerSubmucosaGroup = \
+                findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_stomach_term(
+                    "Innermost submucosa of pyloric canal of stomach along the lesser curvature"))
+
             sectionCurvaturesCMLMGroups = [None, bodyCurvaturesCMLMGroup, None, duodenumCurvaturesCMLMGroup,
                                            esoCurvaturesCMLMGroup, fundusCurvaturesCMLMGroup,
                                            antrumGreaterCurvatureCMLMGroup, pylorusGreaterCurvatureCMLMGroup,
@@ -1100,6 +1143,12 @@ class MeshType_3d_stomach1(Scaffold_base):
                  fundusCurvaturesInnerCircularGroup, antrumGreaterCurvatureInnerCircularGroup,
                  pylorusGreaterCurvatureInnerCircularGroup, antrumLesserCurvatureInnerCircularGroup,
                  pylorusLesserCurvatureInnerCircularGroup]
+
+            sectionCurvaturesInnerSubmucosaGroups = \
+                [None, bodyCurvaturesInnerSubmucosaGroup, None, None, esoCurvaturesInnerSubmucosaGroup,
+                 fundusCurvaturesInnerSubmucosaGroup, antrumGreaterCurvatureInnerSubmucosaGroup,
+                 pylorusGreaterCurvatureInnerSubmucosaGroup, antrumLesserCurvatureInnerSubmucosaGroup,
+                 pylorusLesserCurvatureInnerSubmucosaGroup]
 
         sectionGroups = [stomachGroup, bodyGroup, cardiaGroup, duodenumGroup, esoGroup, fundusGroup, antrumGroup,
                          pylorusGroup]
@@ -1127,6 +1176,10 @@ class MeshType_3d_stomach1(Scaffold_base):
                                                                                     is_greaterCurvature_innerCircular)
                     is_sectionLesserCurvatureInnerCircular = fm.createFieldAnd(is_section,
                                                                                    is_lesserCurvature_innerCircular)
+                    is_sectionGreaterCurvatureInnerSubmucosa = fm.createFieldAnd(is_section,
+                                                                                 is_greaterCurvature_innerSubmucosa)
+                    is_sectionLesserCurvatureInnerSubmucosa = fm.createFieldAnd(is_section,
+                                                                               is_lesserCurvature_innerSubmucosa)
                     if sectionCurvaturesCMLMGroups[i]:
                         sectionCurvaturesCMLMGroups[i].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionGreaterCurvatureCMLM)
@@ -1140,11 +1193,15 @@ class MeshType_3d_stomach1(Scaffold_base):
                             addElementsConditional(is_sectionGreaterCurvatureInnerCircular)
                         sectionCurvaturesInnerCircularGroups[i + 2].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionLesserCurvatureInnerCircular)
+                        sectionCurvaturesInnerSubmucosaGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionGreaterCurvatureInnerSubmucosa)
+                        sectionCurvaturesInnerSubmucosaGroups[i + 2].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionLesserCurvatureInnerSubmucosa)
                 else:
                     is_sectionCurvaturesCMLM = fm.createFieldAnd(is_section, is_curvatures_CMLM)
                     is_sectionCurvaturesOuterLongitudinal = fm.createFieldAnd(is_section, is_curvatures_outerLongitudinal)
-                    is_sectionCurvaturesInnerCircular = fm.createFieldAnd(is_section,
-                                                                              is_curvatures_innerCircular)
+                    is_sectionCurvaturesInnerCircular = fm.createFieldAnd(is_section, is_curvatures_innerCircular)
+                    is_sectionCurvaturesInnerSubmucosa = fm.createFieldAnd(is_section, is_curvatures_innerSubmucosa)
                     if sectionCurvaturesCMLMGroups[i]:
                         sectionCurvaturesCMLMGroups[i].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionCurvaturesCMLM)
@@ -1153,6 +1210,8 @@ class MeshType_3d_stomach1(Scaffold_base):
                             addElementsConditional(is_sectionCurvaturesOuterLongitudinal)
                         sectionCurvaturesInnerCircularGroups[i].getMeshGroup(mesh1d). \
                             addElementsConditional(is_sectionCurvaturesInnerCircular)
+                        sectionCurvaturesInnerSubmucosaGroups[i].getMeshGroup(mesh1d). \
+                            addElementsConditional(is_sectionCurvaturesInnerSubmucosa)
 
         if limitingRidge:
             limitingRidgeGroup = \
