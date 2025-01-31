@@ -20932,7 +20932,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F107db71c-1870-4572-8f25-567f9b72567c",
     "item": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 5)"
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 16)"
     },
     "body": {
       "evidence": [
@@ -20941,7 +20941,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 5)",
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 16)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20957,13 +20957,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 5)",
+    "group": "Point on right phrenic nerve where phrenicoabdominal branch of right phrenic nerve starts (waypoint 16)",
     "region": "__annotation/Right phrenic nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe9f2ea69-3941-4a11-903e-dd95e633f467",
     "item": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 3)"
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 7)"
     },
     "body": {
       "evidence": [
@@ -20972,7 +20972,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 3)",
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 7)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -20980,15 +20980,15 @@
       "geometry": {
         "coordinates": [
           [
-            -27.849849700927734,
-            -131.92578125,
+            -36.047245025634766,
+            -117.38584899902344,
             1248.2744140625
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 3)",
+    "group": "Point on right phrenic nerve where pericardial branch of right phrenic nerve starts (waypoint 7)",
     "region": "__annotation/Right phrenic nerve"
   },
   {
@@ -21180,7 +21180,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Fe30aeedb-9675-48a1-9d4e-b0857b04ed62",
     "item": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 5)"
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 21)"
     },
     "body": {
       "evidence": [
@@ -21189,7 +21189,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 5)",
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 21)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -21205,7 +21205,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 5)",
+    "group": "Point on left phrenic nerve where phrenicoabdominal branch of left phrenic nerve starts (waypoint 21)",
     "region": "__annotation/Left phrenic nerve"
   },
   {
@@ -21552,7 +21552,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F96183c16-342a-4271-8c8a-45fde7027231",
     "item": {
-      "id": "__annotation/Left phrenic nerve/Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 4)"
+      "id": "__annotation/Left phrenic nerve/Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 20)"
     },
     "body": {
       "evidence": [
@@ -21561,7 +21561,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left phrenic nerve/Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 4)",
+      "id": "__annotation/Left phrenic nerve/Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 20)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -21569,21 +21569,21 @@
       "geometry": {
         "coordinates": [
           [
-            32.49482727050781,
-            -96.72940826416016,
-            1166.6080322265625
+            52.98003005981445,
+            -163.98959350585938,
+            1166.611083984375
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 4)",
+    "group": "Point on left hemidiaphragm innervated by left phrenic nerve (waypoint 20)",
     "region": "__annotation/Left phrenic nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F96183c16-342a-4271-8c8a-45fde7027231",
     "item": {
-      "id": "__annotation/Right phrenic nerve/Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 4)"
+      "id": "__annotation/Right phrenic nerve/Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 15)"
     },
     "body": {
       "evidence": [
@@ -21592,7 +21592,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right phrenic nerve/Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 4)",
+      "id": "__annotation/Right phrenic nerve/Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 15)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -21608,7 +21608,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 4)",
+    "group": "Point on right hemidiaphragm innervated by right phrenic nerve (waypoint 15)",
     "region": "__annotation/Right phrenic nerve"
   },
   {
@@ -21738,7 +21738,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F7b40d03a-a090-4e23-8389-b6da8c59cb2f",
     "item": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 3)"
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 12)"
     },
     "body": {
       "evidence": [
@@ -21747,7 +21747,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 3)",
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 12)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -21763,7 +21763,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 3)",
+    "group": "Point on left phrenic nerve where pericardial branch of left phrenic nerve starts (waypoint 12)",
     "region": "__annotation/Left phrenic nerve"
   },
   {
@@ -21817,9 +21817,9 @@
       "geometry": {
         "coordinates": [
           [
-            -31.68107795715332,
-            -126.63177490234375,
-            1250.9942626953125
+            -36.047245025634766,
+            -117.38584899902344,
+            1248.2744140625
           ]
         ],
         "type": "MultiPoint"
@@ -76318,7 +76318,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F7c8ee6b5-acc3-4e7c-a6da-c87d21d31807",
     "item": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 2)"
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 3)"
     },
     "body": {
       "evidence": [
@@ -76327,7 +76327,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 2)",
+      "id": "__annotation/Right phrenic nerve/Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 3)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -76343,13 +76343,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 2)",
+    "group": "Point on right phrenic nerve where right accessory phrenic nerve joins (waypoint 3)",
     "region": "__annotation/Right phrenic nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F7c8ee6b5-acc3-4e7c-a6da-c87d21d31807",
     "item": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 2)"
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 3)"
     },
     "body": {
       "evidence": [
@@ -76358,7 +76358,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 2)",
+      "id": "__annotation/Left phrenic nerve/Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 3)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -76366,15 +76366,15 @@
       "geometry": {
         "coordinates": [
           [
-            46.196346282958984,
-            -127.2842025756836,
-            1341.690185546875
+			13.424163818359375,
+            -110.92438507080078,
+            1320.25634765625
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 2)",
+    "group": "Point on left phrenic nerve where left accessory phrenic nerve joins (waypoint 3)",
     "region": "__annotation/Left phrenic nerve"
   },
   {
@@ -76397,9 +76397,9 @@
       "geometry": {
         "coordinates": [
           [
-            46.167510986328125,
-            -127.06288146972656,
-            1342.005615234375
+			13.424163818359375,
+            -110.92438507080078,
+            1320.25634765625
           ]
         ],
         "type": "MultiPoint"
@@ -81231,6 +81231,37 @@
       }
     },
     "group": "Point on right phrenic nerve where origins merge (waypoint 1)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve passes anterior to anterior scalene muscle (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve passes anterior to anterior scalene muscle (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -42.12731170654297,
+            -95.35662078857422,
+            1348.1212158203125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve passes anterior to anterior scalene muscle (waypoint 2)",
     "region": "__annotation/Right phrenic nerve"
   },
   {
@@ -91121,5 +91152,811 @@
     },
     "group": "Point on esophageal plexus (origin)",
     "region": "__annotation/Posterior esophageal vagus trunk"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is lateral to superior vena cava (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is lateral to superior vena cava (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -25.543760299682617,
+            -103.07455444335938,
+            1261.8326416015625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is lateral to superior vena cava (waypoint 4)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium A (waypoint 5)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium A (waypoint 5)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -28.26876449584961,
+            -110.72102355957031,
+            1254.2401123046875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium A (waypoint 5)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium B (waypoint 6)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium B (waypoint 6)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -32.17147445678711,
+            -119.47438049316406,
+            1252.031982421875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium B (waypoint 6)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium C (waypoint 8)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium C (waypoint 8)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -37.35845184326172,
+            -117.83885955810547,
+            1244.8763427734375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium C (waypoint 8)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium D (waypoint 9)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium D (waypoint 9)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -38.30018615722656,
+            -114.92701721191406,
+            1238.04931640625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium D (waypoint 9)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium E (waypoint 10)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium E (waypoint 10)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -35.03268814086914,
+            -107.40078735351562,
+            1229.81982421875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to pericardium covering right surface of right atrium E (waypoint 10)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to inferior vena cava A (waypoint 11)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to inferior vena cava A (waypoint 11)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -33.06488800048828,
+            -102.05847930908203,
+            1223.6165771484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to inferior vena cava A (waypoint 11)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to inferior vena cava B (waypoint 12)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to inferior vena cava B (waypoint 12)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -34.57094955444336,
+            -99.84883880615234,
+            1217.648681640625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to inferior vena cava B (waypoint 12)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to right hemidiaphragm (waypoint 13)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve is adjacent to right hemidiaphragm (waypoint 13)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -31.185054779052734,
+            -110.34420776367188,
+            1187.50048828125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve is adjacent to right hemidiaphragm (waypoint 13)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve passes through right hemidiaphragm (waypoint 14)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right phrenic nerve/Point where right phrenic nerve passes through right hemidiaphragm (waypoint 14)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -25.239255905151367,
+            -101.63079833984375,
+            1181.260009765625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right phrenic nerve passes through right hemidiaphragm (waypoint 14)",
+    "region": "__annotation/Right phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes anterior to first part of left subclavian artery (waypoint 2)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes anterior to first part of left subclavian artery (waypoint 2)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            21.91090965270996,
+            -107.67713928222656,
+            1336.401611328125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve passes anterior to first part of left subclavian artery (waypoint 2)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to medial aspect of apex of left lung (waypoint 4)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to medial aspect of apex of left lung (waypoint 4)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            14.603367805480957,
+            -109.12102508544922,
+            1316.2041015625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to medial aspect of apex of left lung (waypoint 4)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes superior to aortic arch (waypoint 5)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes superior to aortic arch (waypoint 5)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            14.145605087280273,
+            -109.87220001220703,
+            1313.9783935546875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve passes superior to aortic arch (waypoint 5)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes anterior to left pulmonary hilum (waypoint 6)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes anterior to left pulmonary hilum (waypoint 6)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            13.046834945678711,
+            -112.67140197753906,
+            1308.6116943359375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve passes anterior to left pulmonary hilum (waypoint 6)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle A (waypoint 7)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle A (waypoint 7)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            24.816621780395508,
+            -137.52810668945312,
+            1276.4857177734375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle A (waypoint 7)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle B (waypoint 8)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle B (waypoint 8)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            24.992361068725586,
+            -143.0521697998047,
+            1274.4381103515625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle B (waypoint 8)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle C (waypoint 9)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle C (waypoint 9)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            25.671207427978516,
+            -150.48208618164062,
+            1271.5057373046875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle C (waypoint 9)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle D (waypoint 10)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle D (waypoint 10)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            29.44864845275879,
+            -157.19232177734375,
+            1268.020263671875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle D (waypoint 10)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle E (waypoint 11)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle E (waypoint 11)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            34.62187957763672,
+            -161.51382446289062,
+            1262.9288330078125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle E (waypoint 11)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle F (waypoint 13)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle F (waypoint 13)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            48.85736083984375,
+            -163.86891174316406,
+            1248.9830322265625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle F (waypoint 13)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle G (waypoint 14)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle G (waypoint 14)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            60.502044677734375,
+            -165.05735778808594,
+            1227.0089111328125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle G (waypoint 14)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle H (waypoint 15)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle H (waypoint 15)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            65.81278991699219,
+            -166.68724060058594,
+            1204.3743896484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle H (waypoint 15)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle I (waypoint 16)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle I (waypoint 16)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            69.23664093017578,
+            -164.22439575195312,
+            1195.25830078125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle I (waypoint 16)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle J (waypoint 17)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle J (waypoint 17)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            69.1783218383789,
+            -163.2408905029297,
+            1187.5048828125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle J (waypoint 17)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle K (waypoint 18)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle K (waypoint 18)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            69.49639892578125,
+            -156.54945373535156,
+            1179.4271240234375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve is adjacent to pericardium over anterior surface of left ventricle K (waypoint 18)",
+    "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/64c2a85b-4166-4142-a972-3a01c7def8fe",
+    "item": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes through muscular part of diaphragm anterior to central tendon (waypoint 19)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left phrenic nerve/Point where left phrenic nerve passes through muscular part of diaphragm anterior to central tendon (waypoint 19)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            50.504371643066406,
+            -162.0564727783203,
+            1173.7967529296875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left phrenic nerve passes through muscular part of diaphragm anterior to central tendon (waypoint 19)",
+    "region": "__annotation/Left phrenic nerve"
   }
 ]
