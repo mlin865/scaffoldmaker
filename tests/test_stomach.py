@@ -38,7 +38,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         region = context.getDefaultRegion()
         self.assertTrue(region.isValid())
         annotationGroups = scaffold.generateBaseMesh(region, options)[0]
-        self.assertEqual(42, len(annotationGroups))
+        self.assertEqual(48, len(annotationGroups))
 
         fieldmodule = region.getFieldmodule()
         self.assertEqual(RESULT_OK, fieldmodule.defineAllFaces())
@@ -49,7 +49,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         mesh1d = fieldmodule.findMeshByDimension(1)
         self.assertEqual(3300, mesh1d.getSize())
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        self.assertEqual(1219, nodes.getSize())
+        self.assertEqual(1225, nodes.getSize())
         datapoints = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
         self.assertEqual(0, datapoints.getSize())
 
@@ -112,7 +112,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
 
         for annotationGroup in removeAnnotationGroups:
             annotationGroups.remove(annotationGroup)
-        self.assertEqual(42, len(annotationGroups))
+        self.assertEqual(48, len(annotationGroups))
 
         refineRegion = region.createRegion()
         refineFieldmodule = refineRegion.getFieldmodule()
@@ -131,7 +131,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         for annotation in annotationGroups:
             if annotation not in oldAnnotationGroups:
                 annotationGroup.addSubelements()
-        self.assertEqual(76, len(annotationGroups))
+        self.assertEqual(121, len(annotationGroups))
 #
         mesh3d = refineFieldmodule.findMeshByDimension(3)
         self.assertEqual(57984, mesh3d.getSize())
@@ -140,7 +140,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         mesh1d = refineFieldmodule.findMeshByDimension(1)
         self.assertEqual(183216, mesh1d.getSize())
         nodes = refineFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        self.assertEqual(62644, nodes.getSize())
+        self.assertEqual(62650, nodes.getSize())
         datapoints = refineFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
         self.assertEqual(0, datapoints.getSize())
 
@@ -165,7 +165,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         markerGroup = refineFieldmodule.findFieldByName("marker").castGroup()
         refinedNodes = refineFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
         markerNodes = markerGroup.getNodesetGroup(refinedNodes)
-        self.assertEqual(20, markerNodes.getSize())
+        self.assertEqual(26, markerNodes.getSize())
         markerName = refineFieldmodule.findFieldByName("marker_name")
         self.assertTrue(markerName.isValid())
         markerLocation = refineFieldmodule.findFieldByName("marker_location")

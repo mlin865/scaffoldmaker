@@ -448,7 +448,7 @@ class GeneralScaffoldTestCase(unittest.TestCase):
 
         # delete element ranges for body
         annotationGroups = scaffoldPackage.getAnnotationGroups()
-        self.assertEqual(74, len(annotationGroups))
+        self.assertEqual(119, len(annotationGroups))
         scaffoldPackage.deleteElementsInRanges(region, [[313, 496]])
         self.assertEqual(824, mesh3d.getSize())
         element = mesh3d.findElementByIdentifier(400)
@@ -469,7 +469,7 @@ class GeneralScaffoldTestCase(unittest.TestCase):
 
         # check that bob is deleted
         annotationGroups = scaffoldPackage.getAnnotationGroups()
-        self.assertEqual(71, len(annotationGroups))
+        self.assertEqual(116, len(annotationGroups))
         bob = scaffoldPackage.findAnnotationGroupByName('bob')
         self.assertNotIn(bob, annotationGroups)
         node = nodes.findNodeByIdentifier(bobNodeIdentifier)
