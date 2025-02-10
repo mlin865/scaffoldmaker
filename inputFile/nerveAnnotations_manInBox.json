@@ -13833,7 +13833,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F5923469d-bf8e-4d97-8b17-011766cf1848",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 9)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 16)"
     },
     "body": {
       "evidence": [
@@ -13842,7 +13842,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 9)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 16)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13850,21 +13850,21 @@
       "geometry": {
         "coordinates": [
           [
-            -32.32299041748047,
-            -107.24759674072266,
-            1364.224365234375
+            -22.446962356567383,
+            -106.63320922851562,
+            1322.885498046875
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 9)",
+    "group": "Point on right vagus nerve where right recurrent laryngeal nerve starts (waypoint 16)",
     "region": "__annotation/Right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2Ff6e7e3bf-fed7-4547-9a93-bbcded59272b",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 8)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 15)"
     },
     "body": {
       "evidence": [
@@ -13873,7 +13873,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 8)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 15)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -13881,15 +13881,15 @@
       "geometry": {
         "coordinates": [
           [
-            -27.78653335571289,
-            -106.21887969970703,
-            1353.49951171875
+            -22.532318115234375,
+            -106.64901733398438,
+            1333.5262451171875
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 8)",
+    "group": "Point on right vagus nerve where superior cervical cardiac branch of right vagus nerve starts (waypoint 15)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -14098,9 +14098,9 @@
       "geometry": {
         "coordinates": [
           [
-            -32.32299041748047,
-            -107.24759674072266,
-            1364.224365234375
+            -22.446962356567383,
+            -106.63320922851562,
+            1322.885498046875
           ]
         ],
         "type": "MultiPoint"
@@ -14129,9 +14129,9 @@
       "geometry": {
         "coordinates": [
           [
-            -27.78653335571289,
-            -106.21887969970703,
-            1353.49951171875
+            -22.532318115234375,
+            -106.64901733398438,
+            1333.5262451171875
           ]
         ],
         "type": "MultiPoint"
@@ -14267,7 +14267,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 10)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 17)"
     },
     "body": {
       "evidence": [
@@ -14276,7 +14276,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 10)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 17)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14284,15 +14284,15 @@
       "geometry": {
         "coordinates": [
           [
-            -26.496662139892578,
-            -107.0826416015625,
-            1344.911376953125
+            -22.267234802246094,
+            -106.64112854003906,
+            1312.2066650390625
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 10)",
+    "group": "Point on right vagus nerve where inferior cervical cardiac branch of right vagus nerve starts (waypoint 17)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -14315,9 +14315,9 @@
       "geometry": {
         "coordinates": [
           [
-            -26.43404769897461,
-            -107.01863861083984,
-            1344.9755859375
+            -22.267234802246094,
+            -106.64112854003906,
+            1312.2066650390625
           ]
         ],
         "type": "MultiPoint"
@@ -14360,7 +14360,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 11)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 18)"
     },
     "body": {
       "evidence": [
@@ -14369,7 +14369,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 11)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 18)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14385,7 +14385,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 11)",
+    "group": "Point on right vagus nerve where thoracic cardiac branch of right vagus nerve starts (waypoint 18)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -14453,7 +14453,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F228c7f58-0426-4234-9c0f-7a2c20c8649c",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 14)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 25)"
     },
     "body": {
       "evidence": [
@@ -14462,7 +14462,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 14)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 25)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -14478,7 +14478,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 14)",
+    "group": "Point on right vagus nerve where branch of right vagus nerve to oesophageal nerve plexus starts (waypoint 25)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -15028,9 +15028,9 @@
       "geometry": {
         "coordinates": [
           [
-            6.656836986541748,
-            -77.9515609741211,
-            1293.0189208984375
+            14.52168083190918,
+            -77.49862670898438,
+            1304.1375732421875
           ]
         ],
         "type": "MultiPoint"
@@ -15042,7 +15042,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 13)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 23)"
     },
     "body": {
       "evidence": [
@@ -15051,7 +15051,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 13)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 23)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15059,15 +15059,15 @@
       "geometry": {
         "coordinates": [
           [
-            6.333865165710449,
+            14.52168083190918,
             -77.49862670898438,
-            1293.41455078125
+            1304.1375732421875
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 13)",
+    "group": "Point on left vagus nerve where branch of left vagus nerve to oesophageal nerve plexus starts (waypoint 23)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15166,7 +15166,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 11)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 21)"
     },
     "body": {
       "evidence": [
@@ -15175,7 +15175,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 11)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 21)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15191,7 +15191,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 11)",
+    "group": "Point on left vagus nerve where cardiopulmonary branch A of left vagus nerve starts (waypoint 21)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15259,7 +15259,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 12)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 23)"
     },
     "body": {
       "evidence": [
@@ -15268,7 +15268,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 12)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 23)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15284,13 +15284,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 12)",
+    "group": "Point on right vagus nerve where cardiopulmonary branch A of right vagus nerve starts (waypoint 23)",
     "region": "__annotation/Right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F39ba4a3e-106f-4ff6-a21b-31d28dfe7388",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 13)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 24)"
     },
     "body": {
       "evidence": [
@@ -15299,7 +15299,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 13)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 24)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15315,7 +15315,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 13)",
+    "group": "Point on right vagus nerve where cardiopulmonary branch B of right vagus nerve starts (waypoint 24)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -15352,7 +15352,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 12)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 22)"
     },
     "body": {
       "evidence": [
@@ -15361,7 +15361,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 12)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 22)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15377,7 +15377,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 12)",
+    "group": "Point on left vagus nerve where cardiopulmonary branch B of left vagus nerve starts (waypoint 22)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15507,7 +15507,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 10)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 20)"
     },
     "body": {
       "evidence": [
@@ -15516,7 +15516,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 10)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 20)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15532,7 +15532,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 10)",
+    "group": "Point on left vagus nerve where left recurrent laryngeal nerve starts (waypoint 20)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15555,9 +15555,9 @@
       "geometry": {
         "coordinates": [
           [
-            31.640796661376953,
-            -103.56806945800781,
-            1310.05712890625
+            25.02912139892578,
+            -104.37471008300781,
+            1311.5740966796875
           ]
         ],
         "type": "MultiPoint"
@@ -15569,7 +15569,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F941f1044-02de-47a1-b75a-d7af4cae33d6",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 9)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 19)"
     },
     "body": {
       "evidence": [
@@ -15578,7 +15578,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 9)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 19)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15586,15 +15586,15 @@
       "geometry": {
         "coordinates": [
           [
-            33.22391128540039,
+            25.02912139892578,
             -104.37471008300781,
-            1311.5618896484375
+            1311.5740966796875
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 9)",
+    "group": "Point on left vagus nerve where inferior cervical cardiac branch of left vagus nerve starts (waypoint 19)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15803,9 +15803,9 @@
       "geometry": {
         "coordinates": [
           [
-            29.505563735961914,
-            -67.17568969726562,
-            1271.0870361328125
+            29.296838760375977,
+            -67.3480453491211,
+            1260.0677490234375
           ]
         ],
         "type": "MultiPoint"
@@ -15817,7 +15817,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F9b3db605-6e0b-439a-a9a8-23c17daa969d",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 18)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 29)"
     },
     "body": {
       "evidence": [
@@ -15826,7 +15826,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 18)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 29)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15836,13 +15836,13 @@
           [
             29.296838760375977,
             -67.3480453491211,
-            1270.78466796875
+            1260.0677490234375
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 18)",
+    "group": "Point on left vagus nerve where thoracic cardiac branch of left vagus nerve starts (waypoint 29)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -15865,9 +15865,9 @@
       "geometry": {
         "coordinates": [
           [
-            33.42405319213867,
-            -99.66886138916016,
-            1325.08740234375
+			33.311920166015625,
+            -99.79852294921875,
+            1335.935302734375
           ]
         ],
         "type": "MultiPoint"
@@ -15879,7 +15879,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F9b3db605-6e0b-439a-a9a8-23c17daa969d",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 8)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 16)"
     },
     "body": {
       "evidence": [
@@ -15888,7 +15888,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 8)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 16)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -15896,15 +15896,15 @@
       "geometry": {
         "coordinates": [
           [
-            33.311920166015625,
+			33.311920166015625,
             -99.79852294921875,
-            1325.2122802734375
+            1335.935302734375
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 8)",
+    "group": "Point on left vagus nerve where superior cervical cardiac branch of left vagus nerve starts (waypoint 16)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -17987,7 +17987,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 15)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 27)"
     },
     "body": {
       "evidence": [
@@ -17996,7 +17996,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 15)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 27)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18012,13 +18012,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 15)",
+    "group": "Point on right vagus nerve where pulmonary branch A of right vagus nerve starts (waypoint 27)",
     "region": "__annotation/Right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 14)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 24)"
     },
     "body": {
       "evidence": [
@@ -18027,7 +18027,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 14)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 24)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18043,7 +18043,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 14)",
+    "group": "Point on left vagus nerve where pulmonary branch A of left vagus nerve starts (waypoint 24)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -18173,7 +18173,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 16)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 28)"
     },
     "body": {
       "evidence": [
@@ -18182,7 +18182,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 16)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 28)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18198,13 +18198,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 16)",
+    "group": "Point on right vagus nerve where pulmonary branch B of right vagus nerve starts (waypoint 28)",
     "region": "__annotation/Right vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 17)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 29)"
     },
     "body": {
       "evidence": [
@@ -18213,7 +18213,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 17)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 29)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18229,7 +18229,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 17)",
+    "group": "Point on right vagus nerve where pulmonary branch C of right vagus nerve starts (waypoint 29)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -18297,7 +18297,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 18)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 30)"
     },
     "body": {
       "evidence": [
@@ -18306,7 +18306,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 18)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 30)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18322,7 +18322,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 18)",
+    "group": "Point on right vagus nerve where pulmonary branch D of right vagus nerve starts (waypoint 30)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -18421,7 +18421,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 19)"
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 31)"
     },
     "body": {
       "evidence": [
@@ -18430,7 +18430,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 19)",
+      "id": "__annotation/Right vagus nerve/Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 31)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18446,7 +18446,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 19)",
+    "group": "Point on right vagus nerve where pulmonary branch E of right vagus nerve starts (waypoint 31)",
     "region": "__annotation/Right vagus nerve"
   },
   {
@@ -18545,7 +18545,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 15)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 25)"
     },
     "body": {
       "evidence": [
@@ -18554,7 +18554,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 15)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 25)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18570,13 +18570,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 15)",
+    "group": "Point on left vagus nerve where pulmonary branch B of left vagus nerve starts (waypoint 25)",
     "region": "__annotation/Left vagus nerve"
   },
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 16)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 27)"
     },
     "body": {
       "evidence": [
@@ -18585,7 +18585,7 @@
       "comment": "Position Updated"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 16)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 27)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18593,15 +18593,15 @@
       "geometry": {
         "coordinates": [
           [
-            28.193517684936523,
+            24.09872817993164,
             -69.18183898925781,
-            1269.417236328125
+            1280.1402587890625
           ]
         ],
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 16)",
+    "group": "Point on left vagus nerve where pulmonary branch C of left vagus nerve starts (waypoint 27)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -18624,9 +18624,9 @@
       "geometry": {
         "coordinates": [
           [
-            28.07539939880371,
-            -69.26972961425781,
-            1269.54931640625
+            24.09872817993164,
+            -69.18183898925781,
+            1280.1402587890625
           ]
         ],
         "type": "MultiPoint"
@@ -18700,7 +18700,7 @@
   {
     "resource": "blob%3Ahttps%3A%2F%2Fmapcore-demo.org%2F0c6cea04-d808-4832-a8c4-4d1abd116fff",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 17)"
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 28)"
     },
     "body": {
       "evidence": [
@@ -18709,7 +18709,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 17)",
+      "id": "__annotation/Left vagus nerve/Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 28)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -18725,7 +18725,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 17)",
+    "group": "Point on left vagus nerve where pulmonary branch D of left vagus nerve starts (waypoint 28)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -91032,7 +91032,7 @@
   {
     "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
     "item": {
-      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 20)"
+      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 32)"
     },
     "body": {
       "evidence": [
@@ -91041,7 +91041,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 20)",
+      "id": "__annotation/Right vagus nerve/Point on esophageal plexus (waypoint 32)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -91057,13 +91057,13 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on esophageal plexus (waypoint 20)",
+    "group": "Point on esophageal plexus (waypoint 32)",
     "region": "__annotation/Right vagus nerve"
   },
   {
     "resource": "blob:https://mapcore-demo.org/1a404018-2e01-40c0-85a5-b4dcead177d6",
     "item": {
-      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 19)"
+      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 30)"
     },
     "body": {
       "evidence": [
@@ -91072,7 +91072,7 @@
       "comment": "Create"
     },
     "feature": {
-      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 19)",
+      "id": "__annotation/Left vagus nerve/Point on esophageal plexus (waypoint 30)",
       "properties": {
         "drawn": true,
         "label": "Drawn annotation"
@@ -91088,7 +91088,7 @@
         "type": "MultiPoint"
       }
     },
-    "group": "Point on esophageal plexus (waypoint 19)",
+    "group": "Point on esophageal plexus (waypoint 30)",
     "region": "__annotation/Left vagus nerve"
   },
   {
@@ -91958,5 +91958,718 @@
     },
     "group": "Point where left phrenic nerve passes through muscular part of diaphragm anterior to central tendon (waypoint 19)",
     "region": "__annotation/Left phrenic nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            30.33020782470703,
+            -96.89264678955078,
+            1411.5218505859375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            27.002716064453125,
+            -96.96703338623047,
+            1402.1429443359375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            24.187292098999023,
+            -97.62602233886719,
+            1391.8763427734375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            21.061241149902344,
+            -99.14569091796875,
+            1376.678955078125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            18.26177978515625,
+            -101.56336212158203,
+            1353.1939697265625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between left common carotid artery and left subclavian artery (waypoint 13)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve runs between left common carotid artery and left subclavian artery (waypoint 13)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            28.198286056518555,
+            -112.91015625,
+            1345.4547119140625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve runs between left common carotid artery and left subclavian artery (waypoint 13)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/82ed12e0-ae49-461b-a6ad-9d92c232c35f",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes posterior to left brachiocephalic vein (waypoint 14)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes posterior to left brachiocephalic vein (waypoint 14)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            24.018089294433594,
+            -116.1309585571289,
+            1338.7652587890625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve passes posterior to left brachiocephalic vein (waypoint 14)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/318b7716-9baf-4385-a9f0-01567b2623dc",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes anterior to left subclavian artery (waypoint 15)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes anterior to left subclavian artery (waypoint 15)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            30.951520919799805,
+            -103.10768127441406,
+            1330.703369140625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve passes anterior to left subclavian artery (waypoint 15)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/f7bf05dc-fed1-4aed-a293-d08ce72231fe",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes to left side of aortic arch (waypoint 17)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes to left side of aortic arch (waypoint 17)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            30.279844284057617,
+            -46.38821029663086,
+            1332.2630615234375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve passes to left side of aortic arch (waypoint 17)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/f7bf05dc-fed1-4aed-a293-d08ce72231fe",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve is crossed by left superior intercostal vein on aortic arch (waypoint 18)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve is crossed by left superior intercostal vein on aortic arch (waypoint 18)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            57.903724670410156,
+            -47.54252624511719,
+            1322.646728515625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve is crossed by left superior intercostal vein on aortic arch (waypoint 18)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes posterior to left lung hilum (waypoint 26)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Left vagus nerve/Point where left vagus nerve passes posterior to left lung hilum (waypoint 26)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            22.32797622680664,
+            -57.33572006225586,
+            1284.7728271484375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where left vagus nerve passes posterior to left lung hilum (waypoint 26)",
+    "region": "__annotation/Left vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -30.52895736694336,
+            -97.31783294677734,
+            1411.4033203125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve runs between internal jugular vein and internal carotid artery A (waypoint 8)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -29.010282516479492,
+            -98.25763702392578,
+            1405.6917724609375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve runs between internal jugular vein and internal carotid artery B (waypoint 9)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -27.344308853149414,
+            -99.50007629394531,
+            1399.35107421875
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve runs between internal jugular vein and internal carotid artery C (waypoint 10)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -25.767322540283203,
+            -100.99443817138672,
+            1393.2359619140625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve runs between internal jugular vein and internal carotid artery D (waypoint 11)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -21.908681869506836,
+            -105.27567291259766,
+            1377.5751953125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve runs between internal jugular vein and internal carotid artery E (waypoint 12)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/5c535593-6fde-4d83-b2b6-9256b850a6f8",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve descends posterior to internal jugular vein to cross first part of subclavian artery (waypoint 13)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve descends posterior to internal jugular vein to cross first part of subclavian artery (waypoint 13)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -22.592958450317383,
+            -101.19096374511719,
+            1344.1202392578125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve descends posterior to internal jugular vein to cross first part of subclavian artery (waypoint 13)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes posterior to right brachiocephalic vein (waypoint 14)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes posterior to right brachiocephalic vein (waypoint 14)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -24.817785263061523,
+            -113.72389221191406,
+            1342.291015625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve passes posterior to right brachiocephalic vein (waypoint 14)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes anterior to brachiocephalic trunk (waypoint 19)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes anterior to brachiocephalic trunk (waypoint 19)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -13.039678573608398,
+            -113.32671356201172,
+            1339.0216064453125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve passes anterior to brachiocephalic trunk (waypoint 19)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes inferior to brachiocephalic trunk (waypoint 20)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes inferior to brachiocephalic trunk (waypoint 20)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -12.622138977050781,
+            -113.36631774902344,
+            1338.6585693359375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve passes inferior to brachiocephalic trunk (waypoint 20)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes posteromedial to superior vena cava (waypoint 21)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve passes posteromedial to superior vena cava (waypoint 21)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -10.25222396850586,
+            -118.2142105102539,
+            1312.9476318359375
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve passes posteromedial to superior vena cava (waypoint 21)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where azygous vein separates right vagus nerve from lung and pleura (waypoint 22)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Position Updated"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where azygous vein separates right vagus nerve from lung and pleura (waypoint 22)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -12.552919387817383,
+            -103.35710144042969,
+            1306.3350830078125
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where azygous vein separates right vagus nerve from lung and pleura (waypoint 22)",
+    "region": "__annotation/Right vagus nerve"
+  },
+  {
+    "resource": "blob:https://mapcore-demo.org/81d2ea91-fdb9-4c19-953b-61ff6986a4cb",
+    "item": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve lies on posterior aspect of right lung hilum (waypoint 26)"
+    },
+    "body": {
+      "evidence": [
+        
+      ],
+      "comment": "Create"
+    },
+    "feature": {
+      "id": "__annotation/Right vagus nerve/Point where right vagus nerve lies on posterior aspect of right lung hilum (waypoint 26)",
+      "properties": {
+        "drawn": true,
+        "label": "Drawn annotation"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -20.379356384277344,
+            -90.7247543334961,
+            1281.9371337890625
+          ]
+        ],
+        "type": "MultiPoint"
+      }
+    },
+    "group": "Point where right vagus nerve lies on posterior aspect of right lung hilum (waypoint 26)",
+    "region": "__annotation/Right vagus nerve"
   }
 ]
