@@ -10,15 +10,23 @@ from cmlibs.zinc.result import RESULT_OK
 from scaffoldmaker.annotation.annotationgroup import getAnnotationGroupForTerm
 from scaffoldmaker.annotation.esophagus_terms import get_esophagus_term
 from scaffoldmaker.annotation.smallintestine_terms import get_smallintestine_term
-from scaffoldmaker.annotation.stomach_terms import get_stomach_term
+from scaffoldmaker.annotation.stomach_terms import get_stomach_term, stomach_terms
 from scaffoldmaker.meshtypes.meshtype_3d_stomach1 import MeshType_3d_stomach1
 from scaffoldmaker.utils.meshrefinement import MeshRefinement
 from scaffoldmaker.utils.zinc_utils import createFaceMeshGroupExteriorOnFace
 
-from testutils import assertAlmostEqualList
+from testutils import assertAlmostEqualList, check_annotation_term_ids
 
 
 class StomachScaffoldTestCase(unittest.TestCase):
+
+    def test_stomach_annotations(self):
+        """
+        Test nomenclature of the stomach terms. 
+        """
+        for term_ids in stomach_terms:
+            self.assertTrue(check_annotation_term_ids(term_ids), "Invalid primary term id or order not UBERON < ILX < FMA for stomach annotation term ids " + str(term_ids)) 
+
 
     def test_stomach1(self):
         """
@@ -28,7 +36,7 @@ class StomachScaffoldTestCase(unittest.TestCase):
         parameterSetNames = scaffold.getParameterSetNames()
         self.assertEqual(parameterSetNames, ["Default", "Human 1", "Human 2", "Mouse 1", "Pig 1", "Rat 1", "Material"])
         options = scaffold.getDefaultOptions("Rat 1")
-        self.assertEqual(17, len(options))
+        self.assertEqual(18, len(options))
         self.assertEqual(16, options.get("Number of elements around duodenum"))
         self.assertEqual(14, options.get("Number of elements along"))
         self.assertEqual(0.0215, options.get("Wall thickness"))
@@ -74,10 +82,10 @@ class StomachScaffoldTestCase(unittest.TestCase):
         fieldcache = fieldmodule.createFieldcache()
         result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
         self.assertEqual(result, RESULT_OK)
-        self.assertAlmostEqual(surfaceArea, 4.092273543567514, delta=1.0E-6)
+        self.assertAlmostEqual(surfaceArea, 4.092342779924945, delta=1.0E-6)
         result, volume = volumeField.evaluateReal(fieldcache, 1)
         self.assertEqual(result, RESULT_OK)
-        self.assertAlmostEqual(volume, 0.05789368036003227, delta=1.0E-6)
+        self.assertAlmostEqual(volume, 0.05789671955338514, delta=1.0E-6)
 
         # check some annotationGroups:
         expectedSizes3d = {

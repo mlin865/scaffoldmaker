@@ -6,9 +6,11 @@ from cmlibs.utils.zinc.field import find_or_create_field_coordinates
 from cmlibs.zinc.element import Element, Elementbasis
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from cmlibs.maths.vectorops import cross, magnitude, normalize, sub
+from cmlibs.maths.vectorops import cross, magnitude, mult, normalize, rejection, sub
 from scaffoldmaker.annotation.annotationgroup import AnnotationGroup
-from scaffoldmaker.utils.interpolation import getCubicHermiteCurvesLength
+from scaffoldmaker.utils.constructionobject import ConstructionObject
+from scaffoldmaker.utils.interpolation import (
+    gaussWt4, gaussXi4, getCubicHermiteCurvesLength, interpolateCubicHermiteDerivative)
 from scaffoldmaker.utils.tracksurface import TrackSurface
 from abc import ABC, abstractmethod
 import math
@@ -100,14 +102,16 @@ class NetworkSegment:
     Describes a segment of a network between junctions as a sequence of nodes with node derivative versions.
     """
 
-    def __init__(self, networkNodes: list, nodeVersions: list):
+    def __init__(self, networkNodes: list, nodeVersions: list, isPatch):
         """
         :param networkNodes: List of NetworkNodes from start to end. Must be at least 2.
         :param nodeVersions: List of node versions to use for derivatives at network nodes.
+        :param isPatch: True if segment at the other end of the junction requires a patch.
         """
         assert isinstance(networkNodes, list) and (len(networkNodes) > 1) and (len(nodeVersions) == len(networkNodes))
         self._networkNodes = networkNodes
         self._nodeVersions = nodeVersions
+        self._isPatch = isPatch
         self._elementIdentifiers = [None] * (len(networkNodes) - 1)
         for networkNode in networkNodes[1:-1]:
             networkNode.setInteriorSegment(self)
@@ -158,6 +162,12 @@ class NetworkSegment:
         """
         return False  # not implemented, assume not cyclic
 
+    def isPatch(self):
+        """
+        :return: True if the segment is a patch, False if not.
+        """
+        return self._isPatch
+
     def split(self, splitNetworkNode):
         """
         Split segment to finish at splitNetworkNode, returning remainder as a new NetworkSegment.
@@ -172,7 +182,7 @@ class NetworkSegment:
         return nextSegment
 
 
-class NetworkMesh:
+class NetworkMesh(ConstructionObject):
     """
     Defines a 1-D network with lateral axes, and utility functions for fleshing into higher dimensional meshes.
     """
@@ -206,6 +216,17 @@ class NetworkMesh:
         self._networkSegments = []
         sequenceStrings = structureString.split(",")
         for sequenceString in sequenceStrings:
+            # check if segment is a patch
+            if not sequenceString[0].isnumeric():
+                try:
+                    isPatch = True if sequenceString[0] == "#" else False
+                    sequenceString = sequenceString[2:] if isPatch else sequenceString
+                except ValueError:
+                    print("Network mesh: Skipping invalid cap sequence", sequenceString, file=sys.stderr)
+                    continue
+            else:
+                isPatch = False
+
             nodeIdentifiers = []
             nodeVersions = []
             nodeVersionStrings = sequenceString.split("-")
@@ -239,7 +260,7 @@ class NetworkMesh:
                 sequenceNodes.append(networkNode)
                 sequenceVersions.append(nodeVersion)
                 if (len(sequenceNodes) > 1) and (existingNetworkNode or (nodeIdentifier == nodeIdentifiers[-1])):
-                    networkSegment = NetworkSegment(sequenceNodes, sequenceVersions)
+                    networkSegment = NetworkSegment(sequenceNodes, sequenceVersions, isPatch)
                     self._networkSegments.append(networkSegment)
                     sequenceNodes = sequenceNodes[-1:]
                     sequenceVersions = sequenceVersions[-1:]
@@ -364,12 +385,11 @@ class NetworkMesh:
                             break
                 if prevNetworkNode or nextNetworkNode:
                     if prevNetworkNode and nextNetworkNode:
-                        d1 = sub(nextNetworkNode.getX(), prevNetworkNode.getX())
+                        d1 = mult(sub(nextNetworkNode.getX(), prevNetworkNode.getX()), 0.5)
                     elif prevNetworkNode:
                         d1 = sub(networkNode.getX(), prevNetworkNode.getX())
                     else:
                         d1 = sub(nextNetworkNode.getX(), networkNode.getX())
-                    d1 = normalize(d1)
                     d3 = [0.0, 0.0, 0.1]
                     d2 = cross(d3, normalize(d1))
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, nodeVersion, d1)
@@ -535,10 +555,10 @@ class NetworkMeshSegment(ABC):
         self._pathParametersList = pathParametersList
         self._pathsCount = len(pathParametersList)
         self._dimension = 3 if (self._pathsCount > 1) else 2
-        self._length = getCubicHermiteCurvesLength(pathParametersList[0][0], pathParametersList[0][1])
         self._annotationTerms = []
         self._junctions = []  # start, end junctions. Set when junctions are created.
         self._isLoop = False
+        self._lengthParameters = self._calculateLengthParameters()
 
     def addAnnotationTerm(self, annotationTerm):
         """
@@ -550,12 +570,12 @@ class NetworkMeshSegment(ABC):
     def getAnnotationTerms(self):
         return self._annotationTerms
 
-    def getLength(self):
+    def getSampleLength(self):
         """
-        Get length of the segment's primary path.
-        :return: Real length.
+        Get sample length of the segment's primary path.
+        :return: Length.
         """
-        return self._length
+        return self._lengthParameters[0][-1][0]
 
     def getNetworkSegment(self):
         """
@@ -596,10 +616,50 @@ class NetworkMeshSegment(ABC):
         """
         return self._isLoop
 
+    def _calculateLengthParameters(self):
+        """
+        Calculate scalar field values and derivatives giving effective length along segment central path
+        with allowance for mean change in lateral axes, used for sampling elements along segment.
+        Uses first (outer) path parameters only.
+        Calculated in constructor and stored.
+        :return: Length parameters (lx[], ld1[])
+        """
+        px, pd1, pd2, pd12, pd3, pd13 = self._pathParametersList[0]
+        lx = [[0.0]]
+        totalLength = 0.0
+        for e in range(len(px) - 1):
+            ax, ad1, ad2, ad12, ad3, ad13 = px[e], pd1[e], pd2[e], pd12[e], pd3[e], pd13[e]
+            bx, bd1, bd2, bd12, bd3, bd13 = px[e + 1], pd1[e + 1], pd2[e + 1], pd12[e + 1], pd3[e + 1], pd13[e + 1]
+            length = 0.0
+            for i in range(4):
+                d1 = interpolateCubicHermiteDerivative(ax, ad1, bx, bd1, gaussXi4[i])
+                gd1 = magnitude(d1)
+                gd2 = magnitude(rejection(interpolateCubicHermiteDerivative(ad2, ad12, bd2, bd12, gaussXi4[i]), d1))
+                gd3 = magnitude(rejection(interpolateCubicHermiteDerivative(ad3, ad13, bd3, bd13, gaussXi4[i]), d1))
+                gds = 0.5 * (gd2 + gd3)
+                length += gaussWt4[i] * math.sqrt(gd1 * gd1 + gds * gds)
+            totalLength += length
+            lx.append([totalLength])
+        ld = []
+        for n in range(len(px)):
+            d1 = magnitude(pd1[n])
+            d2 = 0.5 * (magnitude(pd12[n]) + magnitude(pd13[n]))
+            ld.append([math.sqrt(d1 * d1 + d2 * d2)])
+        return (lx, ld)
+
+    def getLengthParameters(self):
+        """
+        Get scalar field parameter (value, derivative) giving effective length along segment.
+        :return: Length parameters (lx[], ld[])
+        """
+        return self._lengthParameters
+
     @abstractmethod
-    def sample(self, targetElementLength):
+    def sample(self, fixedElementsCountAlong, targetElementLength):
         """
         Override to resample curve/raw data to final coordinates.
+        :param fixedElementsCountAlong: Fixed number of elements along > 0 or None to use targetElementLength.
+        Implementations may enforce a higher minimum number.
         :param targetElementLength: Target element size along length of segment/junction.
         """
         pass
@@ -673,10 +733,22 @@ class NetworkMeshBuilder(ABC):
     """
 
     def __init__(self, networkMesh: NetworkMesh, targetElementDensityAlongLongestSegment: float,
-                 layoutAnnotationGroups):
+                 layoutAnnotationGroups, annotationElementsCountsAlong=[]):
+        """
+        Abstract base class for building meshes from a NetworkMesh network layout.
+        :param networkMesh: Description of the topology of the network layout.
+        :param targetElementDensityAlongLongestSegment: Real value which longest segment path in network is divided by
+        to get target element length, which is used to determine numbers of elements along except when set for a segment
+        through annotationElementsCountsAlong.
+        :param layoutAnnotationGroups: Annotation groups defined on the layout to mirror on the final mesh.
+        :param annotationElementsCountsAlong: List in same order as layoutAnnotationGroups, specifying fixed number of
+        elements along segment with any elements in the annotation group. Client must ensure exclusive map from
+        segments. Groups with zero value or past end of this list use the targetElementDensityAlongLongestSegment.
+        """
         self._networkMesh = networkMesh
         self._targetElementDensityAlongLongestSegment = targetElementDensityAlongLongestSegment
         self._layoutAnnotationGroups = layoutAnnotationGroups
+        self._annotationElementsCountsAlong = annotationElementsCountsAlong
         self._layoutRegion = networkMesh.getRegion()
         layoutFieldmodule = self._layoutRegion.getFieldmodule()
         self._layoutNodes = layoutFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
@@ -706,7 +778,7 @@ class NetworkMeshBuilder(ABC):
         for networkSegment in self._networkMesh.getNetworkSegments():
             # derived class makes the segment of its required type
             self._segments[networkSegment] = segment = self.createSegment(networkSegment)
-            segmentLength = segment.getLength()
+            segmentLength = segment.getSampleLength()
             if segmentLength > self._longestSegmentLength:
                 self._longestSegmentLength = segmentLength
             for layoutAnnotationGroup in self._layoutAnnotationGroups:
@@ -753,8 +825,19 @@ class NetworkMeshBuilder(ABC):
         Must have called self.createJunctions() first.
         """
         for networkSegment in self._networkMesh.getNetworkSegments():
+            fixedElementsCountAlong = None
+            i = 0
+            for layoutAnnotationGroup in self._layoutAnnotationGroups:
+                if i >= len(self._annotationElementsCountsAlong):
+                    break
+                if self._annotationElementsCountsAlong[i] > 0:
+                    if networkSegment.hasLayoutElementsInMeshGroup(
+                            layoutAnnotationGroup.getMeshGroup(self._layoutMesh)):
+                        fixedElementsCountAlong = self._annotationElementsCountsAlong[i]
+                        break
+                i += 1
             segment = self._segments[networkSegment]
-            segment.sample(self._targetElementLength)
+            segment.sample(fixedElementsCountAlong, self._targetElementLength)
 
     def _sampleJunctions(self):
         """
@@ -793,6 +876,8 @@ class NetworkMeshBuilder(ABC):
             if junctions[0] not in generatedJunctions:
                 junctions[0].generateMesh(generateData)
                 generatedJunctions.add(junctions[0])
+            if networkSegment.isPatch():
+                continue  # so as not to make patch mesh twice
             segment.generateMesh(generateData)
             if junctions[1] not in generatedJunctions:
                 junctions[1].generateMesh(generateData)

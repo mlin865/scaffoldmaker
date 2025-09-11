@@ -8,16 +8,23 @@ from cmlibs.zinc.element import Element
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.result import RESULT_OK
 from scaffoldmaker.annotation.annotationgroup import getAnnotationGroupForTerm
-from scaffoldmaker.annotation.esophagus_terms import get_esophagus_term
+from scaffoldmaker.annotation.esophagus_terms import get_esophagus_term, esophagus_terms
 from scaffoldmaker.meshtypes.meshtype_3d_esophagus1 import MeshType_3d_esophagus1
 from scaffoldmaker.utils.meshrefinement import MeshRefinement
 from scaffoldmaker.utils.zinc_utils import createFaceMeshGroupExteriorOnFace
 
-from testutils import assertAlmostEqualList
+from testutils import assertAlmostEqualList, check_annotation_term_ids
 
 
 class EsophagusScaffoldTestCase(unittest.TestCase):
 
+    def test_esophagus_annotations(self):
+        """
+        Test nomenclature of the esophagus terms. 
+        """
+        for term_ids in esophagus_terms:
+            self.assertTrue(check_annotation_term_ids(term_ids), "Invalid primary term id or order not UBERON < ILX < FMA for esophagus annotation term ids " + str(term_ids)) 
+            
     def test_esophagus1(self):
         """
         Test creation of esophagus scaffold.
@@ -58,14 +65,14 @@ class EsophagusScaffoldTestCase(unittest.TestCase):
         coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
         self.assertTrue(coordinates.isValid())
         minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
-        assertAlmostEqualList(self, minimums, [-8.645606404075409, -115.4469482741834, 1123.3296869517246], 1.0E-6)
-        assertAlmostEqualList(self, maximums, [17.428066853931824, -63.05159903323634, 1403.9055789269714], 1.0E-6)
+        assertAlmostEqualList(self, minimums, [-8.651939179594637, -113.60141744677131, 1126.4189460716025], 1.0E-6)
+        assertAlmostEqualList(self, maximums, [14.317229342198544, -62.96131235320371, 1403.9055789269714], 1.0E-6)
 
         flatCoordinates = fieldmodule.findFieldByName("flat coordinates").castFiniteElement()
         self.assertTrue(flatCoordinates.isValid())
         minimums, maximums = evaluateFieldNodesetRange(flatCoordinates, nodes)
-        assertAlmostEqualList(self, minimums, [-2.023676644962851, 0.0, 0.0], 1.0E-6)
-        assertAlmostEqualList(self, maximums, [38.56398979676183, 289.9673186862639, 1.2], 1.0E-6)
+        assertAlmostEqualList(self, minimums, [-2.0052709915460802, 0.0, 0.0], 1.0E-6)
+        assertAlmostEqualList(self, maximums, [38.55018555669926, 286.2207860825292, 1.2], 1.0E-6)
 
         esophagusCoordinates = fieldmodule.findFieldByName("esophagus coordinates").castFiniteElement()
         minimums, maximums = evaluateFieldNodesetRange(esophagusCoordinates, nodes)
@@ -82,10 +89,10 @@ class EsophagusScaffoldTestCase(unittest.TestCase):
         fieldcache = fieldmodule.createFieldcache()
         result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
         self.assertEqual(result, RESULT_OK)
-        self.assertAlmostEqual(surfaceArea, 12544.147466204333, delta=1.0E-6)
+        self.assertAlmostEqual(surfaceArea, 12404.496450194649, delta=1.0E-6)
         result, volume = volumeField.evaluateReal(fieldcache, 1)
         self.assertEqual(result, RESULT_OK)
-        self.assertAlmostEqual(volume, 13787.433711373638, delta=1.0E-6)
+        self.assertAlmostEqual(volume, 13637.443048857438, delta=1.0E-6)
 
         # check some annotationGroups:
         expectedSizes3d = {
