@@ -1007,7 +1007,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         rdlists = (rx, rd1, rd2, rd3)
         # transition layers, if any
         for n3 in range(self._transition_count - 1):
-            for i, rd in enumerator(rdlists):
+            for i, rd in enumerate(rdlists):
                 rd.append(copy.copy(self._transitionCoordinates[i][n2][n3][n1]))
         # first shell layer
         for i, rd in enumerate(rdlists):
