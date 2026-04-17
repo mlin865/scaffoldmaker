@@ -152,7 +152,7 @@ class QuadTriangleMesh:
 
     def set_edge_parameters23(self, px, pd1, pd2, pd3=None):
         """
-        Set parameters along 123 edge of triangle.
+        Set parameters along 2-3 edge of triangle.
         :param px: Coordinates x.
         :param pd1: Derivatives in direction away from point1.
         :param pd2: Derivatives in direction from point2 towards point3.

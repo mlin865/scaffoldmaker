@@ -194,7 +194,7 @@ class MeshType_3d_lung3(Scaffold_base):
         elementsCountLateral = options["Number of elements lateral"]
         elementsCountNormal = options["Number of elements normal"]
         elementsCountOblique = options["Number of elements oblique"]
-        elementsCountTransition = options["Number of transition elements"]
+        transition_count = options["Number of transition elements"]
         lungSpacing = options["Left-right lung spacing"] * 0.5
         baseSharpFactor = options["Base lateral edge sharpness factor"]
         edgeSharpFactor = options["Ventral edge sharpness factor"]
@@ -263,7 +263,7 @@ class MeshType_3d_lung3(Scaffold_base):
             axis2_x_rotation_radians = -oblique_slope_radians
             axis3_x_rotation_radians = math.radians(90) - oblique_slope_radians
 
-            ellipsoid = EllipsoidMesh(elementCounts, transition_element_count=elementsCountTransition)
+            ellipsoid = EllipsoidMesh(elementCounts, transition_element_count=transition_count)
 
             if lung == leftLung:
                 octant_group_lists = []

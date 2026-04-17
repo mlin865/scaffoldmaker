@@ -123,7 +123,7 @@ class MeshType_2d_tubenetwork1(Scaffold_base):
             annotationElementsCountsAlong=options["Annotation numbers of elements along"],
             defaultElementsCountAround=options["Number of elements around"],
             annotationElementsCountsAround=options["Annotation numbers of elements around"],
-            elementsCountThroughShell=1)
+            shell_count=1)
         tubeNetworkMeshBuilder.build()
         generateData = TubeNetworkMeshGenerateData(
             region, 2,

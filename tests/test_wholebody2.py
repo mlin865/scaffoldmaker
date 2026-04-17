@@ -96,17 +96,17 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            self.assertAlmostEqual(volume, 98.48031242590075, delta=tol)
+            self.assertAlmostEqual(volume, 98.4801767062105, delta=tol)
             self.assertAlmostEqual(surfaceArea, 228.97680729603854, delta=tol)
 
         # check some annotation groups:
 
         expectedSizes3d = {
-            'abdominal cavity': (40, 10.07914067175023),
+            'abdominal cavity': (40, 10.124914037206159),
             'core': (428, 45.53226306964464),
             'head': (64, 6.909592206493212),
             'shell': (276, 52.94927195918318),
-            'thoracic cavity': (40, 6.97830787903503)
+            'thoracic cavity': (40, 6.958359089468085)
         }
         for name in expectedSizes3d:
             term = get_body_term(name)

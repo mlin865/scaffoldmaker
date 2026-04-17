@@ -221,9 +221,9 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
             annotationElementsCountsAlong=options["Annotation numbers of elements along"],
             defaultElementsCountAround=options["Number of elements around"],
             annotationElementsCountsAround=options["Annotation numbers of elements around"],
-            elementsCountThroughShell=options["Number of elements through shell"],
-            isCore=options["Core"],
-            elementsCountTransition=options["Number of elements across core transition"],
+            shell_count=options["Number of elements through shell"],
+            core=options["Core"],
+            transition_count=options["Number of elements across core transition"],
             defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
             annotationElementsCountsCoreBoxMinor=options["Annotation numbers of elements across core box minor"],
             useOuterTrimSurfaces=options["Use outer trim surfaces"])

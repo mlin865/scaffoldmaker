@@ -311,7 +311,7 @@ class MeshType_3d_lung4(Scaffold_base):
             octant1 = middle_ellipsoid.build_octant(
                 axes_lengths, half_counts, -pi__3, 0.0,
                 surface_d3_mode=EllipsoidSurfaceD3Mode.SURFACE_NORMAL_PLANE_PROJECTION)
-            middle_ellipsoid.merge_octant(octant1, quadrant=3)
+            middle_ellipsoid.merge_octant_plus1_quadrant(octant1, quadrant=3)
             if lung == right_lung:
                 middle_ellipsoid.copy_to_negative_axis1()
 
@@ -338,11 +338,11 @@ class MeshType_3d_lung4(Scaffold_base):
             octant2 = upper_ellipsoid.build_octant(
                 axes_lengths, half_counts, 0.0, pi__3,
                 surface_d3_mode=EllipsoidSurfaceD3Mode.SURFACE_NORMAL_PLANE_PROJECTION)
-            upper_ellipsoid.merge_octant(octant2, quadrant=0)
+            upper_ellipsoid.merge_octant_plus1_quadrant(octant2, quadrant=0)
             octant3 = upper_ellipsoid.build_octant(
                 axes_lengths, half_counts, pi__3, 2.0 * pi__3,
                 surface_d3_mode=EllipsoidSurfaceD3Mode.SURFACE_NORMAL_PLANE_PROJECTION)
-            upper_ellipsoid.merge_octant(octant3, quadrant=1)
+            upper_ellipsoid.merge_octant_plus1_quadrant(octant3, quadrant=1)
             upper_ellipsoid.copy_to_negative_axis1()
 
             octant4 = lower_ellipsoid_build.build_octant(
@@ -354,7 +354,7 @@ class MeshType_3d_lung4(Scaffold_base):
                 [element_counts[0], element_counts[1], element_counts[2] + 2 * elements_count_lower_extension],
                 transition_element_count=elements_count_transition)
             lower_ellipsoid_mesh.set_box_transition_groups(box_group.getGroup(), transition_group.getGroup())
-            lower_ellipsoid_mesh.merge_octant(octant4, quadrant=1)
+            lower_ellipsoid_mesh.merge_octant_plus1_quadrant(octant4, quadrant=1)
             lower_ellipsoid_mesh.copy_to_negative_axis1()
 
             node_layout_manager = generate_data.getHermiteNodeLayoutManager()

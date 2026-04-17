@@ -1799,7 +1799,7 @@ class MeshType_3d_uterus1(Scaffold_base):
             annotationElementsCountsAlong=annotationElementsCountsAlong,
             defaultElementsCountAround=options['Number of elements around'],
             annotationElementsCountsAround=annotationElementsCountsAround,
-            elementsCountThroughShell=options["Number of elements through wall"],
+            shell_count=options["Number of elements through wall"],
             useOuterTrimSurfaces=False)
         uterusTubeNetworkMeshBuilder.build()
 

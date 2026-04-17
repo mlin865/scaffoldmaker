@@ -657,9 +657,9 @@ class MeshType_3d_spinalnerve1(Scaffold_base):
             annotationElementsCountsAlong=annotationAlongCounts,
             defaultElementsCountAround=options["Number of elements around spinal nerve"],
             annotationElementsCountsAround=annotationAroundCounts,
-            elementsCountThroughShell=options["Number of elements through shell"],
-            isCore=isCore,
-            elementsCountTransition=options['Number of elements across core transition'],
+            shell_count=options["Number of elements through shell"],
+            core=isCore,
+            transition_count=options['Number of elements across core transition'],
             defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
             annotationElementsCountsCoreBoxMinor=[],
             useOuterTrimSurfaces=True)
