@@ -143,6 +143,23 @@ class MeshGenerateData:
             self._annotationGroupMap[annotationTerm] = annotationGroup
         return annotationGroup
 
+    def _getAnnotationZincGroup(self, annotationTerm):
+        """
+        Get Zinc group to add objects to for term.
+        :param annotationTerm: Annotation term (name, ontId).
+        :return: Zinc Group.
+        """
+        annotationGroup = self.getOrCreateAnnotationGroup(annotationTerm)
+        return annotationGroup.getGroup()
+
+    def getAnnotationZincGroups(self, annotationTerms):
+        """
+        Get Zinc groups for all annotation terms to add segment objects to, creating as needed.
+        :param annotationTerms: List of annotation terms (name, ontId).
+        :return: List of Zinc Group.
+        """
+        return [self._getAnnotationZincGroup(annotationTerm) for annotationTerm in annotationTerms]
+
     def _getAnnotationMeshGroup(self, annotationTerm):
         """
         Get mesh group to add elements to for term.

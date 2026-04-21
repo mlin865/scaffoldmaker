@@ -37,11 +37,13 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
         options = {}
         options["Base parameter set"] = parameterSetName
         options["Structure"] = (
-            "1-2-3-4,"
-            "4-5-6.1," 
+            # "1-2-3-4,"
+            # "4-5-6.1,"
+            "4-3-2-1),"
+            "6.1-5-4,"
             "6.2-14-15-16-17-18-19,19-20,"
             "6.3-21-22-23-24-25-26,26-27,"
-            "6.1-7-8-9,"
+            "6.4-7-8-9,"
             "9-10-11-12-13.1,"
             "13.2-28-29-30-31-32,32-33-34,"
             "13.3-35-36-37-38-39,39-40-41")
@@ -53,12 +55,12 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
         options["Shoulder drop"] = 1.0
         options["Shoulder width"] = 4.5
         options["Arm lateral angle degrees"] = 10.0
-        options["Arm length"] = 7.5
+        options["Arm length"] = 7.0
         options["Arm top diameter"] = 1.0
         options["Arm twist angle degrees"] = 0.0
         options["Wrist thickness"] = 0.5
         options["Wrist width"] = 0.7
-        options["Hand length"] = 2.0
+        options["Hand length"] = 1.5
         options["Hand thickness"] = 0.2
         options["Hand width"] = 1.0
         options["Thorax length"] = 2.5
@@ -76,7 +78,7 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
         options["Foot thickness"] = 0.3
         options["Foot width"] = 1.0
         options["Inner proportion default"] = 0.7
-        options["Inner proportion head"] = 0.35
+        options["Inner proportion head"] = 0.7
         return options
 
     @classmethod
@@ -316,21 +318,29 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
 
         headScale = headLength / headElementsCount
         nodeIdentifier = 1
-        d1 = [headScale, 0.0, 0.0]
-        d2 = [0.0, halfHeadWidth, 0.0]
+        d1 = [-headScale, 0.0, 0.0]
+        d2 = [0.0, -halfHeadWidth, 0.0]
         d3 = [0.0, 0.0, halfHeadDepth]
         id2 = mult(d2, innerProportionHead)
         id3 = mult(d3, innerProportionHead)
+
+        headInnerOffset = (1.0 - innerProportionHead) * halfHeadWidth
+        headLengthInner = headLength - headInnerOffset
+        ix, id1 = sampleCubicHermiteCurvesSmooth(
+            [[headInnerOffset, 0.0, 0.0], [headLength, 0.0, 0.0]],
+            [[headLengthInner, 0.0, 0.0]] * 2,
+            headElementsCount, derivativeMagnitudeEnd=headScale)[:2]
+        id1 = [[-d for d in v] for v in id1]
         for i in range(headElementsCount):
             node = nodes.findNodeByIdentifier(nodeIdentifier)
             fieldcache.setNode(node)
             x = [headScale * i, 0.0, 0.0]
             setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3)
-            setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3)
+            setNodeFieldParameters(innerCoordinates, fieldcache, ix[i], id1[i], id2, id3)
             nodeIdentifier += 1
 
         neckScale = neckLength / neckElementsCount
-        d2 = [0.0, halfHeadWidth, 0.0]
+        d2 = [0.0, -halfHeadWidth, 0.0]
         d3 = [0.0, 0.0, halfHeadWidth]
         id2 = mult(d2, innerProportionHead)
         id3 = mult(d3, innerProportionHead)
@@ -339,6 +349,7 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
             fieldcache.setNode(node)
             x = [headLength + neckScale * i, 0.0, 0.0]
             d1 = [0.5 * (headScale + neckScale) if (i == 0) else neckScale, 0.0, 0.0]
+            d1[0] *= -1.0
             setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3)
             setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3)
             nodeIdentifier += 1
@@ -367,8 +378,15 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
                 id2 = mult(d2, innerProportionDefault)
                 id12 = None
                 id3 = mult(d3, innerProportionDefault)
-            setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3, d12)
-            setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3, id12)
+            if i == 0:
+                md1 = [-d for d in d1]
+                setNodeFieldParameters(coordinates, fieldcache, x, md1, [-d for d in d2], d3, d12)
+                setNodeFieldParameters(innerCoordinates, fieldcache, x, md1, [-d for d in id2], id3, id12)
+                setNodeFieldVersionDerivatives(coordinates, fieldcache, 4, d1, d2, d3, d12)
+                setNodeFieldVersionDerivatives(innerCoordinates, fieldcache, 4, d1, id2, id3, id12)
+            else:
+                setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3, d12)
+                setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3, id12)
             nodeIdentifier += 1
 
         abdomenScale = abdomenLength / abdomenElementsCount
@@ -632,7 +650,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         useParameterSetName = "Human 1 Coarse" if (parameterSetName == "Default") else parameterSetName
         options["Base parameter set"] = useParameterSetName
         options["Body network layout"] = ScaffoldPackage(MeshType_1d_human_body_network_layout1)
-        options["Number of elements along head"] = 2
+        options["Number of elements along head"] = 4
         options["Number of elements along neck"] = 1
         options["Number of elements along thorax"] = 2
         options["Number of elements along abdomen"] = 2
@@ -650,7 +668,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         options["Number of elements across core box minor"] = 2
         options["Number of elements across core transition"] = 1
         if "Medium" in useParameterSetName:
-            options["Number of elements along head"] = 3
+            options["Number of elements along head"] = 6
             options["Number of elements along neck"] = 2
             options["Number of elements along thorax"] = 3
             options["Number of elements along abdomen"] = 3
@@ -662,7 +680,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
             options["Number of elements around torso"] = 16
             options["Number of elements around leg"] = 12
         elif "Fine" in useParameterSetName:
-            options["Number of elements along head"] = 4
+            options["Number of elements along head"] = 8
             options["Number of elements along neck"] = 2
             options["Number of elements along thorax"] = 4
             options["Number of elements along abdomen"] = 4
@@ -862,6 +880,10 @@ class MeshType_3d_wholebody2(Scaffold_base):
 
         meshDimension = 3
         tubeNetworkMeshBuilder.build()
+        # swap left and right for head and neck groups
+        tubeNetworkMeshBuilder.setAnnotationLeftRightSwap("head", True)
+        tubeNetworkMeshBuilder.setAnnotationLeftRightSwap("neck", True)
+
         generateData = TubeNetworkMeshGenerateData(
             region, meshDimension,
             isLinearThroughShell=False,
@@ -935,6 +957,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
             fieldmodule.createFieldAnd(rightLegGroup.getGroup(), is_exterior))
 
         if isCore:
+            headGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("head"))
             coreGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("core"))
             shellGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("shell"))
             leftGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("left"))
@@ -973,8 +996,11 @@ class MeshType_3d_wholebody2(Scaffold_base):
             is_diaphragm = fieldmodule.createFieldAnd(thoracicCavityGroup.getGroup(), abdominalCavityGroup.getGroup())
             diaphragmGroup.getMeshGroup(mesh2d).addElementsConditional(is_diaphragm)
 
+            # now excluding head from spinal cord
             spinalCordGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_body_term("spinal cord"))
-            is_spinal_cord = fieldmodule.createFieldAnd(is_core_shell, is_left_right_dorsal)
+            is_spinal_cord = fieldmodule.createFieldAnd(
+                fieldmodule.createFieldAnd(is_core_shell, is_left_right_dorsal),
+                fieldmodule.createFieldNot(headGroup.getGroup()))
             spinalCordGroup.getMeshGroup(mesh1d).addElementsConditional(is_spinal_cord)
 
 

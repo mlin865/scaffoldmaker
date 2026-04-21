@@ -534,6 +534,7 @@ class NetworkMeshSegment(ABC):
         self._junctions = []  # start, end junctions. Set when junctions are created.
         self._isLoop = False
         self._lengthParameters = self._calculateLengthParameters()
+        self._leftRightSwap = False
 
     def addAnnotationTerm(self, annotationTerm):
         """
@@ -638,6 +639,19 @@ class NetworkMeshSegment(ABC):
         :param targetElementLength: Target element size along length of segment/junction.
         """
         pass
+
+    def setLeftRightSwap(self, swap: bool):
+        """
+        :param swap: True to swap sense of left and right for this segment.
+        """
+        self._leftRightSwap = swap
+
+    def isLeftRightSwap(self):
+        """
+        Query whether left-right sense of segment is swapped.
+        :return: True if swapped, False if not.
+        """
+        return self._leftRightSwap
 
     @abstractmethod
     def generateMesh(self, generateData: MeshGenerateData):
@@ -836,6 +850,18 @@ class NetworkMeshBuilder(ABC):
         self._createJunctions()
         self._sampleSegments()
         self._sampleJunctions()
+
+    def setAnnotationLeftRightSwap(self, name, swap):
+        """
+        Call after build but before generate mesh to swap left-right sense of segments with annotation name
+        :param group_name: Name of annotation group.
+        :param swap: True to swap sense of left and right.
+        """
+        for segment in self._segments.values():
+            for annotationTerm in segment.getAnnotationTerms():
+                if annotationTerm[0] == name:
+                    segment.setLeftRightSwap(swap)
+                    break
 
     def generateMesh(self, generateData: MeshGenerateData):
         """

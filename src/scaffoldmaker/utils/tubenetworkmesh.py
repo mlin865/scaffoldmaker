@@ -208,15 +208,21 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
     def isShowTrimSurfaces(self):
         return self._isShowTrimSurfaces
 
-    def getCoreMeshGroup(self):
+    def getCoreAnnotationGroup(self):
         if not self._coreGroup:
             self._coreGroup = self.getOrCreateAnnotationGroup(("core", ""))
-        return self._coreGroup.getMeshGroup(self._mesh)
+        return self._coreGroup
 
-    def getShellMeshGroup(self):
+    def getCoreMeshGroup(self):
+        return self.getCoreAnnotationGroup().getMeshGroup(self._mesh)
+
+    def getShellAnnotationGroup(self):
         if not self._shellGroup:
             self._shellGroup = self.getOrCreateAnnotationGroup(("shell", ""))
-        return self._shellGroup.getMeshGroup(self._mesh)
+        return self._shellGroup
+
+    def getShellMeshGroup(self):
+        return self.getShellAnnotationGroup().getMeshGroup(self._mesh)
 
     def getLeftMeshGroup(self):
         if not self._leftGroup:
@@ -401,10 +407,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         curveLocationMax = (rawElementsCountAlong, 1.0)
         startCurveLocations = []
         startLengths = []
-        sumStartLengths = 0.0
         endCurveLocations = []
         endLengths = []
-        sumEndLengths = 0.0
         trimmedLengths = []  # only for p == 0 i.e. outer path
         for p in range(self._pathsCount):
             px, pd1, pd2, pd12 = self._rawTubeCoordinatesList[p]
@@ -423,7 +427,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         startLength = evaluateCoordinatesOnCurve(lx, ld, startCurveLocation)[0]
                 startCurveLocations.append(startCurveLocation)
                 startLengths.append(startLength)
-                sumStartLengths += startLength
                 endCurveLocation = curveLocationMax
                 endLength = lx[-1][0]
                 if endTrimSurface:
@@ -433,7 +436,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         endLength = evaluateCoordinatesOnCurve(lx, ld, endCurveLocation)[0]
                 endCurveLocations.append(endCurveLocation)
                 endLengths.append(endLength)
-                sumEndLengths += endLength
 
         minStartLength = min(startLengths)
         maxStartLength = max(startLengths)
@@ -442,7 +444,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         maxLength = maxEndLength - minStartLength
         # minimum number applies to fixedElementsCountAlong and targetElementLength
         if any(self._dome_ends):
-            domeElementsCountAlong = max(self._elementsCountCoreBoxMajor, self._elementsCountCoreBoxMinor) // 2 + 1
+            domeElementsCountAlong = (self._elementsCountCoreBoxMajor + self._elementsCountCoreBoxMinor) // 4 + 1
             minimumElementsCountAlong = domeElementsCountAlong * self._dome_ends.count(True)
         else:
             domeElementsCountAlong = 0
@@ -788,10 +790,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 n1 = self._elementsCountCoreBoxMajor // 2
                 n2 = -1
                 n3 = self._elementsCountCoreBoxMinor // 2
-                ccx = self._boxCoordinates[0][n2][n3][n1]
-                ccd1 = self._boxCoordinates[1][n2][n3][n1]
-                ccd2 = self._boxCoordinates[2][n2][n3][n1]
-                ccd3 = self._boxCoordinates[3][n2][n3][n1]
+                ccx = self._boxCoordinates[0][n2][n1][n3]
+                ccd1 = self._boxCoordinates[1][n2][n1][n3]
+                ccd2 = self._boxCoordinates[2][n2][n1][n3]
+                ccd3 = self._boxCoordinates[3][n2][n1][n3]
                 # get dome tip coordinates. Not d1 is zero at the tip so use d2 in separate quadrants
                 dtx = self._rawTubeCoordinatesList[1][0][-1][0]
                 dtd1 = self._rawTubeCoordinatesList[1][2][-1][0]
@@ -989,19 +991,19 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         core_count = (n1 if (l in (0, 2)) else n3) + 1
         rdlists = (rd1, rd2, rd3)
         for c in range(core_count):
-            rx.append(self._boxCoordinates[0][n2][n3][n1])
+            rx.append(self._boxCoordinates[0][n2][n1][n3])
             for i, rd in enumerate(rdlists):
                 j = perm[i]
-                rd.append([-d for d in self._boxCoordinates[-j][n2][n3][n1]] if (j < 0) else
-                          copy.copy(self._boxCoordinates[j][n2][n3][n1]))
+                rd.append([-d for d in self._boxCoordinates[-j][n2][n1][n3]] if (j < 0) else
+                          copy.copy(self._boxCoordinates[j][n2][n1][n3]))
             if l == 0:
-                n3 -= 1
-            elif l == 1:
-                n1 += 1
-            elif l == 2:
-                n3 += 1
-            else:
                 n1 -= 1
+            elif l == 1:
+                n3 += 1
+            elif l == 2:
+                n1 += 1
+            else:
+                n3 -= 1
         # transition + first shell
         n1 = l * (self._elementsCountAround // 4)
         rdlists = (rx, rd1, rd2, rd3)
@@ -1919,6 +1921,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         if (self._elementsCountAround % 4) == 2:
             e1Limit += 1
         self._addRimElementsToMeshGroup(e1Start, e1Limit, 0, self.getElementsCountRim(), meshGroup)
+        for dome_index in range(2):
+            ellipsoid = self._dome_ellipsoid[dome_index]
+            if ellipsoid:
+                ellipsoid.add_axis1_elements_to_mesh_group(not side, meshGroup)
 
     def addSideD3ElementsToMeshGroup(self, side: bool, meshGroup):
         """
@@ -1934,6 +1940,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         e1Start = (self._elementsCountAround // 2) if side else 0
         e1Limit = e1Start + (self._elementsCountAround // 2)
         self._addRimElementsToMeshGroup(e1Start, e1Limit, 0, self.getElementsCountRim(), meshGroup)
+        for dome_index in range(2):
+            ellipsoid = self._dome_ellipsoid[dome_index]
+            if ellipsoid:
+                ellipsoid.add_axis2_elements_to_mesh_group(not side, meshGroup)
 
     def getRimNodeIdsSlice(self, n2):
         """
@@ -2179,8 +2189,13 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     ringElementIds.append(elementIdentifier)
                 self._rimElementIds[e2].append(ringElementIds)
 
-        if self._dome_ellipsoid[1]:
-            self._dome_ellipsoid[1].generate_elements(generateData)  # GRC , e3_start=0, e3_limit=0)
+        for dome_index in range(2):
+            if self._dome_ellipsoid[dome_index]:
+                self._dome_ellipsoid[dome_index].set_core_shell_groups(
+                    generateData.getCoreAnnotationGroup().getGroup(), generateData.getShellAnnotationGroup().getGroup())
+                segment_groups = generateData.getAnnotationZincGroups(self._annotationTerms)
+                self._dome_ellipsoid[dome_index].set_octant_group_lists([segment_groups] * 8)
+                self._dome_ellipsoid[dome_index].generate_elements(generateData)  # GRC , e3_start=0, e3_limit=0)
 
     def generateJunctionRimElements(self, junction, generateData):
         """
@@ -4626,8 +4641,9 @@ class BodyTubeNetworkMeshBuilder(TubeNetworkMeshBuilder):
                     break
             else:
                 # segment on main axis
-                segment.addSideD2ElementsToMeshGroup(False, leftMeshGroup)
-                segment.addSideD2ElementsToMeshGroup(True, rightMeshGroup)
+                leftRightSwap = segment.isLeftRightSwap()
+                segment.addSideD2ElementsToMeshGroup(leftRightSwap, leftMeshGroup)
+                segment.addSideD2ElementsToMeshGroup(not leftRightSwap, rightMeshGroup)
             segment.addSideD3ElementsToMeshGroup(not dorsalD3Side, ventralMeshGroup)
             segment.addSideD3ElementsToMeshGroup(dorsalD3Side, dorsalMeshGroup)
 

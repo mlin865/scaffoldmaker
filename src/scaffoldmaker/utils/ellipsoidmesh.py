@@ -60,6 +60,7 @@ class EllipsoidMesh:
         none_parameters = [None] * 4  # x, d1, d2, d3
         self._nx = []  # shield mesh with holes over n3, n2, n1, d
         self._nids = []
+        self._eids = []
         half_counts = [count // 2 for count in self._element_counts]
         for n3 in range(self._element_counts[2] + 1):
             # index into transition zone
@@ -67,6 +68,7 @@ class EllipsoidMesh:
                 (self._rim_count + n3 - self._element_counts[2])
             nx_layer = []
             nids_layer = []
+            eids_layer = []
             # print(n3, trans3)
             for n2 in range(self._element_counts[1] + 1):
                 # index into transition zone
@@ -93,9 +95,13 @@ class EllipsoidMesh:
                     nids_row.append(None)
                 nx_layer.append(nx_row)
                 nids_layer.append(nids_row)
+                if n2 < self._element_counts[1]:
+                    eids_layer.append([None] * self._element_counts[0])
                 # print(s)
             self._nx.append(nx_layer)
             self._nids.append(nids_layer)
+            if n3 < self._element_counts[2]:
+                self._eids.append(eids_layer)
         self._added_node_layouts = False  # flag set when this is done once
         self._prescribed_node_layouts = []  # list of (n1, n2, n3, node_layout), sets node layout before node created
 
@@ -902,7 +908,7 @@ class EllipsoidMesh:
         n1_n2_list = (
             [(n1_upper, half_counts[1] + i) for i in range(box_counts[1])] +
             [(n1_upper, n2_upper)] +
-            [(half_counts[0] + rim_count - i - 1, n2_upper) for i in range(2 * box_counts[0] - 1)] +
+            [(half_counts[0] + box_counts[0] - i - 1, n2_upper) for i in range(2 * box_counts[0] - 1)] +
             [(n1_lower, n2_upper)] +
             [(n1_lower, half_counts[1] + box_counts[1] - i - 1) for i in range(2 * box_counts[1] - 1)] +
             [(n1_lower, n2_lower)] +
@@ -1192,6 +1198,7 @@ class EllipsoidMesh:
             last_nx_layer = None
             for nt in range(self._rim_count + 1):
                 n3 = nt
+                e3 = nt - 1
                 octant_n3 = 0
                 nids_layer = []
                 nx_layer = []
@@ -1201,6 +1208,7 @@ class EllipsoidMesh:
                     n2 = (nt if (i2 == 0)
                           else (self._element_counts[1] - nt) if (i2 == dbox_counts[1])
                           else (self._rim_count + i2))
+                    e2 = self._rim_count + i2 - 1
                     octant_n2 = 2 if (n2 > half_counts[1]) else 0
                     nids_row = []
                     nx_row = []
@@ -1208,6 +1216,7 @@ class EllipsoidMesh:
                         n1 = (nt if (i1 == 0)
                               else (self._element_counts[0] - nt) if (i1 == dbox_counts[0])
                               else (self._rim_count + i1))
+                        e1 = self._rim_count + i1 - 1
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
                         nx_row.append(self._nx[n3][n2][n1])
@@ -1248,6 +1257,7 @@ class EllipsoidMesh:
                             # print("Element", element_identifier, "nids", nids)
                             if scalefactors:
                                 element.setScaleFactors(eft, scalefactors)
+                            self._eids[e3][e2][e1] = element_identifier
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_n2 + octant_n1
                                 for mesh_group in octant_mesh_group_lists[octant]:
@@ -1276,6 +1286,7 @@ class EllipsoidMesh:
             n3_first = max(e3_start, self._rim_count)
             for i3 in range(dbox_counts[2] + 1):
                 n3 = self._rim_count + i3
+                e3 = n3 - 1
                 if n3 < e3_start:
                     continue
                 if n3 > e3_limit:
@@ -1287,11 +1298,13 @@ class EllipsoidMesh:
                 last_nx_row = None
                 for i2 in range(dbox_counts[1] + 1):
                     n2 = self._rim_count + i2
+                    e2 = n2 - 1
                     octant_n2 = 2 if (n2 > half_counts[1]) else 0
                     nids_row = []
                     nx_row = []
                     for i1 in range(dbox_counts[0] + 1):
                         n1 = self._rim_count + i1
+                        e1 = n1 - 1
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
                         nx_row.append(self._nx[n3][n2][n1])
@@ -1321,6 +1334,7 @@ class EllipsoidMesh:
                             # print("Element", element_identifier, "nids", nids)
                             if scalefactors:
                                 element.setScaleFactors(eft, scalefactors)
+                            self._eids[e3][e2][e1] = element_identifier
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_n2 + octant_n1
                                 for mesh_group in octant_mesh_group_lists[octant]:
@@ -1345,34 +1359,48 @@ class EllipsoidMesh:
                         (upper_trans_counts[2] + nt) if (i3 == dbox_counts[2]) else (self._rim_count + i3)))
                     rim_nids_row = []
                     rim_nx_row = []
+                    rim_eindexes_row = []
                     octant_nc = []
                     n2 = self._rim_count - nt
+                    e2 = n2
+                    # GRC this should really start at +axis1
                     for i1 in range(dbox_counts[0]):
                         n1 = ((self._rim_count - nt) if (i1 == 0) else (
                             (upper_trans_counts[0] + nt) if (i1 == dbox_counts[0]) else (self._rim_count + i1)))
+                        e1 = self._rim_count + i1
                         rim_nids_row.append(self._nids[n3][n2][n1])
                         rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(1 if n1 >= half_counts[0] else 0)
                     n1 = upper_trans_counts[0] + nt
+                    e1 = n1 - 1
                     for i2 in range(dbox_counts[1]):
                         n2 = ((self._rim_count - nt) if (i2 == 0) else (
                             (upper_trans_counts[1] + nt) if (i2 == dbox_counts[1]) else (self._rim_count + i2)))
+                        e2 = self._rim_count + i2
                         rim_nids_row.append(self._nids[n3][n2][n1])
                         rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(3 if n2 >= half_counts[1] else 1)
                     n2 = upper_trans_counts[1] + nt
+                    e2 = n2 - 1
                     for i1 in range(dbox_counts[0]):
                         n1 = ((upper_trans_counts[0] + nt) if (i1 == 0) else (
                             (self._rim_count - nt) if (i1 == dbox_counts[0]) else (upper_trans_counts[0] - i1)))
+                        e1 = upper_trans_counts[0] - i1 - 1
                         rim_nids_row.append(self._nids[n3][n2][n1])
                         rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(3 if n1 > half_counts[0] else 2)
                     n1 = self._rim_count - nt
+                    e1 = n1
                     for i2 in range(dbox_counts[1]):
                         n2 = ((upper_trans_counts[1] + nt) if (i2 == 0) else (
                              (self._rim_count - nt) if (i2 == dbox_counts[1]) else (upper_trans_counts[1] - i2)))
+                        e2 = upper_trans_counts[1] - i2 - 1
                         rim_nids_row.append(self._nids[n3][n2][n1])
                         rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(2 if n2 > half_counts[1] else 0)
                     if (n3 > n3_first) and (nt > 0):
                         rim_count = len(rim_nids_row)
@@ -1414,6 +1442,8 @@ class EllipsoidMesh:
                             # print("Element", element_identifier, "nids", nids)
                             if scalefactors:
                                 element.setScaleFactors(eft, scalefactors)
+                            eindexes = rim_eindexes_row[nc]
+                            self._eids[eindexes[2]][eindexes[1]][eindexes[0]] = element_identifier
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_nc[nc]
                                 for mesh_group in octant_mesh_group_lists[octant]:
@@ -1438,6 +1468,7 @@ class EllipsoidMesh:
             last_nx_layer = None
             for nt in range(self._rim_count, -1, -1):
                 n3 = self._element_counts[2] - nt
+                e3 = n3 - 1
                 octant_n3 = 4
                 nids_layer = []
                 nx_layer = []
@@ -1447,6 +1478,7 @@ class EllipsoidMesh:
                     n2 = (nt if (i2 == 0)
                           else (self._element_counts[1] - nt) if (i2 == dbox_counts[1])
                           else (self._rim_count + i2))
+                    e2 = self._rim_count + i2 - 1
                     octant_n2 = 2 if (n2 > half_counts[1]) else 0
                     nids_row = []
                     nx_row = []
@@ -1454,6 +1486,7 @@ class EllipsoidMesh:
                         n1 = (nt if (i1 == 0)
                               else (self._element_counts[0] - nt) if (i1 == dbox_counts[0])
                               else (self._rim_count + i1))
+                        e1 = self._rim_count + i1 - 1
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
                         nx_row.append(self._nx[n3][n2][n1])
@@ -1494,6 +1527,7 @@ class EllipsoidMesh:
                             # print("Element", element_identifier, "nids", nids)
                             if scalefactors:
                                 element.setScaleFactors(eft, scalefactors)
+                            self._eids[e3][e2][e1] = element_identifier
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_n2 + octant_n1
                                 for mesh_group in octant_mesh_group_lists[octant]:
@@ -1521,3 +1555,60 @@ class EllipsoidMesh:
         """
         self.generate_nodes(generate_data)
         self.generate_elements(generate_data)
+
+    def add_axis1_elements_to_mesh_group(self, side, mesh_group):
+        """
+        Add elements from half of ellipsoid to mesh group.
+        :param side: False for -axis1, True for +axis1.
+        :param mesh_group: Mesh group to add to.
+        """
+        master_mesh = mesh_group.getMasterMesh()
+        e1_start, e1_limit = (
+            (self._element_counts[0] // 2, self._element_counts[0]) if side else (0, self._element_counts[0] // 2))
+        for e3 in range(self._element_counts[2]):
+            eids_layer = self._eids[e3]
+            for e2 in range(self._element_counts[1]):
+                eids_row = eids_layer[e2]
+                for e1 in range(e1_start, e1_limit):
+                    eid = eids_row[e1]
+                    if eid:
+                        element = master_mesh.findElementByIdentifier(eid)
+                        mesh_group.addElement(element)
+
+    def add_axis2_elements_to_mesh_group(self, side, mesh_group):
+        """
+        Add elements from half of ellipsoid to mesh group.
+        :param side: False for -axis2, True for +axis2.
+        :param mesh_group: Mesh group to add to.
+        """
+        master_mesh = mesh_group.getMasterMesh()
+        e2_start, e2_limit = (
+            (self._element_counts[1] // 2, self._element_counts[1]) if side else (0, self._element_counts[1] // 2))
+        for e3 in range(self._element_counts[2]):
+            eids_layer = self._eids[e3]
+            for e2 in range(e2_start, e2_limit):
+                eids_row = eids_layer[e2]
+                for e1 in range(self._element_counts[0]):
+                    eid = eids_row[e1]
+                    if eid:
+                        element = master_mesh.findElementByIdentifier(eid)
+                        mesh_group.addElement(element)
+
+    def add_axis3_elements_to_mesh_group(self, side, mesh_group):
+        """
+        Add elements from half of ellipsoid to mesh group.
+        :param side: False for -axis3, True for +axis3.
+        :param mesh_group: Mesh group to add to.
+        """
+        master_mesh = mesh_group.getMasterMesh()
+        e3_start, e3_limit = (
+            (self._element_counts[2] // 2, self._element_counts[2]) if side else (0, self._element_counts[2] // 2))
+        for e3 in range(e3_start, e3_limit):
+            eids_layer = self._eids[e3]
+            for e2 in range(self._element_counts[1]):
+                eids_row = eids_layer[e2]
+                for e1 in range(self._element_counts[0]):
+                    eid = eids_row[e1]
+                    if eid:
+                        element = master_mesh.findElementByIdentifier(eid)
+                        mesh_group.addElement(element)
