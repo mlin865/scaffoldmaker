@@ -575,6 +575,95 @@ class EllipsoidMesh:
                                     nx[i], d, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                             nx[i] = d
 
+    def merge_octant_minus3_quadrant(self, octant: HexTetrahedronMesh, quadrant: int):
+        """
+        Merge octant parameters into ellipsoid in one of the 4 quadrants on -axis3.
+        :param octant: HexTetrahedronMesh
+        :param quadrant: 0 for +axis1, -axis2 increasing anticlockwise around -axis3 up to 3.
+        """
+        assert 0 <= quadrant <= 3
+        half_counts = [count // 2 for count in self._element_counts]
+        axis_counts = octant.get_axis_counts()
+        even_quadrant = quadrant in (0, 2)
+        assert half_counts[2] == axis_counts[2]
+        obox_counts = octant.get_box_counts()
+        box_counts = [half_counts[i] - self._rim_count for i in range(3)]
+        if even_quadrant:
+            assert box_counts == obox_counts
+        else:
+            assert box_counts == [obox_counts[1], obox_counts[0], obox_counts[2]]
+        octant_parameters = octant.get_parameters()
+
+        for o3 in range(axis_counts[2] + 1):
+            n3 = half_counts[2] - o3
+            obox_layer = (o3 <= obox_counts[2])
+            ox_layer = octant_parameters[o3]
+            nx_layer = self._nx[n3]
+            rim3 = n3 < self._rim_count
+            for o2 in range(axis_counts[1] + 1):
+                ox_row = ox_layer[o2]
+                for o1 in range(axis_counts[0] + 1):
+                    if even_quadrant:
+                        if quadrant == 0:
+                            n1 = half_counts[0] + o1
+                            n2 = half_counts[1] - o2
+                        else:  # quadrant == 2:
+                            n1 = half_counts[0] - o1
+                            n2 = half_counts[1] + o2
+                    else:
+                        if quadrant == 1:
+                            n1 = half_counts[0] - o2
+                            n2 = half_counts[1] - o1
+                        else:  # if quadrant == 3:
+                            n1 = half_counts[0] + o2
+                            n2 = half_counts[1] + o1
+                    rim1 = (n1 < self._rim_count) or (n1 > (self._element_counts[0] - self._rim_count))
+                    rim2 = (n2 < self._rim_count) or (n2 > (self._element_counts[1] - self._rim_count))
+                    obox = obox_layer and (o1 <= obox_counts[0]) and (o2 <= obox_counts[1])
+                    ox = ox_row[o1]
+                    if ox and ox[0]:
+                        x = copy.copy(ox[0])
+                        perm = None
+                        if even_quadrant:
+                            if quadrant == 0:
+                                if obox:
+                                    perm = [1, -2, -3]
+                                else:
+                                    perm = [-1, -2, 3]
+                            else:  # quadrant == 2:
+                                if obox:
+                                    perm = [-1, 2, -3]
+                                elif rim3:
+                                    perm = [1, 2, 3]
+                                else:
+                                    perm = [-1, -2, 3]
+                        else:
+                            if quadrant == 1:
+                                if obox:
+                                    perm = [-2, -1, -3]
+                                elif rim3:
+                                    perm = [2, -1, 3]
+                                else:
+                                    perm = [-2, 1, 3]
+                            else:  # quadrant == 3:
+                                if obox:
+                                    perm = [2, 1, -3]
+                                elif rim3:
+                                    perm = [-2, 1, 3]
+                                else:
+                                    perm = [1, 2, 3]
+                        d1, d2, d3 = [copy.copy(ox[i]) if (i > 0) else [-d for d in ox[-i]] for i in perm]
+                        new_nx = [x, d1, d2, d3]
+                        # merge:
+                        nx = nx_layer[n2][n1]
+                        for i in range(4):
+                            d = new_nx[i]
+                            if i and nx[i]:
+                                # blend derivatives with harmonic mean magnitude; should already be in same direction
+                                d = linearlyInterpolateVectors(
+                                    nx[i], d, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
+                            nx[i] = d
+
     def merge_octant_plus3_quadrant(self, octant: HexTetrahedronMesh, quadrant: int):
         """
         Merge octant parameters into ellipsoid in one of the 4 quadrants on +axis3.
@@ -826,6 +915,38 @@ class EllipsoidMesh:
         assert 0 <= n3 <= self._element_counts[2]
         return self._nx[n3][n2][n1]
 
+    def prescribe_node_layout(self, n1, n2, n3, node_layout):
+        """
+        Set a node layout for the node at the supplied indexes.
+        :param n1: Index of node in 1-direction.
+        :param n2: Index of node in 2-direction.
+        :param n3: Index of node in 3-direction.
+        :param node_layout: NodeLayout to use at that location.
+        """
+        # GRC inefficient for large mesh:
+        for i in range(len(self._prescribed_node_layouts)):
+            tn1, tn2, tn3, _ = self._prescribed_node_layouts[i]
+            if (tn1 == n1) and (tn2 == n2) and (tn3 == n3):
+                self._prescribed_node_layouts[i] = (n1, n2, n3, node_layout)
+                break
+        else:
+            self._prescribed_node_layouts.append((n1, n2, n3, node_layout))
+
+    def prescribe_node_layout_if_new(self, n1, n2, n3, node_layout):
+        """
+        Set a node layout for the node at the supplied indexes, if not set already.
+        :param n1: Index of node in 1-direction.
+        :param n2: Index of node in 2-direction.
+        :param n3: Index of node in 3-direction.
+        :param node_layout: NodeLayout to use at that location.
+        """
+        # GRC inefficient for large mesh:
+        for tn1, tn2, tn3, _ in self._prescribed_node_layouts:
+            if (tn1 == n1) and (tn2 == n2) and (tn3 == n3):
+                break
+        else:
+            self._prescribed_node_layouts.append((n1, n2, n3, node_layout))
+
     def set_node_parameters(self, n1, n2, n3, parameters, nid=None, node_layout=None):
         """
         Prescribe parameters, node identifier and layout at location in mesh.
@@ -846,15 +967,38 @@ class EllipsoidMesh:
         if node_layout:
             self._prescribed_node_layouts.append((n1, n2, n3, node_layout))
 
+    def get_box_node_identifiers12(self, n3):
+        """
+        Get layer of box node identifiers.
+        :param n3: Layer to set ring on, must not be in n3 rim layer.
+        :return: bnids[n2=minor][n1=major]
+        """
+        assert self._core
+        assert self._rim_count <= n3 <= (self._element_counts[2] - n3)
+        node_count1 = (self._element_counts[0] - 2 * self._rim_count) + 1
+        node_count2 = (self._element_counts[1] - 2 * self._rim_count) + 1
+        n1_start = self._rim_count
+        n2_start = self._rim_count
+        n1_limit = n1_start + node_count1
+        n2_limit = n2_start + node_count2
+        bnids = []
+        for n2 in range(n2_start, n2_limit):
+            bnids_row = []
+            nids_row = self._nids[n3][n2]
+            for n1 in range(n1_start, n1_limit):
+                bnids_row.append(nids_row[n1])
+            bnids.append(bnids_row)
+        return bnids
+
     def set_box_node_parameters12(self, generate_data, n3, bparameters, bnids, node_layout=None):
         """
         Bulk set a slice of box node parameters, known node identifiers and node layouts.
         :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
         :param n3: Layer to set ring on, must not be in n3 rim layer.
         :param bparameters: Slice of box parameters [n2][n1][4: x, d1, d2, d3].
-        :param bnids: Node identifiers around ring. Must exist.
+        :param bnids: Node identifiers across box, or None if none.
         :param node_layout: Optional NodeLayout for the supplied node identifiers. Not set for any node identifier
-        which already has a node layout.
+        or location which already has a node layout.
         """
         assert self._core
         assert self._rim_count <= n3 <= (self._element_counts[2] - n3)
@@ -873,34 +1017,28 @@ class EllipsoidMesh:
             for i1, n1 in enumerate(range(n1_start, n1_limit)):
                 for i in range(4):
                     td[n1][i] = copy.copy(sd[i1][i])
-                nid = bnids[i2][i1]
-                self._nids[n3][n2][n1] = nid
+                if bnids:
+                    nid = bnids[i2][i1]
+                    self._nids[n3][n2][n1] = nid
+                else:
+                    nid = None
                 if node_layout:
                     # don't change an existing node layout
-                    existing_node_layout = generate_data.getNodeLayout(nid)
-                    if not existing_node_layout:
-                        generate_data.setNodeLayout(nid, node_layout)
-                        # self._prescribed_node_layouts.append((n1, n2, n3, node_layout))
+                    if nid:
+                        generate_data.setNodeLayoutIfNew(nid, node_layout)
+                    else:
+                        self.prescribe_node_layout_if_new(n1, n2, n3, node_layout)
 
-    def set_rim_node_parameters12(self, generate_data, n3, ri, rparameters, rnids, node_layout=None):
+    def _get_rim_indexes12(self, ri):
         """
-        Bulk set a ring of node parameters and known node identifiers starting at +axis1 and heading towards +axis2.
-        :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
-        :param n3: Layer to set ring on, must not be in n3 rim layer.
+        Get list of (n1, n2) indexes around a ring.
         :param ri: ring index where 0 is first layer outside core box.
-        :param rparameters: Parameters [around][4: x, d1, d2, d3].
-        :param rnids: Node identifiers around ring. Must exist.
-        :param node_layout: Optional NodeLayout for the supplied node identifiers.
+        :return: List of (n1, n2) for each point around the 12 ring.
         """
         rim_count = self._rim_count
-        assert rim_count <= n3 <= (self._element_counts[2] - n3)
         assert 0 <= ri < rim_count
         half_counts = [count // 2 for count in self._element_counts]
         box_counts = [half_counts[i] - rim_count for i in range(3)]
-        around_count = 4 * (box_counts[0] + box_counts[1])
-        assert len(rparameters) == around_count
-        assert all(len(rd) == 4 for rd in rparameters)
-        assert len(rnids) == around_count
         n1_lower = rim_count - ri - 1
         n1_upper = half_counts[0] + box_counts[0] + ri + 1
         n2_lower = n1_lower
@@ -915,14 +1053,53 @@ class EllipsoidMesh:
             [(rim_count + i + 1, n2_lower) for i in range(2 * box_counts[0] - 1)] +
             [(n1_upper, n2_lower)] +
             [(n1_upper, rim_count + i + 1) for i in range(box_counts[1] - 1)])
+        return n1_n2_list
+
+    def get_rim_node_identifiers12(self, n3, ri):
+        """
+        Get single ring of rim node node identifiers.
+        :param n3: Layer to set ring on, must not be in n3 rim layer.
+        :param ri: ring index where 0 is first layer outside core box.
+        :return: rnids[around count]
+        """
+        assert self._rim_count <= n3 <= (self._element_counts[2] - n3)
+        rnids = []
+        n1_n2_list = self._get_rim_indexes12(ri)
+        for n1, n2 in n1_n2_list:
+            rnids.append(self._nids[n3][n2][n1])
+        return rnids
+
+    def set_rim_node_parameters12(self, generate_data, n3, ri, rparameters, rnids, node_layout=None):
+        """
+        Bulk set a ring of node parameters and known node identifiers starting at +axis1 and heading towards +axis2.
+        :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
+        :param n3: Layer to set ring on, must not be in n3 rim layer.
+        :param ri: ring index where 0 is first layer outside core box.
+        :param rparameters: Parameters [around][4: x, d1, d2, d3].
+        :param rnids: Node identifiers around ring, or None if none
+        :param node_layout: Optional NodeLayout for the supplied node identifiers. Not set for any node identifier
+        or location which already has a node layout.
+        """
+        assert self._rim_count <= n3 <= (self._element_counts[2] - n3)
+        half_counts = [count // 2 for count in self._element_counts]
+        box_counts = [half_counts[i] - self._rim_count for i in range(3)]
+        around_count = 4 * (box_counts[0] + box_counts[1])
+        assert len(rparameters) == around_count
+        assert all(len(rd) == 4 for rd in rparameters)
+        assert not rnids or (len(rnids) == around_count)
+        n1_n2_list = self._get_rim_indexes12(ri)
         for a, n1_n2 in enumerate(n1_n2_list):
             n1, n2 = n1_n2
             for i in range(4):
                 self._nx[n3][n2][n1][i] = copy.copy(rparameters[a][i])
-            self._nids[n3][n2][n1] = rnids[a]
+            nid = rnids[a] if rnids else None
+            if nid:
+                self._nids[n3][n2][n1] = rnids[a]
             if node_layout:
-                generate_data.setNodeLayout(rnids[a], node_layout)
-                # self._prescribed_node_layouts.append((n1, n2, n3, node_layout))
+                if nid:
+                    generate_data.setNodeLayoutIfNew(rnids[a], node_layout)
+                else:
+                    self.prescribe_node_layout_if_new(n1, n2, n3, node_layout)
 
     def generate_nodes(self, generate_data, n3_start=0, n3_limit=0):
         """

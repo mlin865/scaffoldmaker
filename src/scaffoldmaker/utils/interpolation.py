@@ -1820,11 +1820,13 @@ def linearlyInterpolateVectors(u, v, xi, magnitudeScalingMode=DerivativeScalingM
             mag = 1.0 / (((1.0 - xi) / mag_u) + (xi / mag_v))
     else:  # magnitudeScalingMode==erivativeScalingMode.ARITHMETIC_MEAN:
         mag = (1.0 - xi) * mag_u + xi * mag_v
-    dirn_u = div(u, mag_u)
-    dirn_v = div(v, mag_v)
+    dirn_u = div(u, mag_u) if (mag_u > 0.0) else [0.0 for _ in u]
+    dirn_v = div(v, mag_v) if (mag_v > 0.0) else [0.0 for _ in v]
     cos_theta = dot(dirn_u, dirn_v)
     if cos_theta > 0.999999:
         dirn = dirn_u
+    elif cos_theta < -0.999999:
+        dirn = [-d for d in dirn_u]
     else:
         theta = math.acos(cos_theta)
         phi = xi * theta
