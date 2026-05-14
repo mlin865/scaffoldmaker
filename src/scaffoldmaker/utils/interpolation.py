@@ -1803,7 +1803,9 @@ def track_curve_side_direction(cx, cd1, start_direction, start_location, end_loc
 def linearlyInterpolateVectors(u, v, xi, magnitudeScalingMode=DerivativeScalingMode.ARITHMETIC_MEAN):
     """
     Linearly interpolate two 3-component vectors less than 180 degrees apart to get an in-between vector
-    rotated from direction of u to direction of v proportionatly to xi, with magnitude linearly interpolated by xi.
+    rotated from direction of u to direction of v proportionatly to xi, with magnitude interpolated with xi.
+    Note that magnitude scaling correctly handles merging where e.g. xi = 1/3 means two values (1.0 - xi) have
+    been merged into u and one value (xi) into v.
     :param u: First vector.
     :param v: Second vector from 0 to less than 180 degrees away from u.
     :param xi: Proportion from u to v.
@@ -1814,7 +1816,7 @@ def linearlyInterpolateVectors(u, v, xi, magnitudeScalingMode=DerivativeScalingM
     mag_u = magnitude(u)
     mag_v = magnitude(v)
     if magnitudeScalingMode==DerivativeScalingMode.HARMONIC_MEAN:
-        if (mag_u == 0.0) or (mag_v == 0):
+        if (mag_u == 0.0) or (mag_v == 0.0):
             mag = 0
         else:
             mag = 1.0 / (((1.0 - xi) / mag_u) + (xi / mag_v))

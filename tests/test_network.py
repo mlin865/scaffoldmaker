@@ -623,6 +623,80 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(volume, 0.03138195249662126, delta=X_TOL)
             self.assertAlmostEqual(surfaceArea, 0.6907451706120391, delta=X_TOL)
 
+    def test_3d_tube_network_sphere_core(self):
+        """
+        Test sphere 3-D tube network with solid core is generated correctly.
+        """
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Sphere")
+        settings = scaffoldPackage.getScaffoldSettings()
+        networkLayoutScaffoldPackage = settings["Network layout"]
+        networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
+        settings["Core"] = True
+
+        context = Context("Test")
+        region = context.getDefaultRegion()
+
+        self.assertTrue(region.isValid())
+        scaffoldPackage.generate(region)
+        annotationGroups = scaffoldPackage.getAnnotationGroups()
+        self.assertEqual(2, len(annotationGroups))
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "core") is not None)
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "shell") is not None)
+
+        fieldmodule = region.getFieldmodule()
+        mesh3d = fieldmodule.findMeshByDimension(3)
+        self.assertEqual(256, mesh3d.getSize())
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(321, nodes.getSize())
+        mesh2d = fieldmodule.findMeshByDimension(2)
+        self.assertEqual(816, mesh2d.getSize())
+        coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+
+        X_TOL = 1.0E-6
+
+        minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
+        assertAlmostEqualList(self, minimums, [-1.0, -1.0, -1.0], X_TOL)
+        assertAlmostEqualList(self, maximums, [1.0, 1.0, 1.0], X_TOL)
+
+        with ChangeManager(fieldmodule):
+            one = fieldmodule.createFieldConstant(1.0)
+            isExterior = fieldmodule.createFieldIsExterior()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            fieldcache = fieldmodule.createFieldcache()
+
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
+            volumeField.setNumbersOfPoints(4)
+            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
+            self.assertAlmostEqual(volume, 4.184052819279864, delta=X_TOL)
+            # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
+            self.assertAlmostEqual(surfaceArea, 12.5569662702283, delta=X_TOL)
+
+        expectedSizes3d = {
+            "core": (160, 2.142235091451815),
+            "shell": (96, 2.041817727828066)
+            }
+        for name in expectedSizes3d:
+            annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+            size = annotationGroup.getMeshGroup(mesh3d).getSize()
+            self.assertEqual(expectedSizes3d[name][0], size, name)
+            volumeMeshGroup = annotationGroup.getMeshGroup(mesh3d)
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, volumeMeshGroup)
+            volumeField.setNumbersOfPoints(4)
+            fieldcache = fieldmodule.createFieldcache()
+            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+            self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+
     def test_3d_tube_network_sphere_cube(self):
         """
         Test sphere cube 3-D tube network is generated correctly.

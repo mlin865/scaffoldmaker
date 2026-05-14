@@ -28,6 +28,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
         "Converging bifurcation": "1-3.1,2-3.2,3.3-4",
         "Loop": "1-2-3-4-5-6-7-8-1",
         "Snake": "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33",
+        "Sphere": "(1-2-3)",
         "Sphere cube": "1.1-2.1,1.2-3.1,1.3-4.1,2.2-5.2,2.3-6.1,3.2-6.2,3.3-7.1,4.2-7.2,4.3-5.1,5.3-8.1,6.3-8.2,7.3-8.3",
         "Trifurcation": "1-2.1,2.2-3,2.3-4,2.4-5",
         "Trifurcation cross": "1-3.1,2-3.2,3.2-4,3.1-5",
@@ -81,7 +82,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
         coordinates = find_or_create_field_coordinates(fieldmodule).castFiniteElement()
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
         fieldcache = fieldmodule.createFieldcache()
-        if "Loop" in parameterSetName:
+        if "Loop" == parameterSetName:
             loopRadius = 0.5
             tubeRadius = 0.1
             elementsCount = nodes.getSize()
@@ -103,7 +104,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS3, 1, d13)
-        elif "Snake" in parameterSetName:
+        elif "Snake" == parameterSetName:
             snakeRadius = 0.5
             tubeRadius = 0.1
             nodesCount = nodes.getSize()
@@ -133,7 +134,9 @@ class MeshType_1d_network_layout1(Scaffold_base):
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS2, 1, d12)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
-        elif "Sphere cube" in parameterSetName:
+        elif "Sphere" == parameterSetName:
+            cls._defineSphereCoordinates(coordinates, 1.0)
+        elif "Sphere cube" == parameterSetName:
             # edit node parameters
             sphereRadius = 0.5
             tubeRadius = 0.1
@@ -188,7 +191,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, v + 1, cd2[n][v])
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, v + 1, cd3[n])
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS3, v + 1, cd13[n][v])
-        elif "Vase" in parameterSetName:
+        elif "Vase" == parameterSetName:
             midRadius = 1.0
             magRadius = 0.5
             nodesCount = nodes.getSize()
@@ -240,13 +243,36 @@ class MeshType_1d_network_layout1(Scaffold_base):
         sir = region.createStreaminformationRegion()
         sir.createStreamresourceMemoryBuffer(buffer)
         region.read(sir)
-        functionOptions = {
-            "To field": {"coordinates": False, "inner coordinates": True},
-            "From field": {"coordinates": True, "inner coordinates": False},
-            "Mode": {"Scale": True, "Offset": False},
-            "D2 value": innerProportion,
-            "D3 value": innerProportion}
-        cls.assignCoordinates(region, options, networkMesh, functionOptions, editGroupName=None)
+        parameterSetName = options["Base parameter set"]
+        if "Sphere" == parameterSetName:
+            fieldmodule = region.getFieldmodule()
+            innerCoordinates = fieldmodule.findFieldByName("inner coordinates").castFiniteElement()
+            cls._defineSphereCoordinates(innerCoordinates, innerProportion)
+        else:
+            functionOptions = {
+                "To field": {"coordinates": False, "inner coordinates": True},
+                "From field": {"coordinates": True, "inner coordinates": False},
+                "Mode": {"Scale": True, "Offset": False},
+                "D2 value": innerProportion,
+                "D3 value": innerProportion}
+            cls.assignCoordinates(region, options, networkMesh, functionOptions, editGroupName=None)
+
+    @classmethod
+    def _defineSphereCoordinates(cls, coordinates, half_size):
+        fieldmodule = coordinates.getFieldmodule()
+        fieldcache = fieldmodule.createFieldcache()
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        d1 = [half_size, 0.0, 0.0]
+        d2 = [0.0, half_size, 0.0]
+        d3 = [0.0, 0.0, half_size]
+        for n in range(3):
+            x = [(n - 1.0) * half_size, 0.0, 0.0]
+            node = nodes.findNodeByIdentifier(n + 1)
+            fieldcache.setNode(node)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
 
     @classmethod
     def editStructure(cls, region, options, networkMesh, functionOptions, editGroupName):

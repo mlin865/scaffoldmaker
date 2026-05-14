@@ -61,6 +61,7 @@ class EllipsoidMesh:
         self._nx = []  # shield mesh with holes over n3, n2, n1, d
         self._nids = []
         self._eids = []
+        self._merge_counts = []  # Number of already merged nodes at location for weighting next nodes
         half_counts = [count // 2 for count in self._element_counts]
         for n3 in range(self._element_counts[2] + 1):
             # index into transition zone
@@ -69,6 +70,7 @@ class EllipsoidMesh:
             nx_layer = []
             nids_layer = []
             eids_layer = []
+            merge_counts_layer = []
             # print(n3, trans3)
             for n2 in range(self._element_counts[1] + 1):
                 # index into transition zone
@@ -97,11 +99,13 @@ class EllipsoidMesh:
                 nids_layer.append(nids_row)
                 if n2 < self._element_counts[1]:
                     eids_layer.append([None] * self._element_counts[0])
+                merge_counts_layer.append([0.0 for _ in range(self._element_counts[0] + 1)])
                 # print(s)
             self._nx.append(nx_layer)
             self._nids.append(nids_layer)
             if n3 < self._element_counts[2]:
                 self._eids.append(eids_layer)
+            self._merge_counts.append(merge_counts_layer)
         self._added_node_layouts = False  # flag set when this is done once
         self._prescribed_node_layouts = []  # list of (n1, n2, n3, node_layout), sets node layout before node created
 
@@ -567,13 +571,15 @@ class EllipsoidMesh:
                         new_nx = [x, d1, d2, d3]
                         # merge:
                         nx = nx_row[n1]
+                        xi = 1.0 / (self._merge_counts[n3][n2][n1] + 1)
                         for i in range(4):
                             d = new_nx[i]
                             if i and nx[i]:
                                 # blend derivatives with harmonic mean magnitude; should already be in same direction
                                 d = linearlyInterpolateVectors(
-                                    nx[i], d, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
+                                    nx[i], d, xi, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                             nx[i] = d
+                        self._merge_counts[n3][n2][n1] += 1
 
     def merge_octant_minus3_quadrant(self, octant: HexTetrahedronMesh, quadrant: int):
         """
@@ -644,25 +650,27 @@ class EllipsoidMesh:
                                 elif rim3:
                                     perm = [2, -1, 3]
                                 else:
-                                    perm = [-2, 1, 3]
+                                    perm = [-1, -2, 3]
                             else:  # quadrant == 3:
                                 if obox:
                                     perm = [2, 1, -3]
                                 elif rim3:
                                     perm = [-2, 1, 3]
                                 else:
-                                    perm = [1, 2, 3]
+                                    perm = [-1, -2, 3]
                         d1, d2, d3 = [copy.copy(ox[i]) if (i > 0) else [-d for d in ox[-i]] for i in perm]
                         new_nx = [x, d1, d2, d3]
                         # merge:
                         nx = nx_layer[n2][n1]
+                        xi = 1.0 / (self._merge_counts[n3][n2][n1] + 1)
                         for i in range(4):
                             d = new_nx[i]
                             if i and nx[i]:
                                 # blend derivatives with harmonic mean magnitude; should already be in same direction
                                 d = linearlyInterpolateVectors(
-                                    nx[i], d, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
+                                    nx[i], d, xi, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                             nx[i] = d
+                        self._merge_counts[n3][n2][n1] += 1
 
     def merge_octant_plus3_quadrant(self, octant: HexTetrahedronMesh, quadrant: int):
         """
@@ -742,13 +750,15 @@ class EllipsoidMesh:
                         new_nx = [x, d1, d2, d3]
                         # merge:
                         nx = nx_layer[n2][n1]
+                        xi = 1.0 / (self._merge_counts[n3][n2][n1] + 1)
                         for i in range(4):
                             d = new_nx[i]
                             if i and nx[i]:
                                 # blend derivatives with harmonic mean magnitude; should already be in same direction
                                 d = linearlyInterpolateVectors(
-                                    nx[i], d, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
+                                    nx[i], d, xi, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                             nx[i] = d
+                            self._merge_counts[n3][n2][n1] += 1
 
     def copy_to_negative_axis1(self):
         """

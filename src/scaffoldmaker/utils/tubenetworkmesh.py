@@ -298,6 +298,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._shell_count = shell_count
         self._rawTubeCoordinatesList = []
         self._rawTrackSurfaceList = []
+        self._dome_raw_sample_count = 3  # index from end that dome ends on sampled raw tubes, if there is a dome
         for pathParameters in pathParametersList:
             px, pd1, pd2, pd12 = getPathRawTubeCoordinates(
                 pathParameters, self._elementsCountAround, dome_ends=self._dome_ends)
@@ -309,6 +310,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 nd2 += pd2[i]
                 nd12 += pd12[i]
             self._rawTrackSurfaceList.append(TrackSurface(len(px[0]), len(px) - 1, nx, nd1, nd2, nd12, loop1=True))
+        self._dome_elements_count_along = [0, 0]  # set if there is a dome at start, end
         self._rawLengthParameters = self._calculateRawLengthParameters()
         # list[pathsCount][4] of sx, sd1, sd2, sd12; all [nAlong][nAround]:
         self._sampledTubeCoordinates = [[[], [], [], []] for p in range(self._pathsCount)]
@@ -445,10 +447,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         maxLength = maxEndLength - minStartLength
         # minimum number applies to fixedElementsCountAlong and targetElementLength
         if any(self._dome_ends):
-            domeElementsCountAlong = (self._elementsCountCoreBoxMajor + self._elementsCountCoreBoxMinor) // 4 + 1
-            minimumElementsCountAlong = domeElementsCountAlong * self._dome_ends.count(True)
+            domeMinElementsCountAround = (self._elementsCountCoreBoxMajor + self._elementsCountCoreBoxMinor) // 4 + 1
+            minimumElementsCountAlong = domeMinElementsCountAround * self._dome_ends.count(True)
         else:
-            domeElementsCountAlong = 0
+            domeMinElementsCountAround = 0
             minimumElementsCountAlong = 2 if (self._isLoop or ((self._junctions[0].getSegmentsCount() > 2) and
                                                                (self._junctions[1].getSegmentsCount() > 2))) else 1
         # small fudge factor on targetElementLength so whole numbers chosen on centroid don't go one higher:
@@ -488,8 +490,20 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         [endTransitionStartLength], [endTransitionSize], [le], 1.0)[0]
                     # print("    p", p, "q", q, "dEnd", dEnd[p][q])
 
-        nStart = domeElementsCountAlong if self._dome_ends[0] else 0
-        nLimit = elementsCountAlong + 1 - (domeElementsCountAlong if self._dome_ends[1] else 0)
+        rim_count = self._transition_count + self._shell_count
+        nStart = 0
+        nLimit = elementsCountAlong + 1
+        if self._dome_ends[0]:
+            ldome = lx[self._dome_raw_sample_count][0]
+            nStart = max(domeMinElementsCountAround,
+                         math.floor(1.001 * (ldome - minStartLength) / maxElementLength))
+            self._dome_elements_count_along[0] = nStart - (domeMinElementsCountAround - 1) + rim_count
+        if self._dome_ends[1]:
+            ldome = lx[-self._dome_raw_sample_count - 1][0]
+            nEnd = max(domeMinElementsCountAround,
+                       math.floor(1.001 * (maxLength - ldome + minStartLength) / maxElementLength))
+            nLimit -= nEnd
+            self._dome_elements_count_along[1] = nEnd - (domeMinElementsCountAround - 1) + rim_count
 
         for p in range(self._pathsCount):
 
@@ -639,7 +653,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         element_counts = [
             self._elementsCountCoreBoxMajor + 2 * rim_count,
             self._elementsCountCoreBoxMinor + 2 * rim_count,
-            (1 + rim_count) * 2]
+            self._dome_elements_count_along[dome_index] * 2]
         self._dome_ellipsoid[dome_index] = EllipsoidMesh(
             element_counts, self._shell_count, self._transition_count,
             core=self._core, core_shell_scaling_mode=self._coreBoundaryScalingMode)
@@ -663,7 +677,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     q = l * (self._elementsCountAround // 4)
                     major = (l == 0) or (l == 2)
                     sideElementsCount = (self._elementsCountCoreBoxMajor if major else
-                                         self._elementsCountCoreBoxMinor) // 2 + 1
+                                         self._elementsCountCoreBoxMinor) // 2
+                    longElementsCount = sideElementsCount + self._dome_elements_count_along[dome_index] - rim_count
                     derivativeMagnitudeTube = magnitude(self._sampledTubeCoordinates[p][2][dome_ix][q])
                     derivativeMagnitudePole = derivativeMagnitudePoleMajor if major else derivativeMagnitudePoleMinor
                     cx = [self._rawTubeCoordinatesList[p][0][n][q] for n in range(rawNodesCountAlong)]
@@ -671,14 +686,14 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     cd2 = [self._rawTubeCoordinatesList[p][2][n][q] for n in range(rawNodesCountAlong)]
                     cd12 = [self._rawTubeCoordinatesList[p][3][n][q] for n in range(rawNodesCountAlong)]
                     px, pd2, pe, pxi, psf = sampleCubicHermiteCurvesSmooth(
-                        cx, cd2, sideElementsCount,
+                        cx, cd2, longElementsCount,
                         derivativeMagnitudeStart=derivativeMagnitudePole if dome0 else derivativeMagnitudeTube,
                         derivativeMagnitudeEnd=derivativeMagnitudeTube if dome0 else derivativeMagnitudePole,
                         startLocation=self._sampledEndTubeLocations[q] if dome1 else None,
                         endLocation=self._sampledStartTubeLocations[q] if dome0 else None)
                     pd1 = interpolateSampleCubicHermite(cd1, cd12, pe, pxi, psf)[0]
                     # make pd1 tangential to raw surface
-                    for n in range(1, sideElementsCount):
+                    for n in range(1, longElementsCount):
                         position = TrackSurfacePosition(q, pe[n], 0.0, pxi[n])
                         td1 = self._rawTrackSurfaceList[p].evaluateCoordinates(position, derivatives=True)[1]
                         pd1[n] = set_magnitude_safe(td1, magnitude(pd1[n]))
@@ -923,7 +938,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             elif not core_octant:
                 octant.set_triangle_abc(triangle_abc)
 
-            # GRC this doesn't blend between all 4 quadrants
             if dome0:
                 self._dome_ellipsoid[dome_index].merge_octant_minus3_quadrant(octant, l)
             else:
@@ -1193,7 +1207,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         then the actual box elements are resampled from these.
         Transition elements are determined by blending from the outside of the box to the shell.
         :param n2: Index along segment.
-        :param centre: Centre coordinates of core.
+        :param centre: Centre coordinates of core for n2.
         :return: box coordinates cbx, cbd1, cbd3, transition coordinates ctx, ctd1, ctd3.
         Box coordinates are over [minorBoxNodeCount][majorBoxNodeCount]. Transition coordinates are over [n3][n1] and
         are only non-empty for at least 2 transition elements as they are the layers between the box and the shell.
@@ -2118,7 +2132,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                             coordinates.setNodeParameters(fieldcache, -1, nodeValue, 1, rValue)
                         self._boxNodeIds[n2][n3].append(nodeIdentifier)
 
-            # create rim nodes and transition nodes (if there are more than 1 layer of transition)
+            # create rim nodes (transition if core and > 1 transition layer, then shell)
             self._rimNodeIds[n2] = [] if self._rimNodeIds[n2] is None else self._rimNodeIds[n2]
             nodesCountRim = self.getNodesCountRim()
             for n3 in range(nodesCountRim):
@@ -4817,12 +4831,13 @@ def getPathRawTubeCoordinates(pathParameters, elementsCountAround, radius=1.0, p
     :param elementsCountAround: Number of elements & nodes to create around tube.
     :param radius: Radius of tube in xi space.
     :param phaseAngle: Starting angle around ellipse, where 0.0 is at d2, pi/2 is at d3.
-    :param subsample_count: Number of subelements between each raw element, at least 2.
+    :param subsample_count: Number of subelements between each raw element, at least 2. Note that the number used on
+    a dome will be set to max(2, round(0.5 * math.pi * subsample_count))
     :param dome_ends: 2-tuple of boolean True if sampled coordinates are rounded into a dome at (start, end).
     If any are True, extra sub-samples are made between the respective end and the next path parameter to capture the
     ellipse shape, and >= 2 samples are made between each other parameter to keep near original scaling.
     :return: px[][], pd1[][], pd2[][], pd12[][] with first index in range(pointsCountAlong),
-    second inner index in range(elementsCountAround)
+    second inner index in range(elementsCountAround), dome_sample_count
     """
     assert len(pathParameters) == 6
     pointsCountAlong = len(pathParameters[0])
