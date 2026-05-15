@@ -291,7 +291,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._transition_count = transition_count
         self._coreBoundaryScalingMode = coreBoundaryScalingMode
         self._networkSegment = networkSegment
-        self._nway_d_factor = 0.6  # GRC only use in dome ellipsoid currently
+        self._nway_d_factor = 0.6  # currently only used in dome ellipsoid
         self._dome_ends = [(end_style == NetworkSegmentEndStyle.DOME) for end_style in networkSegment.getEndStyles()]
         self._dome_ellipsoid = [None] * 2
         assert shell_count > 0
@@ -320,7 +320,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._rimNodeIds = None
         self._rimElementIds = None  # [e2][e3][e1]
 
-        self._boxCoordinates = None
+        self._boxCoordinates = None  # [along][major][minor]
         self._transitionCoordinates = None
         self._boxNodeIds = None  # [along][major][minor]
         self._boxBoundaryNodeIds = None
@@ -1577,18 +1577,18 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             else:
                 boxBoundaryNodeIds.append([])
                 boxBoundaryNodeToBoxId.append([])
-            for n3 in range(coreBoxMajorNodesCount):
-                if n3 == 0 or n3 == coreBoxMajorNodesCount - 1:
-                    ids = self._boxNodeIds[n2][n3] if n3 == 0 else self._boxNodeIds[n2][n3][::-1]
-                    n1List = list(range(coreBoxMinorNodesCount)) if n3 == 0 else (
+            for n1 in range(coreBoxMajorNodesCount):
+                if n1 == 0 or n1 == coreBoxMajorNodesCount - 1:
+                    ids = self._boxNodeIds[n2][n1] if n1 == 0 else self._boxNodeIds[n2][n1][::-1]
+                    n3_list = list(range(coreBoxMinorNodesCount)) if n1 == 0 else (
                         list(range(coreBoxMinorNodesCount - 1, -1, -1)))
                     boxBoundaryNodeIds[n2] += [ids[c] for c in range(coreBoxMinorNodesCount)]
-                    for n1 in n1List:
-                        boxBoundaryNodeToBoxId[n2].append([n3, n1])
+                    for n3 in n3_list:
+                        boxBoundaryNodeToBoxId[n2].append([n1, n3])
                 else:
-                    for n1 in [-1, 0]:
-                        boxBoundaryNodeIds[n2].append(self._boxNodeIds[n2][n3][n1])
-                        boxBoundaryNodeToBoxId[n2].append([n3, n1])
+                    for n3 in [-1, 0]:
+                        boxBoundaryNodeIds[n2].append(self._boxNodeIds[n2][n1][n3])
+                        boxBoundaryNodeToBoxId[n2].append([n1, n3])
 
             start = self._elementsCountCoreBoxMajor - 2
             idx = self._elementsCountCoreBoxMinor + 2
@@ -1691,57 +1691,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             nodesCountRim += (self._transition_count - 1)
         return nodesCountRim
 
-    def getRimCoordinatesListAlong(self, n1, n2List, n3):
-        """
-        Get list of parameters for n2 indexes along segment at given n1, n3.
-        :param n1: Node index around segment.
-        :param n2List: List of node indexes along segment.
-        :param n3: Node index from inner to outer rim.
-        :return: [x[], d1[], d2[], d3[]]. d3[] may be None
-        """
-        paramsList = []
-        for i in range(4):
-            params = []
-            for n2 in n2List:
-                params.append(self._rimCoordinates[i][n2][n3][n1] if self._rimCoordinates[i] else None)
-            paramsList.append(params)
-        return paramsList
-
-    def getBoxCoordinatesListAlong(self, n1, n2List, n3):
-        """
-        Get a list of parameters for solid core box for n2 indexes along segment at given n1, n3.
-        :param n1: Node index around segment.
-        :param n2List: List of node indexes along segment.
-        :param n3: Node index from inner to outer rim.
-        :return: [x[], d1[], d2[], d3[]].
-        """
-        paramsList = []
-        for i in range(4):
-            params = []
-            for n2 in n2List:
-                params.append(self._boxCoordinates[i][n2][n3][n1] if self._boxCoordinates[i] else None)
-            paramsList.append(params)
-
-        return paramsList
-
-    def getTransitionCoordinatesListAlong(self, n1, n2List, n3):
-        """
-        Get a list of parameters for core transition nodes for n2 indexes along segment at given n1, n3.
-        :param n1: Node index around segment.
-        :param n2List: List of node indexes along segment.
-        :param n3: Node index from inner to outer rim.
-        :return: [x[], d1[], d2[], d3[]].
-        """
-        paramsList = []
-        for i in range(4):
-            params = []
-            for n2 in n2List:
-                params.append(self._transitionCoordinates[i][n2][n3][n1] if self._transitionCoordinates[i]
-                              else None)
-            paramsList.append(params)
-
-        return paramsList
-
     def getCoreBoxMajorNodesCount(self):
         return len(self._boxCoordinates[0][0])
 
@@ -1752,18 +1701,25 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         return self._transition_count
 
     def getBoxCoordinates(self, n1, n2, n3):
-        return (self._boxCoordinates[0][n2][n3][n1], self._boxCoordinates[1][n2][n3][n1],
-                self._boxCoordinates[2][n2][n3][n1], self._boxCoordinates[3][n2][n3][n1])
+        """
+        Get parameters for a location in the core box.
+        :param n1: Index in major direction.
+        :param n2: Index along segment.
+        :param n3: Index in minor direction.
+        :return: x, d1, d2, d3
+        """
+        return (self._boxCoordinates[0][n2][n1][n3], self._boxCoordinates[1][n2][n1][n3],
+                self._boxCoordinates[2][n2][n1][n3], self._boxCoordinates[3][n2][n1][n3])
 
-    def getBoxNodeIds(self, n1, n2, n3):
+    def getBoxNodeId(self, n1, n2, n3):
         """
         Get a box node ID for n2 index along segment at given n1, n3.
-        :param n1: Node index across major axis (y-axis).
+        :param n1: Node index across major axis.
         :param n2: Node index along segment.
-        :param n3: Node index across minor axis (z-axis).
+        :param n3: Node index across minor axis.
         :return: Node identifier.
         """
-        return self._boxNodeIds[n2][n3][n1]
+        return self._boxNodeIds[n2][n1][n3]
 
     def getBoxNodeIdsSlice(self, n2):
         """
@@ -1845,14 +1801,14 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param n3: Node index from first core transition row or inner to outer shell.
         :return: x, d1, d2, d3
         """
-        transitionNodeCount = (len(self._transitionCoordinates[0][0])
-                               if (self._transitionCoordinates and self._transitionCoordinates[0]) else 0)
-        if n3 < transitionNodeCount:
+        # only have transition nodes for > 1 transitional elements
+        transition_node_count = (self._transition_count - 1) if self._core else 0
+        if n3 < transition_node_count:
             return (self._transitionCoordinates[0][n2][n3][n1],
                     self._transitionCoordinates[1][n2][n3][n1],
                     self._transitionCoordinates[2][n2][n3][n1],
                     self._transitionCoordinates[3][n2][n3][n1] if self._transitionCoordinates[3] else None)
-        sn3 = n3 - transitionNodeCount
+        sn3 = n3 - transition_node_count
         return (self._rimCoordinates[0][n2][sn3][n1],
                 self._rimCoordinates[1][n2][sn3][n1],
                 self._rimCoordinates[2][n2][sn3][n1],
@@ -2116,21 +2072,21 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 self._boxNodeIds[n2] = [] if self._boxNodeIds[n2] is None else self._boxNodeIds[n2]
                 coreBoxMajorNodesCount = self.getCoreBoxMajorNodesCount()
                 coreBoxMinorNodesCount = self.getCoreBoxMinorNodesCount()
-                for n3 in range(coreBoxMajorNodesCount):
+                for n1 in range(coreBoxMajorNodesCount):
                     self._boxNodeIds[n2].append([])
-                    rx = self._boxCoordinates[0][n2][n3]
-                    rd1 = self._boxCoordinates[1][n2][n3]
-                    rd2 = self._boxCoordinates[2][n2][n3]
-                    rd3 = self._boxCoordinates[3][n2][n3]
-                    for n1 in range(coreBoxMinorNodesCount):
+                    rx = self._boxCoordinates[0][n2][n1]
+                    rd1 = self._boxCoordinates[1][n2][n1]
+                    rd2 = self._boxCoordinates[2][n2][n1]
+                    rd3 = self._boxCoordinates[3][n2][n1]
+                    for n3 in range(coreBoxMinorNodesCount):
                         nodeIdentifier = generateData.nextNodeIdentifier()
                         node = nodes.createNode(nodeIdentifier, nodetemplate)
                         fieldcache.setNode(node)
                         for nodeValue, rValue in zip([Node.VALUE_LABEL_VALUE, Node.VALUE_LABEL_D_DS1,
                                                       Node.VALUE_LABEL_D_DS2, Node.VALUE_LABEL_D_DS3],
-                                                     [rx[n1], rd1[n1], rd2[n1], rd3[n1]]):
+                                                     [rx[n3], rd1[n3], rd2[n3], rd3[n3]]):
                             coordinates.setNodeParameters(fieldcache, -1, nodeValue, 1, rValue)
-                        self._boxNodeIds[n2][n3].append(nodeIdentifier)
+                        self._boxNodeIds[n2][n1].append(nodeIdentifier)
 
             # create rim nodes (transition if core and > 1 transition layer, then shell)
             self._rimNodeIds[n2] = [] if self._rimNodeIds[n2] is None else self._rimNodeIds[n2]
@@ -2222,7 +2178,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     for n2 in [e2, e2 + 1]:
                         for n1 in [e1, n1p]:
                             nids += [self._boxBoundaryNodeIds[n2][n1]]
-                            n3c, n1c = self._boxBoundaryNodeToBoxId[n2][n1]
+                            n1c, n3c = self._boxBoundaryNodeToBoxId[n2][n1]
                             nodeParameters.append(self.getBoxCoordinates(n1c, n2, n3c))
                             nodeLayouts.append(nodeLayoutTransitionTriplePoint if n1 in triplePointIndexesList else
                                                nodeLayoutTransition)
@@ -3463,14 +3419,14 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
     def _sampleMidPoint(self, segmentsParameterLists):
         """
         Get mid-point coordinates and derivatives within junction from 2 or more segments' parameters.
-        :param segmentsParameterLists: List over segment indexes s of [x, d1, d2, d3], each with 2 last parameters.
-        d3 will be None for 2-D of bicubic-linear.
+        :param segmentsParameterLists: List over segment indexes s of [last two n2s][x, d1, d2, d3].
+        The n2 values are 2nd nearsest then nearest to junction. d3 will be None for 2-D or bicubic-linear.
         :return: Mid-point x, d1, d2, d3. Derivative magnitudes will need smoothing.`
         """
-        segmentsIn = [dot(sub(params[0][1], params[0][0]), params[2][1]) > 0.0 for params in segmentsParameterLists]
+        segmentsIn = [dot(sub(params[1][0], params[0][0]), params[1][2]) > 0.0 for params in segmentsParameterLists]
         segmentsCount = len(segmentsIn)
         assert segmentsCount > 1
-        d3Defined = None not in segmentsParameterLists[0][3]
+        d3Defined = segmentsParameterLists[0][0][3] is not None
         # for each segment get inward parameters halfway between last 2 parameters
         xi = 0.5
         hx = []
@@ -3481,13 +3437,13 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
 
         for s in range(segmentsCount):
             params = segmentsParameterLists[s]
-            hd2m = [params[2][i] if segmentsIn[s] else [-d for d in params[2][i]] for i in range(2)]
-            hx.append(interpolateCubicHermite(params[0][0], hd2m[0], params[0][1], hd2m[1], xi))
-            hd1.append(mult(add(params[1][0], params[1][1]), 0.5 if segmentsIn[s] else -0.5))
-            hd2.append(interpolateCubicHermiteDerivative(params[0][0], hd2m[0], params[0][1], hd2m[1], xi))
+            hd2m = [params[i][2] if segmentsIn[s] else [-d for d in params[i][2]] for i in range(2)]
+            hx.append(interpolateCubicHermite(params[0][0], hd2m[0], params[1][0], hd2m[1], xi))
+            hd1.append(mult(add(params[0][1], params[1][1]), 0.5 if segmentsIn[s] else -0.5))
+            hd2.append(interpolateCubicHermiteDerivative(params[0][0], hd2m[0], params[1][0], hd2m[1], xi))
             hn.append(normalize(cross(hd1[-1], hd2[-1])))
             if d3Defined:
-                hd3.append(mult(add(params[3][0], params[3][1]), 0.5))
+                hd3.append(mult(add(params[0][3], params[1][3]), 0.5))
 
         # get lists of mid-point parameters for all segment permutations
         mx = []
@@ -3499,7 +3455,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         outFactor = 1.0  # only used as relative proportion with non-zero sideFactor
         for s1 in range(segmentsCount - 1):
             fxs1 = segmentsParameterLists[s1][0][0]
-            fd2s1 = segmentsParameterLists[s1][2][0]
+            fd2s1 = segmentsParameterLists[s1][0][2]
             if not segmentsIn[s1]:
                 fd2s1 = [-d for d in fd2s1]
             norm_fd2s1 = normalize(fd2s1)
@@ -3526,7 +3482,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                 mx.append(cx)
                 md1.append(mult(add(hd1[s1], [-d for d in hd1[s2]]), 0.5))
                 fxs2 = segmentsParameterLists[s2][0][0]
-                fd2s2 = segmentsParameterLists[s2][2][0]
+                fd2s2 = segmentsParameterLists[s2][0][2]
                 if segmentsIn[s2]:
                     fd2s2 = [-d for d in fd2s2]
                 norm_fd2s2 = normalize(fd2s2)
@@ -3565,8 +3521,8 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
 
         # get preferred derivative at centre out to each segment
         rd = [interpolateLagrangeHermiteDerivative(
-            cx, segmentsParameterLists[s][0][0], [-d for d in segmentsParameterLists[s][2][0]] if segmentsIn[s]
-            else segmentsParameterLists[s][2][0], 0.0) for s in range(segmentsCount)]
+            cx, segmentsParameterLists[s][0][0], [-d for d in segmentsParameterLists[s][0][2]] if segmentsIn[s]
+            else segmentsParameterLists[s][0][2], 0.0) for s in range(segmentsCount)]
         # get orthonormal axes with ns12, axis1 in direction of first preferred derivative
         axis1 = normalize(cross(cross(ns12, rd[0]), ns12))
         axis2 = cross(ns12, axis1)
@@ -3612,9 +3568,9 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             maxThroughScore = 0.0
             si = None
             # for s1 in range(segmentsCount - 1):
-            #     dir1 = normalize(segmentsParameterLists[s1][2][1])
+            #     dir1 = normalize(segmentsParameterLists[s1][1][2])
             #     for s2 in range(s1 + 1, segmentsCount):
-            #         dir2 = normalize(segmentsParameterLists[s2][2][1])
+            #         dir2 = normalize(segmentsParameterLists[s2][1][2])
             #         throughScore = abs(dot(dir1, dir2))
             #         if throughScore > maxThroughScore:
             #             maxThroughScore = throughScore
@@ -4183,22 +4139,16 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             [[None] * rimIndexesCount for _ in range(nodesCountRim)] for i in range(4)]
         self._rimCoordinates = (rx, rd1, rd2, rd3)
         for n3 in range(nodesCountRim):
-            n3p = n3 - (transition_count - 1) if self._core else n3
             for rimIndex in range(rimIndexesCount):
                 segmentNodeList = self._rimIndexToSegmentNodeList[rimIndex]
                 # segments have been ordered from lowest to highest s index
-                segmentsParameterLists = []
-                # print('segmentNodeList =', segmentNodeList)
+                segmentsParameterLists = []  # [s][n2 next nearest, n2 nearest][4: x, d1, d2, d3]
                 for s, n1 in segmentNodeList:
                     # print('s =', s, 'n1 =', n1)
-                    if self._core and n3 < (transition_count - 1):
-                        segmentsParameterLists.append(
-                            self._segments[s].getTransitionCoordinatesListAlong(
-                                n1, [-2, -1] if self._segmentsIn[s] else [1, 0], n3))
-                    else:
-                        segmentsParameterLists.append(
-                            self._segments[s].getRimCoordinatesListAlong(
-                                n1, [-2, -1] if self._segmentsIn[s] else [1, 0], n3p))
+                    s_n2_params = []
+                    for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
+                        s_n2_params.append(self._segments[s].getRimCoordinates(n1, n2, n3))
+                    segmentsParameterLists.append(s_n2_params)
                 rx[n3][rimIndex], rd1[n3][rimIndex], rd2[n3][rimIndex], rd3[n3][rimIndex] = \
                     self._sampleMidPoint(segmentsParameterLists)
 
@@ -4209,10 +4159,11 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             for boxIndex in range(boxIndexesCount):
                 segmentNodeList = self._boxIndexToSegmentNodeList[boxIndex]
                 segmentsParameterLists = []
-                for s, n3, n1 in segmentNodeList:
-                    segmentsParameterLists.append(
-                        self._segments[s].getBoxCoordinatesListAlong(
-                            n1, [-2, -1] if self._segmentsIn[s] else [1, 0], n3))
+                for s, n1, n3 in segmentNodeList:
+                    s_n2_params = []
+                    for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
+                        s_n2_params.append(self._segments[s].getBoxCoordinates(n1, n2, n3))
+                    segmentsParameterLists.append(s_n2_params)
                 bx[boxIndex], bd1[boxIndex], bd2[boxIndex], bd3[boxIndex] = \
                     self._sampleMidPoint(segmentsParameterLists)
 
@@ -4287,27 +4238,27 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         nodeLayoutFlipD2 = generateData.getNodeLayoutFlipD2()
 
         e2 = n2 if self._segmentsIn[s] else 0
-        for e3 in range(boxElementsCountAcrossMajor[s]):
-            for e1 in range(boxElementsCountAcrossMinor):
-                e3p = (e3 + 1)
+        for e1 in range(boxElementsCountAcrossMajor[s]):
+            e1p = (e1 + 1)
+            for e3 in range(boxElementsCountAcrossMinor):
                 nids, nodeParameters, nodeLayouts = [], [], []
                 # get identifier early to aid debugging
                 elementIdentifier = generateData.nextElementIdentifier()
-                for n1 in [e1, e1 + 1]:
-                    for n3 in [e3, e3p]:
-                        nids.append(segment.getBoxNodeIds(n1, n2, n3))
+                for n3 in [e3, e3 + 1]:
+                    for n1 in [e1, e1p]:
+                        nids.append(segment.getBoxNodeId(n1, n2, n3))
                         boxCoordinates = segment.getBoxCoordinates(n1, n2, n3)
                         nodeParameters.append(boxCoordinates)
                         nodeLayouts.append(None)
-                    for n3 in [e3, e3p]:
-                        boxIndex = self._segmentNodeToBoxIndex[s][n3][n1]
-                        nids.append(self._boxNodeIds[s][n3][n1])
+                    for n1 in [e1, e1p]:
+                        boxIndex = self._segmentNodeToBoxIndex[s][n1][n3]
+                        nids.append(self._boxNodeIds[s][n1][n3])
                         nodeParameters.append(self._getBoxCoordinates(boxIndex))
                         segmentNodesCount = len(self._boxIndexToSegmentNodeList[boxIndex])
                         if is6WayTriplePoint and (segmentNodesCount == 3) and self._segmentsCount == 3:
                             nodeLayouts.append(nodeLayout6Way)
                         elif self._segmentsIn[s] and (segmentNodesCount == 3) and self._segmentsCount == 4:
-                            location = 1 if e3 < boxElementsCountAcrossMajor[s] // 2 else 2
+                            location = 1 if e1 < boxElementsCountAcrossMajor[s] // 2 else 2
                             nodeLayoutTrifurcation = generateData.getNodeLayoutTrifurcation(location)
                             nodeLayouts.append(nodeLayout6Way if self._sequence == [0, 1, 3, 2] else
                                                nodeLayoutTrifurcation)
@@ -4320,18 +4271,18 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                         for a in [nids, nodeParameters, nodeLayouts]:
                             a[-4], a[-2] = a[-2], a[-4]
                             a[-3], a[-1] = a[-1], a[-3]
-                eft = eftList[e3][e1]
-                scalefactors = scalefactorsList[e3][e1]
+                eft = eftList[e1][e3]
+                scalefactors = scalefactorsList[e1][e3]
                 if not eft:
                     eft, scalefactors = determineCubicHermiteSerendipityEft(mesh, nodeParameters, nodeLayouts)
-                    eftList[e3][e1] = eft
-                    scalefactorsList[e3][e1] = scalefactors
+                    eftList[e1][e3] = eft
+                    scalefactorsList[e1][e3] = scalefactors
                 elementtemplate.defineField(coordinates, -1, eft)
                 element = mesh.createElement(elementIdentifier, elementtemplate)
                 element.setNodesByIdentifier(eft, nids)
                 if scalefactors:
                     element.setScaleFactors(eft, scalefactors)
-                segment.setBoxElementId(e1, e2, e3, elementIdentifier)
+                segment.setBoxElementId(e3, e2, e1, elementIdentifier)
                 for annotationMeshGroup in annotationMeshGroups:
                     annotationMeshGroup.addElement(element)
 
@@ -4372,7 +4323,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             # outside of core box
             for n1 in [e1, n1p]:
                 nids.append(segment.getBoxBoundaryNodeIds(n1, n2))
-                n3c, n1c = segment.getBoxBoundaryNodeToBoxId(n1, n2)
+                n1c, n3c = segment.getBoxBoundaryNodeToBoxId(n1, n2)
                 nodeParameters.append(segment.getBoxCoordinates(n1c, n2, n3c))
                 nodeLayoutTransitionTriplePoint = (
                     generateData.getNodeLayoutTransitionTriplePoint(oLocation))
@@ -4382,8 +4333,8 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             for n1 in [e1, n1p]:
                 nid = boxBoundaryNodeIds[n1]
                 nids.append(nid)
-                n3c, n1c = boxBoundaryNodeToBoxId[n1]
-                boxIndex = self._segmentNodeToBoxIndex[s][n3c][n1c]
+                n1c, n3c = boxBoundaryNodeToBoxId[n1]
+                boxIndex = self._segmentNodeToBoxIndex[s][n1c][n3c]
                 nodeParameters.append(self._getBoxCoordinates(boxIndex))
                 segmentNodesCount = len(self._boxIndexToSegmentNodeList[boxIndex])
                 if segmentNodesCount == 3:  # 6-way node
