@@ -25,6 +25,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
     parameterSetStructureStrings = {
         "Default": "1-2",
         "Bifurcation": "1-2.1,2.2-3,2.3-4",
+        "Bone": "(1-3.2,(2-3.3,3.1-4-5", # "(1-3.2,(2-3.3,3.1-4-5-6-7.1,7.2-8),7.3-9)",
         "Converging bifurcation": "1-3.1,2-3.2,3.3-4",
         "Loop": "1-2-3-4-5-6-7-8-1",
         "Snake": "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33",
@@ -82,7 +83,9 @@ class MeshType_1d_network_layout1(Scaffold_base):
         coordinates = find_or_create_field_coordinates(fieldmodule).castFiniteElement()
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
         fieldcache = fieldmodule.createFieldcache()
-        if "Loop" == parameterSetName:
+        if "Bone" == parameterSetName:
+            cls._defineBoneCoordinates(coordinates, 4.0, 1.0, 0.5)
+        elif "Loop" == parameterSetName:
             loopRadius = 0.5
             tubeRadius = 0.1
             elementsCount = nodes.getSize()
@@ -218,7 +221,14 @@ class MeshType_1d_network_layout1(Scaffold_base):
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS3, 1, d13)
 
         if defineInnerCoordinates:
-            cls.defineInnerCoordinates(region, coordinates, options, networkMesh)
+            innerProportion = 0.8
+            cls.defineInnerCoordinates(region, coordinates, options, networkMesh, innerProportion)
+            innerCoordinates = fieldmodule.findFieldByName("inner coordinates").castFiniteElement()
+            if "Bone" == parameterSetName:
+                cls._defineBoneCoordinates(
+                    innerCoordinates, 4.0, 1.0 - 0.5 * (1.0 - innerProportion), 0.5 * innerProportion)
+            elif "Sphere" == parameterSetName:
+                cls._defineSphereCoordinates(innerCoordinates, innerProportion)
 
         return [], networkMesh
 
@@ -244,35 +254,70 @@ class MeshType_1d_network_layout1(Scaffold_base):
         sir.createStreamresourceMemoryBuffer(buffer)
         region.read(sir)
         parameterSetName = options["Base parameter set"]
-        if "Sphere" == parameterSetName:
-            fieldmodule = region.getFieldmodule()
-            innerCoordinates = fieldmodule.findFieldByName("inner coordinates").castFiniteElement()
-            cls._defineSphereCoordinates(innerCoordinates, innerProportion)
-        else:
-            functionOptions = {
-                "To field": {"coordinates": False, "inner coordinates": True},
-                "From field": {"coordinates": True, "inner coordinates": False},
-                "Mode": {"Scale": True, "Offset": False},
-                "D2 value": innerProportion,
-                "D3 value": innerProportion}
-            cls.assignCoordinates(region, options, networkMesh, functionOptions, editGroupName=None)
+        functionOptions = {
+            "To field": {"coordinates": False, "inner coordinates": True},
+            "From field": {"coordinates": True, "inner coordinates": False},
+            "Mode": {"Scale": True, "Offset": False},
+            "D2 value": innerProportion,
+            "D3 value": innerProportion}
+        cls.assignCoordinates(region, options, networkMesh, functionOptions, editGroupName=None)
 
     @classmethod
-    def _defineSphereCoordinates(cls, coordinates, half_size):
+    def _defineSphereCoordinates(cls, coordinates, radius):
         fieldmodule = coordinates.getFieldmodule()
         fieldcache = fieldmodule.createFieldcache()
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        d1 = [half_size, 0.0, 0.0]
-        d2 = [0.0, half_size, 0.0]
-        d3 = [0.0, 0.0, half_size]
+        d1 = [radius, 0.0, 0.0]
+        d2 = [0.0, radius, 0.0]
+        d3 = [0.0, 0.0, radius]
         for n in range(3):
-            x = [(n - 1.0) * half_size, 0.0, 0.0]
+            x = [(n - 1.0) * radius, 0.0, 0.0]
             node = nodes.findNodeByIdentifier(n + 1)
             fieldcache.setNode(node)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
+
+    @classmethod
+    def _defineBoneCoordinates(cls, coordinates, shaft_length, arm_length, radius):
+        fieldmodule = coordinates.getFieldmodule()
+        fieldcache = fieldmodule.createFieldcache()
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        # shaft
+        shaft_element_count = 4
+        shaft_element_length = shaft_length / shaft_element_count
+        d1 = [shaft_element_length, 0.0, 0.0]
+        d2 = [0.0, radius, 0.0]
+        d3 = [0.0, 0.0, radius]
+        for n in range((shaft_element_count // 2) + 1):
+            x = [n * shaft_element_length, 0.0, 0.0]
+            node = nodes.findNodeByIdentifier(n + 3)
+            fieldcache.setNode(node)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
+        # start condyles
+        cos60 = math.cos(math.pi / 3.0)
+        sin60 = math.sin(math.pi / 3.0)
+        for n in range(2):
+            arm_long_x = arm_length * cos60
+            arm_long_y = arm_length * sin60
+            arm_side_x = radius * -sin60
+            arm_side_y = radius * cos60
+            x = [-arm_long_x, -arm_long_y if (n == 0) else arm_long_y, 0.0]
+            d1 = [arm_long_x, arm_long_y if (n == 0) else -arm_long_y, 0.0]
+            d2 = [arm_side_x if (n == 0) else -arm_side_x, arm_side_y, 0.0]
+            for node_identifier in (n + 1, 3):
+                node = nodes.findNodeByIdentifier(node_identifier)
+                fieldcache.setNode(node)
+                if node_identifier < 3:
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
+                version = (n + 2) if (node_identifier == 3) else 1
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, version, d1)
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, version, d2)
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, version, d3)
 
     @classmethod
     def editStructure(cls, region, options, networkMesh, functionOptions, editGroupName):

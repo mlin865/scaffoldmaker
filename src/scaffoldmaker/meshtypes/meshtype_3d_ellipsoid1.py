@@ -78,9 +78,9 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
                 max_rim_count = transition_count
 
         shell_transition_counts = options["Numbers of shell, transition elements"]
-        count = len(axes_numbers)
+        count = len(shell_transition_counts)
         if count < 2:
-            shell_transition_counts[1] = 1
+            shell_transition_counts.append(1)
         elif count > 2:
             del shell_transition_counts[2:]
         if shell_transition_counts[0] > max_rim_count - 1:

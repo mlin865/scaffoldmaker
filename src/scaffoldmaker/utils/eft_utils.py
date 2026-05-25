@@ -813,28 +813,60 @@ class HermiteNodeLayoutManager:
                        self._nodeLayoutTriplePoint2DQ3, self._nodeLayoutTriplePoint2DQ4]
         return nodeLayouts
 
-    def getNodeLayout3WayPoints12(self):
+    def getNodeLayout3WayPoints12(self, i):
+        """
+        Get 3-way node layout for quadrants 12 = NN, NP, PN, PP.
+        :param i: Index of variant from 0 to 3.
+        :return: HermiteNodeLayout.
+        """
+        return self._nodeLayout3WayPoints12[i]
+
+    def getNodeLayout3WayPoints13(self, i):
+        """
+        Get 3-way node layout for quadrants 13 = NN, NP, PN, PP.
+        :param i: Index of variant from 0 to 3.
+        :return: HermiteNodeLayout.
+        """
+        return self._nodeLayout3WayPoints13[i]
+
+    def getNodeLayout3WayPoints23(self, i):
+        """
+        Get 3-way node layout for quadrants 23 = NN, NP, PN, PP.
+        :param i: Index of variant from 0 to 3.
+        :return: HermiteNodeLayout.
+        """
+        return self._nodeLayout3WayPoints23[i]
+
+    def getNodeLayout4WayPoints(self, i):
+        """
+        Get node layout from a regular core for octants 123: NNN, NNP, NPN, NPP, PNN, PNP, PPN, PPP.
+        :param i: Index of variant from 0 to 7.
+        :return: HermiteNodeLayout.
+        """
+        return self._nodeLayout4WayPoints[i]
+
+    def getNodeLayout3WayPoints12List(self):
         """
         Get 3-way node layouts for quadrants 12 = NN, NP, PN, PP.
         :return: List of 4 HermiteNodeLayout.
         """
         return self._nodeLayout3WayPoints12
 
-    def getNodeLayout3WayPoints13(self):
+    def getNodeLayout3WayPoints13List(self):
         """
         Get 3-way node layouts for quadrants 13 = NN, NP, PN, PP.
         :return: List of 4 HermiteNodeLayout.
         """
         return self._nodeLayout3WayPoints13
 
-    def getNodeLayout3WayPoints23(self):
+    def getNodeLayout3WayPoints23List(self):
         """
         Get 3-way node layouts for quadrants 23 = NN, NP, PN, PP.
         :return: List of 4 HermiteNodeLayout.
         """
         return self._nodeLayout3WayPoints23
 
-    def getNodeLayout4WayPoints(self):
+    def getNodeLayout4WayPointsList(self):
         """
         Get node layouts from a regular core for octants 123: NNN, NNP, NPN, NPP, PNN, PNP, PPN, PPP.
         :return: List of 8 HermiteNodeLayout.

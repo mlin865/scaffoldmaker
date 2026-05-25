@@ -370,7 +370,7 @@ class TrackSurface:
         :param start_x: Coordinates on or near surface.
         :return: Nearest coordinates to start_x on surfacde.
         """
-        position = self.findNearestPosition(start_x)
+        position = self.findNearestPosition(start_x, startPosition=self.findNearestPositionSample(start_x)[0])
         return self.evaluateCoordinates(position)
 
     def makeDerivativeOnSurface(self, x, start_d):
@@ -391,7 +391,7 @@ class TrackSurface:
         :return: Coordinates at neares point on surface, dDerivative made tangential to surface there with same
         magnitude as start_d.
         """
-        position = self.findNearestPosition(start_x)
+        position = self.findNearestPosition(start_x, startPosition=self.findNearestPositionSample(start_x)[0])
         x, d1, d2 = self.evaluateCoordinates(position, derivatives=True)
         normal = normalize(cross(d1, d2))
         d = rejection(start_d, normal)
@@ -430,8 +430,8 @@ class TrackSurface:
             start_d = [d * scaling for d in start_d]
             end_d = interpolateHermiteLagrangeDerivative(start_x, start_d, end_x, 1.0)
             end_d = self.makeCoordinatesAndDerivativeOnSurface(end_x, end_d)[1]
-        use_start_weight = (start_weight if start_weight else 1.0) * magnitude(end_x)
-        use_end_weight = (end_weight if end_weight else 1.0) * magnitude(start_x)
+        use_start_weight = start_weight if start_weight else 1.0
+        use_end_weight = end_weight if end_weight else 1.0
         start_d = set_magnitude(start_d, 2.0 * length * use_start_weight / (use_start_weight + use_end_weight))
         end_d = set_magnitude(end_d, 2.0 * length * use_end_weight / (use_start_weight + use_end_weight))
         scaling = computeCubicHermiteDerivativeScaling(start_x, start_d, end_x, end_d) * overweighting

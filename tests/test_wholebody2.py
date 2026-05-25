@@ -97,7 +97,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
 
             self.assertAlmostEqual(volume, 97.5392935495108, delta=tol)
-            self.assertAlmostEqual(surfaceArea, 224.4420763753855, delta=tol)
+            self.assertAlmostEqual(surfaceArea, 224.44187101474296, delta=tol)
 
         # check some annotation groups:
 
@@ -105,7 +105,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             'abdominal cavity': (40, 10.124914037206159),
             'core': (456, 49.07715132262464),
             'head': (112, 6.124221560163941),
-            'shell': (296, 48.4636748088455),
+            'shell': (296, 48.46353280488115),
             'thoracic cavity': (40, 7.2688106965868835)
         }
         for name in expectedSizes3d:
@@ -128,7 +128,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             'left upper limb skin epidermis outer surface': (68, 21.45453552011718),
             'right lower limb skin epidermis outer surface': (68, 55.22110056448186),
             'right upper limb skin epidermis outer surface': (68, 21.45453552009655),
-            'skin epidermis outer surface': (376, 224.4420763753855),
+            'skin epidermis outer surface': (376, 224.44187101474296),
             'thoracic cavity boundary surface': (64, 21.05063800681311)
         }
         for name in expectedSizes2d:
@@ -172,7 +172,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
         region = context.getDefaultRegion()
         self.assertTrue(region.isValid())
         annotationGroups = scaffold.generateMesh(region, options)[0]
-        self.assertEqual(26, len(annotationGroups))
+        self.assertEqual(24, len(annotationGroups))
 
         fieldmodule = region.getFieldmodule()
         self.assertEqual(RESULT_OK, fieldmodule.defineAllFaces())
@@ -220,13 +220,13 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             result, innerSurfaceArea = innerSurfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            self.assertAlmostEqual(volume, 48.46360920957989, delta=tol)
-            self.assertAlmostEqual(outerSurfaceArea, 223.62328982131913, delta=tol)
-            self.assertAlmostEqual(innerSurfaceArea, 159.93079156983148, delta=tol)
+            self.assertAlmostEqual(volume, 48.46346792023442, delta=tol)
+            self.assertAlmostEqual(outerSurfaceArea, 223.62308446067658, delta=tol)
+            self.assertAlmostEqual(innerSurfaceArea, 159.93096824862147, delta=tol)
 
         # check some annotationGroups:
         expectedSizes2d = {
-            "skin epidermis outer surface": (328, 224.04087064829253)
+            "skin epidermis outer surface": (328, 224.04066528764997)
             }
         for name in expectedSizes2d:
             term = get_body_term(name)

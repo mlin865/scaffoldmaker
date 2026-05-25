@@ -88,6 +88,7 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
         self._standardElementtemplate.defineField(self._coordinates, -1, self._standardEft)
 
         d3Defined = (meshDimension == 3) and not isLinearThroughShell
+        self._nodeLayoutRegularPermuted = self._nodeLayoutManager.getNodeLayoutRegularPermuted(d3Defined)
         self._nodeLayoutTubeDomeBoundary = self._nodeLayoutManager.getNodeLayoutRegularPermuted(d3Defined=True)
         self._nodeLayout5Way = self._nodeLayoutManager.getNodeLayout5Way12(d3Defined)
         self._nodeLayout6Way = self._nodeLayoutManager.getNodeLayout6Way12(d3Defined)
@@ -126,6 +127,9 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
         Create a new standard element field template for modifying.
         """
         return self._mesh.createElementfieldtemplate(self._elementbasis)
+
+    def getNodeLayoutRegularPermuted(self):
+        return self._nodeLayoutRegularPermuted
 
     def getNodeLayoutTubeDomeBoundary(self):
         return self._nodeLayoutTubeDomeBoundary
@@ -323,11 +327,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._boxCoordinates = None  # [along][major][minor]
         self._transitionCoordinates = None
         self._boxNodeIds = None  # [along][major][minor]
-        self._boxBoundaryNodeIds = None
-        # boxNodeIds that form the boundary of the solid core, rearranged in circular format
-        self._boxBoundaryNodeToBoxId = None
-        # lookup table that translates box boundary node ids in a circular format to box node ids in
-        # [nAlong][nAcrossMajor][nAcrossMinor] format.
         self._boxElementIds = None  # [along][major][minor]
 
     def _calculateRawLengthParameters(self):
@@ -1553,57 +1552,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
         return wx, wd3
 
-    def _createBoxBoundaryNodeIdsList(self, startSkipCount=None, endSkipCount=None):
-        """
-        Creates a list (in a circular format similar to other rim node id lists) of core box node ids that are
-        located at the boundary of the core.
-        This list is used to easily stitch inner rim nodes with box nodes.
-        :param startSkipCount: Row in from start that node ids are for.
-        :param endSkipCount: Row in from end that node ids are for.
-        :return: A list of box node ids stored in a circular format, and a lookup list that translates indexes used in
-        boxBoundaryNodeIds list to indexes that can be used in boxCoordinates list.
-        """
-        boxBoundaryNodeIds = []
-        boxBoundaryNodeToBoxId = []
-        elementsCountAlong = len(self._rimCoordinates[0]) - 1
-
-        coreBoxMajorNodesCount = self._elementsCountCoreBoxMajor + 1
-        coreBoxMinorNodesCount = self._elementsCountCoreBoxMinor + 1
-        for n2 in range(elementsCountAlong + 1):
-            if (n2 < startSkipCount) or (n2 > elementsCountAlong - endSkipCount) or self._boxNodeIds[n2] is None:
-                boxBoundaryNodeIds.append(None)
-                boxBoundaryNodeToBoxId.append(None)
-                continue
-            else:
-                boxBoundaryNodeIds.append([])
-                boxBoundaryNodeToBoxId.append([])
-            for n1 in range(coreBoxMajorNodesCount):
-                if n1 == 0 or n1 == coreBoxMajorNodesCount - 1:
-                    ids = self._boxNodeIds[n2][n1] if n1 == 0 else self._boxNodeIds[n2][n1][::-1]
-                    n3_list = list(range(coreBoxMinorNodesCount)) if n1 == 0 else (
-                        list(range(coreBoxMinorNodesCount - 1, -1, -1)))
-                    boxBoundaryNodeIds[n2] += [ids[c] for c in range(coreBoxMinorNodesCount)]
-                    for n3 in n3_list:
-                        boxBoundaryNodeToBoxId[n2].append([n1, n3])
-                else:
-                    for n3 in [-1, 0]:
-                        boxBoundaryNodeIds[n2].append(self._boxNodeIds[n2][n1][n3])
-                        boxBoundaryNodeToBoxId[n2].append([n1, n3])
-
-            start = self._elementsCountCoreBoxMajor - 2
-            idx = self._elementsCountCoreBoxMinor + 2
-            for n in range(int(start), -1, -1):
-                boxBoundaryNodeIds[n2].append(boxBoundaryNodeIds[n2].pop(idx + 2 * n))
-                boxBoundaryNodeToBoxId[n2].append(boxBoundaryNodeToBoxId[n2].pop(idx + 2 * n))
-
-            nloop = self._elementsCountCoreBoxMinor // 2
-            for _ in range(nloop):
-                boxBoundaryNodeIds[n2].insert(len(boxBoundaryNodeIds[n2]), boxBoundaryNodeIds[n2].pop(0))
-                boxBoundaryNodeToBoxId[n2].insert(len(boxBoundaryNodeToBoxId[n2]),
-                                                      boxBoundaryNodeToBoxId[n2].pop(0))
-
-        return boxBoundaryNodeIds, boxBoundaryNodeToBoxId
-
     @classmethod
     def blendSampledCoordinates(cls, segment1, nodeIndexAlong1, segment2, nodeIndexAlong2):
         nodesCountAround = segment1._elementsCountAround
@@ -1700,52 +1648,137 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
     def getElementsCountTransition(self):
         return self._transition_count
 
-    def getBoxCoordinates(self, n1, n2, n3):
+    def getBoxBoundaryIndexes(self, ai):
+        """
+        Get the n1, n3 box indexes for a point around the boundary of the box.
+        :param ai: Node index around, starting at side +axis2, heading towards +axis3.
+        :return: n1 (major), n3 (minor).
+        """
+        assert ai >= 0
+        # start half way along first straight
+        a = ai
+        a_limit = self._elementsCountCoreBoxMinor // 2
+        if a < a_limit:
+            return 0, a_limit + a
+        a -= a_limit
+        a_limit = self._elementsCountCoreBoxMajor
+        if a < a_limit:
+            return a, self._elementsCountCoreBoxMinor
+        a -= a_limit
+        a_limit = self._elementsCountCoreBoxMinor
+        if a < a_limit:
+            return self._elementsCountCoreBoxMajor, self._elementsCountCoreBoxMinor - a
+        a -= a_limit
+        a_limit = self._elementsCountCoreBoxMajor
+        if a < a_limit:
+            return self._elementsCountCoreBoxMajor - a, 0
+        # remainder of first straight
+        a -= a_limit
+        a_limit = self._elementsCountCoreBoxMinor // 2
+        assert a < a_limit
+        return 0, a
+
+    def getBoxCoordinates(self, n1, n2, n3, transform=False):
         """
         Get parameters for a location in the core box.
-        :param n1: Index in major direction.
-        :param n2: Index along segment.
-        :param n3: Index in minor direction.
+        This function can look into dome coordinates one row on from tube.
+        Supports negative indexes within box for n1, n3, within segment for n2.
+        :param n1: Node index across major axis of box.
+        :param n2: Node index along segment.
+        :param n3: Node index across minor axis of box.
+        :param transform: If True, transform into tube box orientation (from dome).
         :return: x, d1, d2, d3
         """
+        if len(self._boxCoordinates[0]) == 1:
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            rim_count = self._transition_count + self._shell_count
+            element_counts = ellipsoid.get_element_counts()
+            x, d1, d2, d3 = ellipsoid.get_node_parameters(
+                ((rim_count - 1) if (n1 < 0) else element_counts[0] - rim_count) - n1,
+                ((element_counts[1] - rim_count + 1) if (n3 < 0) else rim_count) + n3,
+                element_counts[2] // 2 + ((n2 + 1) if (n2 < 0) else n2))
+            if transform:
+                return x, [-d for d in d1], d3, d2
+            else:
+                return x, d1, d2, d3
         return (self._boxCoordinates[0][n2][n1][n3], self._boxCoordinates[1][n2][n1][n3],
                 self._boxCoordinates[2][n2][n1][n3], self._boxCoordinates[3][n2][n1][n3])
 
     def getBoxNodeId(self, n1, n2, n3):
         """
         Get a box node ID for n2 index along segment at given n1, n3.
-        :param n1: Node index across major axis.
+        This function can look into dome coordinates one row on from tube.
+        Supports negative indexes within box for n1, n3, within segment for n2.
+        :param n1: Node index across major axis of box.
         :param n2: Node index along segment.
-        :param n3: Node index across minor axis.
+        :param n3: Node index across minor axis of box.
         :return: Node identifier.
         """
+        if len(self._boxNodeIds) == 1:
+            # only the empty row representing the junction nodes: get node identifier from dome
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            rim_count = self._transition_count + self._shell_count
+            element_counts = ellipsoid.get_element_counts()
+            return ellipsoid.get_node_identifier(
+                ((rim_count - 1) if (n1 < 0) else element_counts[0] - rim_count) - n1,
+                ((element_counts[1] - rim_count + 1) if (n3 < 0) else rim_count) + n3,
+                element_counts[2] // 2 + ((n2 + 1) if (n2 < 0) else n2))
         return self._boxNodeIds[n2][n1][n3]
 
     def getBoxNodeIdsSlice(self, n2):
         """
         Get slice of box node IDs at n2 index along segment.
+        Supports negative indexes within box for n1, n3, within segment for n2.
         :param n2: Node index along segment, including negative indexes from end.
         :return: Node IDs arrays, or None if not set.
         """
         return self._boxNodeIds[n2]
 
-    def getBoxBoundaryNodeIds(self, n1, n2):
+    def getBoxCornerIndex(self, n1, n3):
         """
-        Get a node ID around the core box for n2 index along segment at a given n1.
-        :param n1: Node index around the core box.
-        :param n2: Node index along segment.
-        :return: Node identifier.
+        Determing which corner of box the location is on, if any.
+        :return: Index of corner starting with 0 for next after +axis2 in direction of +axis3.
         """
-        return self._boxBoundaryNodeIds[n2][n1]
+        n1_min = n1 == 0
+        n1_max = n1 == self._elementsCountCoreBoxMajor
+        n3_min = n3 == 0
+        n3_max = n3 == self._elementsCountCoreBoxMinor
+        if n1_min and n3_max:
+            return 0
+        if n1_max and n3_max:
+            return 1
+        if n1_max and n3_min:
+            return 2
+        if n1_min and n3_min:
+            return 3
+        return None
 
-    def getBoxBoundaryNodeToBoxId(self, n1, n2):
+    def getBoxNodeLayout(self, n1, n2, n3, generateData):
         """
-        Translate box boundary node indexes to core box node indexes in the form of major- and minor axes.
-        :param n1: Node index around the core box.
+        Used by junction only.
+        This function can look into dome coordinates one row on from tube.
+        Supports negative indexes within box for n1, n3, within segment for n2.
+        :param n1: Node index across major axis of box.
         :param n2: Node index along segment.
-        :return: n3 (major axis) and n1 (minor axis) indexes used in boxCoordinates.
+        :param n3: Node index across minor axis of box.
+        :param generateData: MeshGenerateData.
+        :return: HermiteNodeLayout or None.
         """
-        return self._boxBoundaryNodeToBoxId[n2][n1]
+        if len(self._boxNodeIds) == 1:
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            rim_count = self._transition_count + self._shell_count
+            element_counts = ellipsoid.get_element_counts()
+            node_layout = ellipsoid.get_node_layout(
+                ((rim_count - 1) if (n1 < 0) else element_counts[0] - rim_count) - n1,
+                ((element_counts[1] - rim_count + 1) if (n3 < 0) else rim_count) + n3,
+                element_counts[2] // 2 + ((n2 + 1) if (n2 < 0) else n2), generateData)
+            if not node_layout:
+                node_layout = generateData.getNodeLayoutRegularPermuted()
+            return node_layout
+        corner_index = self.getBoxCornerIndex(n1, n3)
+        if corner_index is not None:
+            return generateData.getNodeLayoutTransitionTriplePoint([1, -1, -2, 2][corner_index])
+        return generateData.getNodeLayoutTransition()
 
     def getTriplePointIndexes(self):
         """
@@ -1792,15 +1825,22 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
         return location
 
-    def getRimCoordinates(self, n1, n2, n3):
+    def getRimCoordinates(self, n1, n2, n3, transform=False):
         """
-        Get rim parameters (transition through shell) parameters at a point.
+        Get rim parameters (core transition and shell) parameters at a point.
         This was what rim coordinates should have been.
-        :param n1: Node index around.
-        :param n2: Node index along segment.
+        This function can look into dome coordinates one row on from tube.
+        :param n1: Node index around, starting at side +axis2.
+        :param n2: Node index along segment. Can use negative indexes. Only values, 0, 1, -1, -2 can be used
+        if there is an adjacent dome.
         :param n3: Node index from first core transition row or inner to outer shell.
+        :param transform: If True, transform into tube rim orientation (from dome).
         :return: x, d1, d2, d3
         """
+        if len(self._rimCoordinates[0]) == 1:
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            return ellipsoid.get_rim_parameters(
+                ellipsoid.get_element_counts()[2] // 2 + ((n2 + 1) if (n2 < 0) else n2), n3, n1, transform)
         # only have transition nodes for > 1 transitional elements
         transition_node_count = (self._transition_count - 1) if self._core else 0
         if n3 < transition_node_count:
@@ -1817,12 +1857,35 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
     def getRimNodeId(self, n1, n2, n3):
         """
         Get a rim node ID for a point.
+        This function can look into dome node identifiers one row on from tube.
         :param n1: Node index around.
-        :param n2: Node index along segment.
+        :param n2: Node index along segment. Can use negative indexes
         :param n3: Node index from inner to outer rim.
         :return: Node identifier.
         """
+        if len(self._rimNodeIds) == 1:
+            # only the empty row representing the junction nodes: get node identifier from dome
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            return ellipsoid.get_rim_node_identifier(
+                ellipsoid.get_element_counts()[2] // 2 + ((n2 + 1) if (n2 < 0) else n2), n3, n1)
         return self._rimNodeIds[n2][n3][n1]
+
+    def getRimNodeLayout(self, n1, n2, n3, generateData):
+        """
+        Get a rim node layout. This function can look into dome coordinates one row on from tube.
+        Used by junction only.
+        :param n1: Node index around.
+        :param n2: Node index along segment. Can use negative indexes
+        :param n3: Node index from inner to outer rim.
+        :param generateData: MeshGenerateData.
+        :return: HermiteNodeLayout or None.
+        """
+        if len(self._rimNodeIds) == 1:
+            # only the empty row representing the junction nodes: get node layout from dome
+            ellipsoid = self._dome_ellipsoid[0 if (n2 < 0) else 1]
+            return ellipsoid.get_rim_node_layout(
+                generateData, ellipsoid.get_element_counts()[2] // 2 + ((n2 + 1) if (n2 < 0) else n2), n3, n1)
+        return None
 
     def getRimElementId(self, e1, e2, e3):
         """
@@ -1842,10 +1905,15 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param e3: Element index from inner to outer rim.
         :param elementIdentifier: Element identifier.
         """
-        if not self._rimElementIds[e2]:
-            elementsCountRim = self.getElementsCountRim()
-            self._rimElementIds[e2] = [[None] * self._elementsCountAround for _ in range(elementsCountRim)]
-        self._rimElementIds[e2][e3][e1] = elementIdentifier
+        if self._rimElementIds:
+            if not self._rimElementIds[e2]:
+                elementsCountRim = self.getElementsCountRim()
+                self._rimElementIds[e2] = [[None] * self._elementsCountAround for _ in range(elementsCountRim)]
+            self._rimElementIds[e2][e3][e1] = elementIdentifier
+        else:
+            # set in dome ellipsoid
+            ellipsoid = self._dome_ellipsoid[0 if (e2 < 0) else 1]
+            ellipsoid.set_rim_element_identifier(ellipsoid.get_element_counts()[2] // 2 + e2, e3, e1, elementIdentifier)
 
     def getBoxElementId(self, e1, e2, e3):
         """
@@ -1855,7 +1923,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param e3: Element index across core box minor / d3 direction.
         :return: Element identifier.
         """
-        return self._boxElementIds[e2][e3][e1]
+        return self._boxElementIds[e2][e1][e3]
 
     def setBoxElementId(self, e1, e2, e3, elementIdentifier):
         """
@@ -1865,10 +1933,17 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param e3: Element index across core box minor / d3 direction.
         :param elementIdentifier: Element identifier.
         """
-        if not self._boxElementIds[e2]:
-            self._boxElementIds[e2] = [
-                [None] * self._elementsCountCoreBoxMinor for _ in range(self._elementsCountCoreBoxMajor)]
-        self._boxElementIds[e2][e3][e1] = elementIdentifier
+        if self._boxElementIds:
+            if not self._boxElementIds[e2]:
+                self._boxElementIds[e2] = [
+                    [None] * self._elementsCountCoreBoxMinor for _ in range(self._elementsCountCoreBoxMajor)]
+            self._boxElementIds[e2][e1][e3] = elementIdentifier
+        else:
+            # set in dome ellipsoid
+            ellipsoid = self._dome_ellipsoid[0 if (e2 < 0) else 1]
+            rim_count = self._transition_count + self._shell_count
+            ellipsoid.set_box_element_identifier(
+                rim_count + e1, rim_count + e3, ellipsoid.get_element_counts()[2] // 2 + e2, elementIdentifier)
 
     def _addBoxElementsToMeshGroup(self, e1Start, e1Limit, e3Start, e3Limit, meshGroup):
         """
@@ -1926,6 +2001,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                                         0, self._elementsCountCoreBoxMinor, meshGroup)
         self._addRimElementsToMeshGroup(0, self._elementsCountAround,
                                         0, self._transition_count, meshGroup)
+        for dome_index in range(2):
+            ellipsoid = self._dome_ellipsoid[dome_index]
+            if ellipsoid:
+                ellipsoid.add_core_elements_to_mesh_group(meshGroup)
 
     def addShellElementsToMeshGroup(self, meshGroup):
         """
@@ -1936,6 +2015,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         elementsCountShell = self._shell_count
         e3ShellStart = elementsCountRim - elementsCountShell
         self._addRimElementsToMeshGroup(0, self._elementsCountAround, e3ShellStart, elementsCountRim, meshGroup)
+        for dome_index in range(2):
+            ellipsoid = self._dome_ellipsoid[dome_index]
+            if ellipsoid:
+                ellipsoid.add_shell_elements_to_mesh_group(meshGroup)
 
     def addAllElementsToMeshGroup(self, meshGroup):
         """
@@ -1998,7 +2081,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
     def generateMesh(self, generateData: TubeNetworkMeshGenerateData, n2Only=None):
         """
-        :param n2Only: If set, create nodes only for that single n2 index along. Must be >= 0!
+        :param n2Only: If set, create nodes only for that single n2 index along.
         """
         # keeping this code to enable display of raw segment trim surfaces for future diagnostics
         # if (not n2Only) and generateData.isShowTrimSurfaces():
@@ -2024,8 +2107,13 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         # create nodes
         if self._dome_ellipsoid[0]:
             self._transfer_tube_data_to_dome(generateData, 0)
-            self._dome_ellipsoid[0].generate_nodes(generateData)
-            self._transfer_dome_nodes_to_tube(0)
+            n3_limit = 0
+            if (elementsCountAlong == 0) and endSkipCount:
+                # don't build last row beside junction
+                n3_limit = self._dome_ellipsoid[0].get_element_counts()[2] // 2
+            self._dome_ellipsoid[0].generate_nodes(generateData, n3_limit=n3_limit)
+            if n3_limit == 0:
+                self._transfer_dome_nodes_to_tube(0)
 
         nodes = generateData.getNodes()
         isLinearThroughShell = generateData.isLinearThroughShell()
@@ -2122,11 +2210,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             self._transfer_tube_data_to_dome(generateData, 1)
             self._dome_ellipsoid[1].generate_nodes(generateData)
 
-        # create a new list containing box node ids are located at the boundary
-        if self._core:
-            self._boxBoundaryNodeIds, self._boxBoundaryNodeToBoxId = (
-                self._createBoxBoundaryNodeIdsList(startSkipCount, endSkipCount))
-
         if n2Only is not None:
             return
 
@@ -2136,11 +2219,13 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         elementtemplateStd, eftStd = generateData.getStandardElementtemplate()
 
         if self._dome_ellipsoid[0]:
-            self._dome_ellipsoid[0].set_core_shell_groups(
-                generateData.getCoreAnnotationGroup().getGroup(), generateData.getShellAnnotationGroup().getGroup())
             segment_groups = generateData.getAnnotationZincGroups(self._annotationTerms)
             self._dome_ellipsoid[0].set_octant_group_lists([segment_groups] * 8)
-            self._dome_ellipsoid[0].generate_elements(generateData)
+            e3_limit = 0
+            if (elementsCountAlong == 0) and endSkipCount:
+                # don't build last row beside junction
+                e3_limit = self._dome_ellipsoid[0].get_element_counts()[2] // 2 - 1
+            self._dome_ellipsoid[0].generate_elements(generateData, e3_limit=e3_limit)
 
         for e2 in range(startSkipCount, elementsCountAlong - endSkipCount):
             self._boxElementIds[e2] = []
@@ -2150,14 +2235,14 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 # create box elements
                 elementsCountAcrossMinor = self.getCoreBoxMinorNodesCount() - 1
                 elementsCountAcrossMajor = self.getCoreBoxMajorNodesCount() - 1
-                for e3 in range(elementsCountAcrossMajor):
-                    e3p = e3 + 1
+                for e1 in range(elementsCountAcrossMajor):
+                    e1p = e1 + 1
                     elementIds = []
-                    for e1 in range(elementsCountAcrossMinor):
+                    for e3 in range(elementsCountAcrossMinor):
                         nids = []
-                        for n1 in [e1, e1 + 1]:
-                            nids += [self._boxNodeIds[e2][e3][n1], self._boxNodeIds[e2][e3p][n1],
-                                     self._boxNodeIds[e2p][e3][n1], self._boxNodeIds[e2p][e3p][n1]]
+                        for n1 in [e3, e3 + 1]:
+                            nids += [self._boxNodeIds[e2][e1][n1], self._boxNodeIds[e2][e1p][n1],
+                                     self._boxNodeIds[e2p][e1][n1], self._boxNodeIds[e2p][e1p][n1]]
                         elementIdentifier = generateData.nextElementIdentifier()
                         element = mesh.createElement(elementIdentifier, elementtemplateStd)
                         element.setNodesByIdentifier(eftStd, nids)
@@ -2177,8 +2262,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     nodeLayoutTransitionTriplePoint = generateData.getNodeLayoutTransitionTriplePoint(location)
                     for n2 in [e2, e2 + 1]:
                         for n1 in [e1, n1p]:
-                            nids += [self._boxBoundaryNodeIds[n2][n1]]
-                            n1c, n3c = self._boxBoundaryNodeToBoxId[n2][n1]
+                            n1c, n3c = self.getBoxBoundaryIndexes(n1)
+                            nids.append(self.getBoxNodeId(n1c, n2, n3c))
                             nodeParameters.append(self.getBoxCoordinates(n1c, n2, n3c))
                             nodeLayouts.append(nodeLayoutTransitionTriplePoint if n1 in triplePointIndexesList else
                                                nodeLayoutTransition)
@@ -2243,15 +2328,13 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 self._rimElementIds[e2].append(ringElementIds)
 
         if self._dome_ellipsoid[1]:
-            self._dome_ellipsoid[1].set_core_shell_groups(
-                generateData.getCoreAnnotationGroup().getGroup(), generateData.getShellAnnotationGroup().getGroup())
             segment_groups = generateData.getAnnotationZincGroups(self._annotationTerms)
             self._dome_ellipsoid[1].set_octant_group_lists([segment_groups] * 8)
             self._dome_ellipsoid[1].generate_elements(generateData)
 
-    def generateJunctionRimElements(self, junction, generateData):
+    def generateJunctionElements(self, junction, generateData):
         """
-        Generates rim elements for junction part of the segment after segment nodes and elements have been made.
+        Generates rim elements for junction part of the segment after adjacent segment nodes have been made.
         """
         mesh = generateData.getMesh()
         meshDimension = generateData.getMeshDimension()
@@ -2267,17 +2350,14 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
         elementsCountAlong = self.getSampledElementsCountAlong()
         s = junction._segments.index(self)
-        e2 = (elementsCountAlong - 1) if junction._segmentsIn[s] else 0
-        n2 = (elementsCountAlong - 1) if junction._segmentsIn[s] else 1
+        e2 = -1 if junction._segmentsIn[s] else 0
+        n2 = -2 if junction._segmentsIn[s] else 1
 
-        # Create elements
+        # create elements
         if junction._core:
-            boxBoundaryNodeIds, boxBoundaryNodeToBoxId = junction._createBoxBoundaryNodeIdsList(s)
-            # create box elements
             junction._generateBoxElements(s, n2, mesh, elementtemplate, coordinates, self, generateData)
-            # create core transition elements
             junction._generateTransitionElements(s, n2, mesh, elementtemplate, coordinates, self, generateData,
-                elementsCountAround, boxBoundaryNodeIds, boxBoundaryNodeToBoxId)
+                elementsCountAround)
 
         # create regular rim elements
         elementsCountRimRegular = elementsCountRim - 1 if self._core else elementsCountRim
@@ -2302,7 +2382,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                             rimCoordinates = self.getRimCoordinates(n1, n2, n3)
                             nodeParameters.append(rimCoordinates if d3Defined else (
                                 rimCoordinates[0], rimCoordinates[1], rimCoordinates[2], None))
-                            nodeLayouts.append(None)
+                            nodeLayouts.append(self.getRimNodeLayout(n1, n2, n3, generateData))
                     for n1 in [e1, n1p]:
                         rimIndex = junction._segmentNodeToRimIndex[s][n1]
                         nids.append(junction._rimNodeIds[n3][rimIndex])
@@ -2967,9 +3047,9 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         """
         return generateData.getNodeLayout5Way()
 
-    def generateJunctionRimElements(self, junction, generateData):
+    def generateJunctionElements(self, junction, generateData):
         """
-        Generates rim elements for junction part of the segment after segment nodes and elements have been made.
+        Generates elements for junction part of the segment after adjacent segment nodes have been made.
         Overwrites base class due to differences in derivative directions for nodes on patch and the need to handle
         two elements at each corner with collapsed nodes. The two elements at each corner is replaced by a regular
         element using all 8 corners, resulting in four less elements compared to tube segment case.
@@ -4147,7 +4227,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                     # print('s =', s, 'n1 =', n1)
                     s_n2_params = []
                     for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
-                        s_n2_params.append(self._segments[s].getRimCoordinates(n1, n2, n3))
+                        s_n2_params.append(self._segments[s].getRimCoordinates(n1, n2, n3, transform=True))
                     segmentsParameterLists.append(s_n2_params)
                 rx[n3][rimIndex], rd1[n3][rimIndex], rd2[n3][rimIndex], rd3[n3][rimIndex] = \
                     self._sampleMidPoint(segmentsParameterLists)
@@ -4162,54 +4242,10 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                 for s, n1, n3 in segmentNodeList:
                     s_n2_params = []
                     for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
-                        s_n2_params.append(self._segments[s].getBoxCoordinates(n1, n2, n3))
+                        s_n2_params.append(self._segments[s].getBoxCoordinates(n1, n2, n3, transform=True))
                     segmentsParameterLists.append(s_n2_params)
                 bx[boxIndex], bd1[boxIndex], bd2[boxIndex], bd3[boxIndex] = \
                     self._sampleMidPoint(segmentsParameterLists)
-
-    def _createBoxBoundaryNodeIdsList(self, s):
-        """
-        Creates a list (in a circular format similar to other rim node id lists) of core box node ids that are
-        located at the boundary of the core. This list is used to easily stitch inner rim nodes with box nodes.
-        Used specifically for solid core at the junction.
-        :param s: Index for identifying segments.
-        :return: A list of box node ids stored in a circular format, and a lookup list that translates indexes used in
-        boxBoundaryNodeIds list to indexes that can be used in boxCoordinates list.
-        """
-        boxBoundaryNodeIds = []
-        boxBoundaryNodeToBoxId = []
-        elementsCountCoreBoxMajor = self._segments[s].getElementsCountCoreBoxMajor()
-        elementsCountCoreBoxMinor = self._segments[s].getElementsCountCoreBoxMinor()
-        transition_count = self._segments[s].getElementsCountAcrossTransition()
-        coreBoxMajorNodesCount = elementsCountCoreBoxMajor + 1
-        coreBoxMinorNodesCount = elementsCountCoreBoxMinor + 1
-
-        for n3 in range(coreBoxMajorNodesCount):
-            if n3 == 0 or n3 == coreBoxMajorNodesCount - 1:
-                ids = self._boxNodeIds[s][n3] if n3 == 0 else self._boxNodeIds[s][n3][::-1]
-                n1List = list(range(coreBoxMinorNodesCount)) if n3 == 0 else (
-                    list(range(coreBoxMinorNodesCount - 1, -1, -1)))
-                boxBoundaryNodeIds += [ids[c] for c in range(coreBoxMinorNodesCount)]
-                for n1 in n1List:
-                    boxBoundaryNodeToBoxId.append([n3, n1])
-            else:
-                for n1 in [-1, 0]:
-                    boxBoundaryNodeIds.append(self._boxNodeIds[s][n3][n1])
-                    boxBoundaryNodeToBoxId.append([n3, n1])
-
-        start = elementsCountCoreBoxMajor - 2
-        idx = elementsCountCoreBoxMinor + 2
-        for n in range(int(start), -1, -1):
-            boxBoundaryNodeIds.append(boxBoundaryNodeIds.pop(idx + 2 * n))
-            boxBoundaryNodeToBoxId.append(boxBoundaryNodeToBoxId.pop(idx + 2 * n))
-
-        nloop = elementsCountCoreBoxMinor // 2
-        for _ in range(nloop):
-            boxBoundaryNodeIds.insert(len(boxBoundaryNodeIds), boxBoundaryNodeIds.pop(0))
-            boxBoundaryNodeToBoxId.insert(len(boxBoundaryNodeToBoxId),
-                                              boxBoundaryNodeToBoxId.pop(0))
-
-        return boxBoundaryNodeIds, boxBoundaryNodeToBoxId
 
     def _getBoxCoordinates(self, n1):
         return (self._boxCoordinates[0][n1], self._boxCoordinates[1][n1],
@@ -4237,7 +4273,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         nodeLayout8Way = generateData.getNodeLayout8Way()
         nodeLayoutFlipD2 = generateData.getNodeLayoutFlipD2()
 
-        e2 = n2 if self._segmentsIn[s] else 0
+        e2 = -1 if self._segmentsIn[s] else 0
         for e1 in range(boxElementsCountAcrossMajor[s]):
             e1p = (e1 + 1)
             for e3 in range(boxElementsCountAcrossMinor):
@@ -4249,7 +4285,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                         nids.append(segment.getBoxNodeId(n1, n2, n3))
                         boxCoordinates = segment.getBoxCoordinates(n1, n2, n3)
                         nodeParameters.append(boxCoordinates)
-                        nodeLayouts.append(None)
+                        nodeLayouts.append(segment.getBoxNodeLayout(n1, n2, n3, generateData))
                     for n1 in [e1, e1p]:
                         boxIndex = self._segmentNodeToBoxIndex[s][n1][n3]
                         nids.append(self._boxNodeIds[s][n1][n3])
@@ -4282,12 +4318,12 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                 element.setNodesByIdentifier(eft, nids)
                 if scalefactors:
                     element.setScaleFactors(eft, scalefactors)
-                segment.setBoxElementId(e3, e2, e1, elementIdentifier)
+                segment.setBoxElementId(e1, e2, e3, elementIdentifier)
                 for annotationMeshGroup in annotationMeshGroups:
                     annotationMeshGroup.addElement(element)
 
     def _generateTransitionElements(self, s, n2, mesh, elementtemplate, coordinates, segment, generateData,
-                                    elementsCountAround, boxBoundaryNodeIds, boxBoundaryNodeToBoxId):
+                                    elementsCountAround):
         """
         Blackbox function for generating first row of core transition elements after box at a junction.
         """
@@ -4312,7 +4348,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         nodeLayoutFlipD2 = generateData.getNodeLayoutFlipD2()
         nodeLayoutTransition = generateData.getNodeLayoutTransition()
 
-        e2 = n2 if self._segmentsIn[s] else 0
+        e2 = -1 if self._segmentsIn[s] else 0
         for e1 in range(elementsCountAround):
             nids, nodeParameters, nodeLayouts = [], [], []
             n1p = (e1 + 1) % elementsCountAround
@@ -4322,18 +4358,15 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
 
             # outside of core box
             for n1 in [e1, n1p]:
-                nids.append(segment.getBoxBoundaryNodeIds(n1, n2))
-                n1c, n3c = segment.getBoxBoundaryNodeToBoxId(n1, n2)
+                n1c, n3c = segment.getBoxBoundaryIndexes(n1)
+                nids.append(segment.getBoxNodeId(n1c, n2, n3c))
                 nodeParameters.append(segment.getBoxCoordinates(n1c, n2, n3c))
-                nodeLayoutTransitionTriplePoint = (
-                    generateData.getNodeLayoutTransitionTriplePoint(oLocation))
-                nodeLayouts.append(nodeLayoutTransitionTriplePoint if n1 in triplePointIndexesList
-                                   else nodeLayoutTransition)
+                nodeLayouts.append(segment.getBoxNodeLayout(n1c, n2, n3c, generateData))
 
             for n1 in [e1, n1p]:
-                nid = boxBoundaryNodeIds[n1]
+                n1c, n3c = segment.getBoxBoundaryIndexes(n1)
+                nid = self._boxNodeIds[s][n1c][n3c]
                 nids.append(nid)
-                n1c, n3c = boxBoundaryNodeToBoxId[n1]
                 boxIndex = self._segmentNodeToBoxIndex[s][n1c][n3c]
                 nodeParameters.append(self._getBoxCoordinates(boxIndex))
                 segmentNodesCount = len(self._boxIndexToSegmentNodeList[boxIndex])
@@ -4376,7 +4409,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
             for n1 in [e1, n1p]:
                 nids.append(segment.getRimNodeId(n1, n2, 0))
                 nodeParameters.append(segment.getRimCoordinates(n1, n2, 0))
-                nodeLayouts.append(None)
+                nodeLayouts.append(segment.getRimNodeLayout(n1, n2, 0, generateData))
             for n1 in [e1, n1p]:
                 rimIndex = self._segmentNodeToRimIndex[s][n1]
                 nids.append(self._rimNodeIds[0][rimIndex])
@@ -4478,14 +4511,14 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                                      self._boxCoordinates[2], self._boxCoordinates[3])
                 coreBoxMajorNodesCount = self._segments[s].getCoreBoxMajorNodesCount()
                 coreBoxMinorNodesCount = self._segments[s].getCoreBoxMinorNodesCount()
-                for n3 in range(coreBoxMajorNodesCount):
-                    for n1 in range(coreBoxMinorNodesCount):
-                        boxIndex = self._segmentNodeToBoxIndex[s][n3][n1]
+                for n1 in range(coreBoxMajorNodesCount):
+                    for n3 in range(coreBoxMinorNodesCount):
+                        boxIndex = self._segmentNodeToBoxIndex[s][n1][n3]
                         segmentNodeList = self._boxIndexToSegmentNodeList[boxIndex]
                         nodeIdentifiersCheck = []
                         for segmentNodes in segmentNodeList:
-                            sp, n3p, n1p = segmentNodes
-                            nodeIdentifiersCheck.append(self._boxNodeIds[sp][n3p][n1p])
+                            sp, n1p, n3p = segmentNodes
+                            nodeIdentifiersCheck.append(self._boxNodeIds[sp][n1p][n3p])
                         if nodeIdentifiersCheck.count(None) == len(nodeIdentifiersCheck):
                             nodeIdentifier = generateData.nextNodeIdentifier()
                             node = nodes.createNode(nodeIdentifier, nodetemplate)
@@ -4498,7 +4531,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                         else:
                             nodeIdentifier = next(id for id in nodeIdentifiersCheck if id is not None)
 
-                        self._boxNodeIds[s][n3][n1] = nodeIdentifier
+                        self._boxNodeIds[s][n1][n3] = nodeIdentifier
 
             # create rim nodes (including core transition nodes)
             for n3 in range(nodesCountRim):
@@ -4522,7 +4555,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, rd3[rimIndex])
                     layerNodeIds[rimIndex] = nodeIdentifier
 
-            segment.generateJunctionRimElements(self, generateData)
+            segment.generateJunctionElements(self, generateData)
 
 
 class TubeNetworkMeshBuilder(NetworkMeshBuilder):

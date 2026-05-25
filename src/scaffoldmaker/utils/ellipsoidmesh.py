@@ -791,6 +791,123 @@ class EllipsoidMesh:
                 return True
         return False
 
+    def get_node_layout(self, n1, n2, n3, generate_data):
+        """
+        Get node layout to use at a node location in the ellipsoid. Full 3-D only.
+        :param n1: Index along axis 1.
+        :param n2: Index along axis 2.
+        :param n3: Index along axis 3.
+        :return: Node layout or None.
+        """
+        node_layout_manager = generate_data.getHermiteNodeLayoutManager()
+        rim_count = self._rim_count
+        rn1 = self._element_counts[0] - n1
+        rn2 = self._element_counts[1] - n2
+        rn3 = self._element_counts[2] - n3
+        # bottom transition: 3-way along triple diagonals, permuted on double diagonals
+        if n3 < rim_count:
+            if n1 == n3:
+                if n1 == n2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(1)
+                if n1 == rn2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(3)
+                if (n2 > rim_count) and (rn2 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            elif rn1 == n3:
+                if rn1 == n2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(0)
+                if rn1 == rn2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(2)
+                if (n2 > rim_count) and (rn2 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            elif ((n2 == n3) or (rn2 == n3)) and (n1 > rim_count) and (rn1 > rim_count):
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            return None
+        # top transition: 3-way along triple diagonals, permuted on double diagonals
+        if rn3 < rim_count:
+            if n1 == rn3:
+                if n1 == n2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(0)
+                if n1 == rn2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(2)
+                if (n2 > rim_count) and (rn2 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            elif rn1 == rn3:
+                if rn1 == n2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(1)
+                if rn1 == rn2:
+                    return node_layout_manager.getNodeLayout3WayPoints12(3)
+                if (n2 > rim_count) and (rn2 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            elif ((n2 == rn3) or (rn2 == rn3)) and (n1 > rim_count) and (rn1 > rim_count):
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            return None
+        # nodes on bottom of n3 box are 4-way on corners, 3-way on edges, permuted in between
+        if n3 == rim_count:
+            if n2 == rim_count:
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(0)
+                if rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(1)
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayout3WayPoints23(0)
+            elif rn2 == rim_count:
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(2)
+                if rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(3)
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayout3WayPoints23(1)
+            elif (n2 > rim_count) and (rn2 > rim_count):
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout3WayPoints13(0)
+                if rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout3WayPoints13(1)
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            return None
+        # nodes on top of n3 box are 4-way on corners, 3-way on edges, permuted in between
+        if rn3 == rim_count:
+            if n2 == rim_count:
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(4)
+                if rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(5)
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayout3WayPoints23(2)
+            elif rn2 == rim_count:
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(6)
+                elif rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout4WayPoints(7)
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayout3WayPoints23(3)
+            elif (n2 > rim_count) and (rn2 > rim_count):
+                if n1 == rim_count:
+                    return node_layout_manager.getNodeLayout3WayPoints13(2)
+                if rn1 == rim_count:
+                    return node_layout_manager.getNodeLayout3WayPoints13(3)
+                # no need for node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            return None
+        # middle between +/- rim count, 3-way points on corners, permuted on faces
+        if n2 == rim_count:
+            if n1 == rim_count:
+                return node_layout_manager.getNodeLayout3WayPoints12(0)
+            if rn1 == rim_count:
+                return node_layout_manager.getNodeLayout3WayPoints12(1)
+            if (n1 > rim_count) and (rn1 > rim_count):
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+        elif rn2 == rim_count:
+            if n1 == rim_count:
+                return node_layout_manager.getNodeLayout3WayPoints12(2)
+            if rn1 == rim_count:
+                return node_layout_manager.getNodeLayout3WayPoints12(3)
+            if (n1 > rim_count) and (rn1 > rim_count):
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+        elif ((n1 == rim_count) or (rn1 == rim_count)) and (n2 > rim_count) and (rn2 > rim_count):
+            return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+        return None
+
     def _add_node_layouts_3d(self, generate_data):
         """
         Fill map from node identifier to special node layout. Does not modify node layout mappings that already exist.
@@ -801,10 +918,10 @@ class EllipsoidMesh:
         self._added_node_layouts = True
         node_layout_manager = generate_data.getHermiteNodeLayoutManager()
         node_layout_permuted = node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
-        node_layout_3way12 = node_layout_manager.getNodeLayout3WayPoints12()
-        node_layout_3way13 = node_layout_manager.getNodeLayout3WayPoints13()
-        node_layout_3way23 = node_layout_manager.getNodeLayout3WayPoints23()
-        node_layout_4way = node_layout_manager.getNodeLayout4WayPoints()
+        node_layout_3way12 = node_layout_manager.getNodeLayout3WayPoints12List()
+        node_layout_3way13 = node_layout_manager.getNodeLayout3WayPoints13List()
+        node_layout_3way23 = node_layout_manager.getNodeLayout3WayPoints23List()
+        node_layout_4way = node_layout_manager.getNodeLayout4WayPointsList()
         upper_trans_counts = [self._element_counts[i] - self._rim_count for i in range(3)]
         # bottom and top transition side face nodes are fully permuted
         for nt in range(1, self._rim_count + 1):
@@ -900,29 +1017,38 @@ class EllipsoidMesh:
             generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[2])
             nid = self._nids[self._element_counts[2] - nt][self._element_counts[1] - nt][self._element_counts[0] - nt]
             generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[3])
+        # for n3 in range(self._element_counts[2] + 1):
+        #     for n2 in range(self._element_counts[1] + 1):
+        #         for n1 in range(self._element_counts[0] + 1):
+        #             new_node_layout = self.get_node_layout(n1, n2, n3, generate_data)
+        #             nid = self._nids[n3][n2][n1]
+        #             if nid:
+        #                 old_node_layout = generate_data.getNodeLayout(nid)
+        #                 assert new_node_layout == old_node_layout
+        #             else:
+        #                 if new_node_layout is not None:
+        #                     print("node indexes", n1, n2, n3)
+        #                 assert new_node_layout is None, str(n1) + ", " + str(n2) + ", " + str(n3)
+
 
     def get_node_identifier(self, n1, n2, n3):
         """
-        :param n1: Index of node in 1-direction.
-        :param n2: Index of node in 2-direction.
-        :param n3: Index of node in 3-direction.
-        :return: Node identifier at location.
+        Get node identifier for a node in the ellipsoid.
+        :param n1: Index along axis 1.
+        :param n2: Index along axis 2.
+        :param n3: Index along axis 3.
+        :return: Node identifier or None.
         """
-        assert 0 <= n1 <= self._element_counts[0]
-        assert 0 <= n2 <= self._element_counts[1]
-        assert 0 <= n3 <= self._element_counts[2]
         return self._nids[n3][n2][n1]
 
     def get_node_parameters(self, n1, n2, n3):
         """
-        :param n1: Index of node in 1-direction.
-        :param n2: Index of node in 2-direction.
-        :param n3: Index of node in 3-direction.
-        :return: Parameters list [[x][d1][d2][d3 or None]]
+        Get parameters for a node in the ellipsoid.
+        :param n1: Index along axis 1.
+        :param n2: Index along axis 2.
+        :param n3: Index along axis 3.
+        :return: x, d1, d2, d3, or None if not a valid node location.
         """
-        assert 0 <= n1 <= self._element_counts[0]
-        assert 0 <= n2 <= self._element_counts[1]
-        assert 0 <= n3 <= self._element_counts[2]
         return self._nx[n3][n2][n1]
 
     def prescribe_node_layout(self, n1, n2, n3, node_layout):
@@ -1039,10 +1165,20 @@ class EllipsoidMesh:
                     else:
                         self.prescribe_node_layout_if_new(n1, n2, n3, node_layout)
 
-    def _get_rim_indexes12(self, ri):
+    def set_box_element_identifier(self, e1, e2, e3, element_identifier):
+        """
+        Set element node identifier in core box.
+        :param e1: Index along axis 1. Must be a valid box e1.
+        :param e2: Index along axis 2. Must be a valid box e2.
+        :param e3: Index along axis 3. Must be a valid box e3.
+        :param element_identifier: Element identifier to set.
+        """
+        self._eids[e3][e2][e1] = element_identifier
+
+    def _get_rim_node_indexes12_list(self, ri):
         """
         Get list of (n1, n2) indexes around a ring.
-        :param ri: ring index where 0 is first layer outside core box.
+        :param ri: Rim index where 0 is first layer outside core box.
         :return: List of (n1, n2) for each point around the 12 ring.
         """
         rim_count = self._rim_count
@@ -1065,19 +1201,149 @@ class EllipsoidMesh:
             [(n1_upper, rim_count + i + 1) for i in range(box_counts[1] - 1)])
         return n1_n2_list
 
+    def _get_rim_node_indexes123(self, n3_box, ri, ai):
+        """
+        Get indexes of point around axis 3 on rim layer.
+        :param n3_box: Index along axis 3. Must be a valid box n3.
+        :param ri: Rim index where 0 is first layer outside core box.
+        :param ai: Index around axis 3.
+        :return: n1, n2, n3
+        """
+        rim_count = self._rim_count
+        assert rim_count <= n3_box <= (self._element_counts[2] - rim_count)
+        assert 0 <= ri < rim_count
+        assert ai >= 0
+        rp = ri + 1
+        half_counts = [count // 2 for count in self._element_counts]
+        box_counts = [half_counts[i] - rim_count for i in range(3)]
+        n3 = n3_box
+        if n3 == rim_count:
+            n3 -= rp
+        elif n3 == (self._element_counts[2] - rim_count):
+            n3 += rp
+
+        # start half way along first straight
+        a = ai
+        a_limit = box_counts[1]
+        if a <= a_limit:
+            n1 = self._element_counts[0] - rim_count + rp
+            n2 = half_counts[1] + a
+            if a == a_limit:
+                n2 += rp
+            return n1, n2, n3
+
+        a -= a_limit
+        a_limit = 2 * box_counts[0]
+        if a <= a_limit:
+            n1 = self._element_counts[0] - rim_count - a
+            if a == a_limit:
+                n1 -= rp
+            n2 = self._element_counts[1] - rim_count + rp
+            return n1, n2, n3
+
+        a -= a_limit
+        a_limit = 2 * box_counts[1]
+        if a <= a_limit:
+            n1 = rim_count - rp
+            n2 = self._element_counts[1] - rim_count - a
+            if a == a_limit:
+                n2 -= rp
+            return n1, n2, n3
+
+        a -= a_limit
+        a_limit = 2 * box_counts[0]
+        if a <= a_limit:
+            n1 = rim_count + a
+            if a == a_limit:
+                n1 += rp
+            n2 = rim_count - rp
+            return n1, n2, n3
+
+        # remainder of first straight
+        a -= a_limit
+        a_limit = box_counts[1]
+        assert a < a_limit
+        n1 = self._element_counts[0] - rim_count + rp
+        n2 = rim_count + a
+        return n1, n2, n3
+
     def get_rim_node_identifiers12(self, n3, ri):
         """
         Get single ring of rim node node identifiers.
         :param n3: Layer to set ring on, must not be in n3 rim layer.
-        :param ri: ring index where 0 is first layer outside core box.
+        :param ri: Rim index where 0 is first layer outside core box.
         :return: rnids[around count]
         """
         assert self._rim_count <= n3 <= (self._element_counts[2] - n3)
         rnids = []
-        n1_n2_list = self._get_rim_indexes12(ri)
+        n1_n2_list = self._get_rim_node_indexes12_list(ri)
         for n1, n2 in n1_n2_list:
             rnids.append(self._nids[n3][n2][n1])
         return rnids
+
+    def get_rim_parameters(self, n3_box, ri, ai, transform=False):
+        """
+        Get rim parameters from polar indexes around and radially from axis3.
+        :param n3_box: Index along axis 3. Must be a valid box n3.
+        :param ri: Rim index where 0 is first transition, or first shell row if no core
+        :param ai: Index around rim starting at +axis1
+        :param transform: If True, transform into tube rim orientation (from dome).
+        :return: x, d1, d2, d3
+        """
+        n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
+        x, d1, d2, d3 = self._nx[n3][n2][n1]
+        rn3 =  - n3
+        if transform and ((n3 < self._rim_count) or (n3 > (self._element_counts[2] - self._rim_count))):
+            # only the last rim row needs transforming into tube rim orientation
+            rn1 = self._element_counts[0] - n1
+            rn2 = self._element_counts[1] - n2
+            td1 = [0.0, 0.0, 0.0]
+            td2 = [0.0, 0.0, 0.0]
+            if n1 < self._rim_count:
+                td1 = [-d for d in d2]
+                td2 = d1
+            elif n1 > (self._element_counts[0] - self._rim_count):
+                td1 = d2
+                td2 = [-d for d in d1]
+            if n3 < self._rim_count:
+                if n2 < self._rim_count:
+                    td1 = sub(td1, d1)
+                    td2 = sub(td2, d2)
+                elif n2 > (self._element_counts[1] - self._rim_count):
+                    td1 = add(td1, d1)
+                    td2 = add(td2, d2)
+            else:  # if (3 > (self._element_counts[2] - self._rim_count)
+                if n2 < self._rim_count:
+                    td1 = add(td1, d1)
+                    td2 = add(td2, d2)
+                elif n2 > (self._element_counts[1] - self._rim_count):
+                    td1 = sub(td1, d1)
+                    td2 = sub(td2, d2)
+            d1, d2 = td1, td2
+        return x, d1, d2, d3
+
+    def get_rim_node_identifier(self, n3_box, ri, ai):
+        """
+        Get rim node identifier from polar indexes around and radially from axis3.
+        :param n3_box: Index along axis 3. Must be a valid box n3.
+        :param ri: Rim index where 0 is first transition, or first shell row if no core
+        :param ai: Index around rim starting at +axis1
+        :return: Node identifier, or None if not set.
+        """
+        n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
+        return self._nids[n3][n2][n1]
+
+    def get_rim_node_layout(self, generate_data, n3_box, ri, ai):
+        """
+        Get rim node identifier from polar indexes around and radially from axis3.
+        :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
+        :param n3_box: Index along axis 3. Must be a valid box n3.
+        :param ri: Rim index where 0 is first transition, or first shell row if no core
+        :param ai: Index around rim starting at +axis1
+        :return: Node identifier, or None if not set.
+        """
+        n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
+        return self.get_node_layout(n1, n2, n3, generate_data)
 
     def set_rim_node_parameters12(self, generate_data, n3, ri, rparameters, rnids, node_layout=None):
         """
@@ -1097,19 +1363,93 @@ class EllipsoidMesh:
         assert len(rparameters) == around_count
         assert all(len(rd) == 4 for rd in rparameters)
         assert not rnids or (len(rnids) == around_count)
-        n1_n2_list = self._get_rim_indexes12(ri)
-        for a, n1_n2 in enumerate(n1_n2_list):
+        n1_n2_list = self._get_rim_node_indexes12_list(ri)
+        for ai, n1_n2 in enumerate(n1_n2_list):
             n1, n2 = n1_n2
             for i in range(4):
-                self._nx[n3][n2][n1][i] = copy.copy(rparameters[a][i])
-            nid = rnids[a] if rnids else None
+                self._nx[n3][n2][n1][i] = copy.copy(rparameters[ai][i])
+            nid = rnids[ai] if rnids else None
             if nid:
-                self._nids[n3][n2][n1] = rnids[a]
+                self._nids[n3][n2][n1] = rnids[ai]
             if node_layout:
                 if nid:
-                    generate_data.setNodeLayoutIfNew(rnids[a], node_layout)
+                    generate_data.setNodeLayoutIfNew(rnids[ai], node_layout)
                 else:
                     self.prescribe_node_layout_if_new(n1, n2, n3, node_layout)
+
+    def _get_rim_element_indexes12(self, e3, ri, ai):
+        """
+        Get indexes of an element around axis 3 on rim layer.
+        :param e3: Index along axis 3. Must be a valid box e3.
+        :param ri: Rim index where 0 is first layer outside core box i.e. transition layer.
+        :param ai: Index around axis 3, starting from +axis1 on +axis2 side.
+        :return: e1, e2
+        """
+        rim_count = self._rim_count
+        assert rim_count <= e3 < (self._element_counts[2] - rim_count)
+        assert 0 <= ri < rim_count
+        assert ai >= 0
+        half_counts = [count // 2 for count in self._element_counts]
+        box_counts = [half_counts[i] - rim_count for i in range(3)]
+
+        # start half way along first straight
+        a = ai
+        a_limit = box_counts[1]
+        if a < a_limit:
+            e1 = self._element_counts[0] - rim_count + ri
+            e2 = half_counts[1] + a
+            return e1, e2
+
+        a -= a_limit
+        a_limit = 2 * box_counts[0]
+        if a < a_limit:
+            e1 = self._element_counts[0] - rim_count - a - 1
+            e2 = self._element_counts[1] - rim_count + ri
+            return e1, e2
+
+        a -= a_limit
+        a_limit = 2 * box_counts[1]
+        if a < a_limit:
+            e1 = rim_count - ri - 1
+            e2 = self._element_counts[1] - rim_count - a - 1
+            return e1, e2
+
+        a -= a_limit
+        a_limit = 2 * box_counts[0]
+        if a < a_limit:
+            e1 = rim_count + a
+            e2 = rim_count - ri - 1
+            return e1, e2
+
+        # remainder of first straight
+        a -= a_limit
+        a_limit = box_counts[1]
+        assert a < a_limit
+        e1 = self._element_counts[0] - rim_count + ri
+        e2 = rim_count + a
+        return e1, e2
+
+    def get_rim_element_identifier(self, e3, ri, ai):
+        """
+        Get rim element identifier from polar indexes around and radially from axis3.
+        :param e3: Index along axis 3. Must be a valid box e3.
+        :param ri: Rim index where 0 is first transition, or first shell row if no core
+        :param ai: Index around rim starting at +axis1
+        :return: Element identifier, or None if not set.
+        """
+        e1, e2 = self._get_rim_element_indexes12(e3, ri, ai)
+        return self._eids[e3][e2][e1]
+
+    def set_rim_element_identifier(self, e3, ri, ai, element_identifier):
+        """
+        Set element node identifier from polar indexes around and radially from axis3.
+        :param e3: Index along axis 3. Must be a valid box e3.
+        :param ri: Rim index where 0 is first transition, or first shell row if no core
+        :param ai: Index around rim starting at +axis1
+        :param element_identifier: Element identifier to set.
+        """
+        e1, e2 = self._get_rim_element_indexes12(e3, ri, ai)
+        self._eids[e3][e2][e1] = element_identifier
 
     def generate_nodes(self, generate_data, n3_start=0, n3_limit=0):
         """
@@ -1192,7 +1532,7 @@ class EllipsoidMesh:
             if nid:
                 generate_data.setNodeLayout(nid, node_layout)
             else:
-                self._prescribed_node_layouts.append(node_layout)  # might be created later
+                self._prescribed_node_layouts.append((n1, n2, n3, node_layout))  # might be created later
 
         mesh = generate_data.getMesh()
         half_counts = [count // 2 for count in self._element_counts]
@@ -1742,6 +2082,34 @@ class EllipsoidMesh:
         """
         self.generate_nodes(generate_data)
         self.generate_elements(generate_data)
+
+    def add_core_elements_to_mesh_group(self, mesh_group):
+        master_mesh = mesh_group.getMasterMesh()
+        for e3 in range(self._shell_count, self._element_counts[2] - self._shell_count):
+            eids_layer = self._eids[e3]
+            for e2 in range(self._shell_count, self._element_counts[1] - self._shell_count):
+                eids_row = eids_layer[e2]
+                for e1 in range(self._shell_count, self._element_counts[0] - self._shell_count):
+                    eid = eids_row[e1]
+                    if eid:
+                        element = master_mesh.findElementByIdentifier(eid)
+                        mesh_group.addElement(element)
+
+    def add_shell_elements_to_mesh_group(self, mesh_group):
+        master_mesh = mesh_group.getMasterMesh()
+        for e3 in range(self._element_counts[2]):
+            e3_shell = (e3 < self._shell_count) or (e3 >= (self._element_counts[2] - self._shell_count))
+            eids_layer = self._eids[e3]
+            for e2 in range(self._element_counts[1]):
+                e2_shell = (e2 < self._shell_count) or (e2 >= (self._element_counts[1] - self._shell_count))
+                eids_row = eids_layer[e2]
+                for e1 in range(self._element_counts[0]):
+                    e1_shell = (e1 < self._shell_count) or (e1 >= (self._element_counts[0] - self._shell_count))
+                    if e3_shell or e2_shell or e1_shell:
+                        eid = eids_row[e1]
+                        if eid:
+                            element = master_mesh.findElementByIdentifier(eid)
+                            mesh_group.addElement(element)
 
     def add_axis1_elements_to_mesh_group(self, side, mesh_group):
         """
