@@ -623,7 +623,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(volume, 0.03138195249662126, delta=X_TOL)
             self.assertAlmostEqual(surfaceArea, 0.6907451706120391, delta=X_TOL)
 
-    def test_3d_tube_network_bone_core_12_around_2along(self):
+    def test_3d_tube_network_bone_core_12around_6along(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
         the 4-way cap layer of the domes join the junction.
@@ -631,7 +631,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
         settings["Number of elements around"] = 12
-        settings["Target element density along longest segment"] = 2.0
+        settings["Target element density along longest segment"] = 4.0
         settings["Core"] = True
 
         context = Context("Test")
@@ -646,13 +646,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         fieldmodule = region.getFieldmodule()
         mesh3d = fieldmodule.findMeshByDimension(3)
-        self.assertEqual(160, mesh3d.getSize())
+        self.assertEqual(320, mesh3d.getSize())
         mesh2d = fieldmodule.findMeshByDimension(2)
-        self.assertEqual(528, mesh2d.getSize())
+        self.assertEqual(1024, mesh2d.getSize())
         mesh1d = fieldmodule.findMeshByDimension(1)
-        self.assertEqual(590, mesh1d.getSize())
+        self.assertEqual(1110, mesh1d.getSize())
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        self.assertEqual(223, nodes.getSize())
+        self.assertEqual(407, nodes.getSize())
         coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
         self.assertTrue(coordinates.isValid())
 
@@ -660,7 +660,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
         assertAlmostEqualList(self, minimums, [-0.6593730298094371, -0.8660254037844386, -0.5], X_TOL)
-        assertAlmostEqualList(self, maximums, [2.0, 0.8660254037844386, 0.5], X_TOL)
+        assertAlmostEqualList(self, maximums, [4.659373029509067, 0.8660254037844387, 0.5], X_TOL)
 
         with ChangeManager(fieldmodule):
             one = fieldmodule.createFieldConstant(1.0)
@@ -678,12 +678,12 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            self.assertAlmostEqual(volume, 2.3478263069338516, delta=X_TOL)
-            self.assertAlmostEqual(surfaceArea, 10.716016395640315, delta=X_TOL)
+            self.assertAlmostEqual(volume, 4.695209670963278, delta=X_TOL)
+            self.assertAlmostEqual(surfaceArea, 19.860847455163974, delta=X_TOL)
 
         expectedSizes3d = {
-            "core": (96, 1.48154842455369),
-            "shell": (64, 0.8662778823801764)
+            "core": (192, 2.96275484752132),
+            "shell": (128, 1.7324548234418964)
             }
         for name in expectedSizes3d:
             annotationGroup = findAnnotationGroupByName(annotationGroups, name)
@@ -697,7 +697,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
 
-    def test_3d_tube_network_bone_core_8around_4along(self):
+    def test_3d_tube_network_bone_core_8around_8along(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
         regular layers of the domes join the junction.
@@ -705,7 +705,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
         self.assertEqual(8, settings["Number of elements around"])
-        self.assertEqual(4.0, settings["Target element density along longest segment"])
+        self.assertEqual(8.0, settings["Target element density along longest segment"])
         settings["Core"] = True
 
         context = Context("Test")
@@ -720,13 +720,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         fieldmodule = region.getFieldmodule()
         mesh3d = fieldmodule.findMeshByDimension(3)
-        self.assertEqual(176, mesh3d.getSize())
+        self.assertEqual(352, mesh3d.getSize())
         mesh2d = fieldmodule.findMeshByDimension(2)
-        self.assertEqual(574, mesh2d.getSize())
+        self.assertEqual(1128, mesh2d.getSize())
         mesh1d = fieldmodule.findMeshByDimension(1)
-        self.assertEqual(635, mesh1d.getSize())
+        self.assertEqual(1226, mesh1d.getSize())
         nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        self.assertEqual(238, nodes.getSize())
+        self.assertEqual(451, nodes.getSize())
         coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
         self.assertTrue(coordinates.isValid())
 
@@ -734,7 +734,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
         assertAlmostEqualList(self, minimums, [-0.6612836030569434, -0.8660254037844386, -0.5], X_TOL)
-        assertAlmostEqualList(self, maximums, [2.0, 0.8660254037844386, 0.5], X_TOL)
+        assertAlmostEqualList(self, maximums, [4.661283603014371, 0.8660254037844387, 0.5], X_TOL)
 
         with ChangeManager(fieldmodule):
             one = fieldmodule.createFieldConstant(1.0)
@@ -752,12 +752,12 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            self.assertAlmostEqual(volume, 2.3319810000169765, delta=X_TOL)
-            self.assertAlmostEqual(surfaceArea, 10.712127236288566, delta=X_TOL)
+            self.assertAlmostEqual(volume, 4.663676677455009, delta=X_TOL)
+            self.assertAlmostEqual(surfaceArea, 19.854775869185307, delta=X_TOL)
 
         expectedSizes3d = {
-            "core": (104, 1.4655710455664104),
-            "shell": (72, 0.8664099544505293)
+            "core": (208, 2.930791371992136),
+            "shell": (144, 1.7328853054628615)
             }
         for name in expectedSizes3d:
             annotationGroup = findAnnotationGroupByName(annotationGroups, name)

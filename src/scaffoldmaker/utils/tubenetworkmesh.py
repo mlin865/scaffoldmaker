@@ -942,13 +942,16 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             else:
                 self._dome_ellipsoid[dome_index].merge_octant_plus3_quadrant(octant, l)
 
-    def _transfer_tube_data_to_dome(self, generate_data, dome_index):
+    def _transfer_tube_data_to_dome(self, generate_data, dome_index, transfer_nodes=False):
         """
         Transfer coordinates and optionally nodes from tube row (0 for dome_index 1, -1 for dome_index 1).
         Nodes are only expected and transferred for dome_index == 1.
         :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
         :param dome_index: 0 for start, 1 for end dome.
+        :param transfer_nodes: For dome_index 1 only, transfer tube nodes to dome. Don't do if dome is directly
+        onto junction.
         """
+        assert (not transfer_nodes) or (dome_index == 1)
         ellipsoid = self._dome_ellipsoid[dome_index]
         # the tube row is always equivalent to the middle row in direction 3 in the ellipsoid
         en3 = ellipsoid.get_element_counts()[2] // 2
@@ -960,16 +963,16 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             box_count1 = self._elementsCountCoreBoxMajor
             box_count2 = self._elementsCountCoreBoxMinor
             bparameters = []
-            bnids = [] if dome1 else None
+            bnids = [] if transfer_nodes else None
             for i2 in range(box_count2 + 1):
                 bparameters_row = []
                 bnids_row = []
                 for i1 in range(box_count1, -1, -1):
                     bparameters_row.append([self._boxCoordinates[i][n2][i1][i2] for i in range(4)])
-                    if dome1:
+                    if transfer_nodes:
                         bnids_row.append(self._boxNodeIds[n2][i1][i2])
                 bparameters.append(bparameters_row)
-                if dome1:
+                if transfer_nodes:
                     bnids.append(bnids_row)
             # prescribe node layouts for 3-way corner points so not reset below
             transition_node_layouts = (
@@ -987,9 +990,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         transition_node_layouts):
                     ellipsoid.prescribe_node_layout(en1, en2, en3, node_layout)
             else:  # dome1
-                transition_bnids = (bnids[0][0], bnids[0][-1], bnids[-1][0], bnids[-1][-1])
-                for bnid, node_layout in zip(transition_bnids, transition_node_layouts):
-                    generate_data.setNodeLayout(bnid, node_layout)
+                if transfer_nodes:
+                    transition_bnids = (bnids[0][0], bnids[0][-1], bnids[-1][0], bnids[-1][-1])
+                    for bnid, node_layout in zip(transition_bnids, transition_node_layouts):
+                        generate_data.setNodeLayout(bnid, node_layout)
             node_layout = generate_data.getNodeLayoutTubeDomeBoundary()
             ellipsoid.set_box_node_parameters12(generate_data, en3, bparameters, bnids, node_layout)
         # rim
@@ -1001,7 +1005,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             rparameters = []
             for a in range(self._elementsCountAround):
                 rparameters.append([rc[i][n2][i3][a] for i in range(4)])
-            rnids = self._rimNodeIds[n2][ri] if dome1 else None
+            rnids = self._rimNodeIds[n2][ri] if transfer_nodes else None
             ellipsoid.set_rim_node_parameters12(generate_data, en3, ri, rparameters, rnids)
 
     def _transfer_dome_nodes_to_tube(self, dome_index):
@@ -1010,7 +1014,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         Nodes are only expected and transferred for dome_index == 1.
         :param dome_index: 0 for start, 1 for end dome. Only start may be used.
         """
-        assert dome_index == 0
         ellipsoid = self._dome_ellipsoid[dome_index]
         # the tube row is always equivalent to the middle row in direction 3 in the ellipsoid
         en3 = ellipsoid.get_element_counts()[2] // 2
@@ -2107,18 +2110,24 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         # create nodes
         if self._dome_ellipsoid[0]:
             self._transfer_tube_data_to_dome(generateData, 0)
-            n3_limit = 0
-            if (elementsCountAlong == 0) and endSkipCount:
-                # don't build last row beside junction
-                n3_limit = self._dome_ellipsoid[0].get_element_counts()[2] // 2
+            n3_start = 0
+            n3_limit_full = self._dome_ellipsoid[0].get_element_counts()[2] // 2 + 1
+            n3_limit = n3_limit_full
+            if elementsCountAlong == 0:
+                if n2Only is not None:
+                    n3_limit -= 1
+                    n3_start = n3_limit - 1
+                elif endSkipCount:
+                    n3_limit -= 1  # don't build last row beside junction
             self._dome_ellipsoid[0].generate_nodes(generateData, n3_limit=n3_limit)
-            if n3_limit == 0:
+            if n3_limit == n3_limit_full:
                 self._transfer_dome_nodes_to_tube(0)
 
         nodes = generateData.getNodes()
         isLinearThroughShell = generateData.isLinearThroughShell()
         nodetemplate = generateData.getNodetemplate()
-        for n2 in range(elementsCountAlong + 1) if (n2Only is None) else [n2Only]:
+        for n2 in range(elementsCountAlong + 1) if (n2Only is None) else (
+                [n2Only] if (0 <= n2Only <= elementsCountAlong) else []):
             if (n2 < startSkipCount) or (n2 > elementsCountAlong - endSkipCount):
                 if self._core:
                     self._boxNodeIds[n2] = None
@@ -2207,8 +2216,20 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 self._rimNodeIds[n2].append(ringNodeIds)
 
         if self._dome_ellipsoid[1]:
-            self._transfer_tube_data_to_dome(generateData, 1)
-            self._dome_ellipsoid[1].generate_nodes(generateData)
+            transfer_nodes = (elementsCountAlong > 0) or (startSkipCount == 0)
+            self._transfer_tube_data_to_dome(generateData, 1, transfer_nodes)
+            n3_start_full = self._dome_ellipsoid[1].get_element_counts()[2] // 2
+            n3_start = n3_start_full
+            n3_limit = 0
+            if elementsCountAlong == 0:
+                if n2Only is not None:
+                    n3_start += n2Only
+                    n3_limit = n3_start + 1
+                elif startSkipCount:
+                    n3_start += 1 # don't build first row beside junction
+            self._dome_ellipsoid[1].generate_nodes(generateData, n3_start, n3_limit)
+            if n3_start == n3_start_full:
+                self._transfer_dome_nodes_to_tube(1)
 
         if n2Only is not None:
             return
@@ -2221,10 +2242,9 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         if self._dome_ellipsoid[0]:
             segment_groups = generateData.getAnnotationZincGroups(self._annotationTerms)
             self._dome_ellipsoid[0].set_octant_group_lists([segment_groups] * 8)
-            e3_limit = 0
+            e3_limit = e3_limit = self._dome_ellipsoid[0].get_element_counts()[2] // 2
             if (elementsCountAlong == 0) and endSkipCount:
-                # don't build last row beside junction
-                e3_limit = self._dome_ellipsoid[0].get_element_counts()[2] // 2 - 1
+                e3_limit -= 1  # don't build last row beside junction
             self._dome_ellipsoid[0].generate_elements(generateData, e3_limit=e3_limit)
 
         for e2 in range(startSkipCount, elementsCountAlong - endSkipCount):
@@ -2330,7 +2350,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         if self._dome_ellipsoid[1]:
             segment_groups = generateData.getAnnotationZincGroups(self._annotationTerms)
             self._dome_ellipsoid[1].set_octant_group_lists([segment_groups] * 8)
-            self._dome_ellipsoid[1].generate_elements(generateData)
+            e3_start = self._dome_ellipsoid[1].get_element_counts()[2] // 2
+            if (elementsCountAlong == 0) and startSkipCount:
+                e3_start += 1  # don't build first row beside junction
+            self._dome_ellipsoid[1].generate_elements(generateData, e3_start=e3_start)
 
     def generateJunctionElements(self, junction, generateData):
         """

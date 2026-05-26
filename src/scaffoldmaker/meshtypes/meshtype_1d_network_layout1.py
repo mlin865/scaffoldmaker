@@ -25,7 +25,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
     parameterSetStructureStrings = {
         "Default": "1-2",
         "Bifurcation": "1-2.1,2.2-3,2.3-4",
-        "Bone": "(1-3.2,(2-3.3,3.1-4-5", # "(1-3.2,(2-3.3,3.1-4-5-6-7.1,7.2-8),7.3-9)",
+        "Bone": "(1-3.2,(2-3.3,3.1-4-5-6-7.1,7.2-8),7.3-9)",
         "Converging bifurcation": "1-3.1,2-3.2,3.3-4",
         "Loop": "1-2-3-4-5-6-7-8-1",
         "Snake": "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33",
@@ -290,7 +290,7 @@ class MeshType_1d_network_layout1(Scaffold_base):
         d1 = [shaft_element_length, 0.0, 0.0]
         d2 = [0.0, radius, 0.0]
         d3 = [0.0, 0.0, radius]
-        for n in range((shaft_element_count // 2) + 1):
+        for n in range(shaft_element_count + 1):
             x = [n * shaft_element_length, 0.0, 0.0]
             node = nodes.findNodeByIdentifier(n + 3)
             fieldcache.setNode(node)
@@ -298,9 +298,11 @@ class MeshType_1d_network_layout1(Scaffold_base):
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
             coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
-        # start condyles
+        # start/end condyles
         cos60 = math.cos(math.pi / 3.0)
         sin60 = math.sin(math.pi / 3.0)
+        shaft_start_node_id = 3
+        shaft_end_node_id = shaft_start_node_id + shaft_element_count
         for n in range(2):
             arm_long_x = arm_length * cos60
             arm_long_y = arm_length * sin60
@@ -309,12 +311,24 @@ class MeshType_1d_network_layout1(Scaffold_base):
             x = [-arm_long_x, -arm_long_y if (n == 0) else arm_long_y, 0.0]
             d1 = [arm_long_x, arm_long_y if (n == 0) else -arm_long_y, 0.0]
             d2 = [arm_side_x if (n == 0) else -arm_side_x, arm_side_y, 0.0]
-            for node_identifier in (n + 1, 3):
+            for node_identifier in (n + 1, shaft_start_node_id):
                 node = nodes.findNodeByIdentifier(node_identifier)
                 fieldcache.setNode(node)
-                if node_identifier < 3:
+                if node_identifier < shaft_start_node_id:
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
-                version = (n + 2) if (node_identifier == 3) else 1
+                version = (n + 2) if (node_identifier == shaft_start_node_id) else 1
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, version, d1)
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, version, d2)
+                coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, version, d3)
+            x[0] = shaft_length - x[0]
+            d1[1] = -d1[1]
+            d2[0] = -d2[0]
+            for node_identifier in (shaft_end_node_id, shaft_end_node_id + n + 1):
+                node = nodes.findNodeByIdentifier(node_identifier)
+                fieldcache.setNode(node)
+                if node_identifier > shaft_end_node_id:
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
+                version = (n + 2) if (node_identifier == shaft_end_node_id) else 1
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, version, d1)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, version, d2)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, version, d3)

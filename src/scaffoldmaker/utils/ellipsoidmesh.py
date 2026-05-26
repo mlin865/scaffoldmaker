@@ -1456,6 +1456,8 @@ class EllipsoidMesh:
         After coordinates have been calculated with e.g. build(), generate nodes of ellipsoid.
         Allows nodes to be built for just a range of n3 indexes.
         Client is expected to run within ChangeManager(generate_data.getFieldmodule()).
+        Note: If exactly one n3 is being generated and it is the last box layer, indexing proceeds diagonally
+        into the corners of the box.
         :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
         :param n3_start: First n3 index in (0, self._element_counts[2]), or default to 0.
         :param n3_limit: Limit n3 index in (n3_start + 1, self._element_counts[2] + 1), or default to max limit.
@@ -1465,6 +1467,9 @@ class EllipsoidMesh:
             assert n3_start < n3_limit <= (self._element_counts[2] + 1)
         else:
             n3_limit = self._element_counts[2] + 1
+        # work out whether on diagonal line
+        box_diagonal = (n3_limit == (n3_start + 1)) and (
+                (n3_start == self._rim_count) or (n3_start == (self._element_counts[2] - self._rim_count)))
 
         fieldcache = generate_data.getFieldcache()
         coordinates = generate_data.getCoordinates()
@@ -1480,9 +1485,26 @@ class EllipsoidMesh:
         for n3 in range(n3_start, n3_limit):
             for n2 in range(self._element_counts[1] + 1):
                 for n1 in range(self._element_counts[0] + 1):
-                    if self._nids[n3][n2][n1] is not None:
+                    n3_mod = n3
+                    if box_diagonal:
+                        # get rim index, 1 is first layer outside box
+                        ri = 0
+                        if n2 < self._rim_count:
+                            ri = self._rim_count - n2
+                        elif n2 > (self._element_counts[1] - self._rim_count):
+                            ri = n2 - (self._element_counts[1] - self._rim_count)
+                        elif n1 < self._rim_count:
+                            ri = self._rim_count - n1
+                        elif n1 > (self._element_counts[0] - self._rim_count):
+                            ri = n1 - (self._element_counts[0] - self._rim_count)
+                        if ri:
+                            if n3_start == self._rim_count:
+                                n3_mod -= ri
+                            else:
+                                n3_mod += ri
+                    if self._nids[n3_mod][n2][n1] is not None:
                         continue  # existing node
-                    parameters = self._nx[n3][n2][n1]
+                    parameters = self._nx[n3_mod][n2][n1]
                     if not parameters:
                         continue  # unusable location
                     x, d1, d2, d3 = parameters
@@ -1490,7 +1512,7 @@ class EllipsoidMesh:
                         continue  # while in development
                     node_identifier = generate_data.nextNodeIdentifier()
                     node = nodes.createNode(node_identifier, nodetemplate)
-                    self._nids[n3][n2][n1] = node_identifier
+                    self._nids[n3_mod][n2][n1] = node_identifier
                     fieldcache.setNode(node)
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
                     if d1:
@@ -1817,7 +1839,7 @@ class EllipsoidMesh:
                 if n3 < e3_start:
                     continue
                 if n3 > e3_limit:
-                    continue
+                    break
                 octant_n3 = 4 if (n3 > half_counts[2]) else 0
                 nids_layer = []
                 nx_layer = []
@@ -1835,7 +1857,7 @@ class EllipsoidMesh:
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
                         nx_row.append(self._nx[n3][n2][n1])
-                        if (n3 > n3_first) and (i2 > 0) and (i1 > 0):  # (i3 > 0)
+                        if (n3 > n3_first) and (i2 > 0) and (i1 > 0):
                             nids = [last_nids_layer[i2 - 1][i1 - 1], last_nids_layer[i2 - 1][i1],
                                     last_nids_layer[i2][i1 - 1], last_nids_layer[i2][i1],
                                     last_nids_row[i1 - 1], last_nids_row[i1],
@@ -1882,8 +1904,11 @@ class EllipsoidMesh:
                 last_rim_nids_row = None
                 last_rim_nx_row = None
                 for nt in range(self._rim_count + 1):
-                    n3 = ((self._rim_count - nt) if (i3 == 0) else (
-                        (upper_trans_counts[2] + nt) if (i3 == dbox_counts[2]) else (self._rim_count + i3)))
+                    n3_mod = n3
+                    if i3 == 0:
+                        n3_mod = self._rim_count - nt
+                    elif i3 == dbox_counts[2]:
+                        n3_mod = upper_trans_counts[2] + nt
                     rim_nids_row = []
                     rim_nx_row = []
                     rim_eindexes_row = []
@@ -1895,8 +1920,8 @@ class EllipsoidMesh:
                         n1 = ((self._rim_count - nt) if (i1 == 0) else (
                             (upper_trans_counts[0] + nt) if (i1 == dbox_counts[0]) else (self._rim_count + i1)))
                         e1 = self._rim_count + i1
-                        rim_nids_row.append(self._nids[n3][n2][n1])
-                        rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_nids_row.append(self._nids[n3_mod][n2][n1])
+                        rim_nx_row.append(self._nx[n3_mod][n2][n1])
                         rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(1 if n1 >= half_counts[0] else 0)
                     n1 = upper_trans_counts[0] + nt
@@ -1905,8 +1930,8 @@ class EllipsoidMesh:
                         n2 = ((self._rim_count - nt) if (i2 == 0) else (
                             (upper_trans_counts[1] + nt) if (i2 == dbox_counts[1]) else (self._rim_count + i2)))
                         e2 = self._rim_count + i2
-                        rim_nids_row.append(self._nids[n3][n2][n1])
-                        rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_nids_row.append(self._nids[n3_mod][n2][n1])
+                        rim_nx_row.append(self._nx[n3_mod][n2][n1])
                         rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(3 if n2 >= half_counts[1] else 1)
                     n2 = upper_trans_counts[1] + nt
@@ -1915,8 +1940,8 @@ class EllipsoidMesh:
                         n1 = ((upper_trans_counts[0] + nt) if (i1 == 0) else (
                             (self._rim_count - nt) if (i1 == dbox_counts[0]) else (upper_trans_counts[0] - i1)))
                         e1 = upper_trans_counts[0] - i1 - 1
-                        rim_nids_row.append(self._nids[n3][n2][n1])
-                        rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_nids_row.append(self._nids[n3_mod][n2][n1])
+                        rim_nx_row.append(self._nx[n3_mod][n2][n1])
                         rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(3 if n1 > half_counts[0] else 2)
                     n1 = self._rim_count - nt
@@ -1925,8 +1950,8 @@ class EllipsoidMesh:
                         n2 = ((upper_trans_counts[1] + nt) if (i2 == 0) else (
                              (self._rim_count - nt) if (i2 == dbox_counts[1]) else (upper_trans_counts[1] - i2)))
                         e2 = upper_trans_counts[1] - i2 - 1
-                        rim_nids_row.append(self._nids[n3][n2][n1])
-                        rim_nx_row.append(self._nx[n3][n2][n1])
+                        rim_nids_row.append(self._nids[n3_mod][n2][n1])
+                        rim_nx_row.append(self._nx[n3_mod][n2][n1])
                         rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(2 if n2 > half_counts[1] else 0)
                     if (n3 > n3_first) and (nt > 0):

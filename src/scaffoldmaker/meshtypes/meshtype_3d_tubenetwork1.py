@@ -51,12 +51,12 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         }
         if parameterSetName in ["Loop", "Snake", "Vase"]:
             options["Target element density along longest segment"] = 12.0
-        # elif "Bone" == parameterSetName:
-        #     options["Target element density along longest segment"] = 8
+        elif "Bone" == parameterSetName:
+            options["Target element density along longest segment"] = 8.0
         elif "Sphere" == parameterSetName:
             options["Number of elements around"] = 16
             options["Number of elements across core box minor"] = 4
-            options["Target element density along longest segment"] = 5
+            options["Target element density along longest segment"] = 5.0
         return options
 
     @classmethod
