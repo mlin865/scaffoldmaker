@@ -758,7 +758,7 @@ class EllipsoidMesh:
                                 d = linearlyInterpolateVectors(
                                     nx[i], d, xi, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                             nx[i] = d
-                            self._merge_counts[n3][n2][n1] += 1
+                        self._merge_counts[n3][n2][n1] += 1
 
     def copy_to_negative_axis1(self):
         """

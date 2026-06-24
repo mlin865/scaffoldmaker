@@ -812,6 +812,11 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
             core_octant = None
             if self._core:
+                # extract actual derivatives calculated on edges of triangle abc
+                _, abd1, abd2, _ = triangle_abc.get_edge_parameters12()
+                _, acd1, acd2, _ = triangle_abc.get_edge_parameters13()
+                _, bcd1, bcd2, _ = triangle_abc.get_edge_parameters23()
+
                 if self._shell_count:
                     # half_counts was reduced in earlier loop for inner surface
                     core_octant = HexTetrahedronMesh(half_counts, diag_counts, nway_d_factor=self._nway_d_factor)
@@ -830,7 +835,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 ccd1 = self._boxCoordinates[1][n2][n1][n3]
                 ccd2 = self._boxCoordinates[2][n2][n1][n3]
                 ccd3 = self._boxCoordinates[3][n2][n1][n3]
-                # get dome pole coordinates. Not d1 is zero at the pole so use d2 in separate quadrants
+                # get dome pole coordinates. Note d1 is zero at the pole so use d2 in separate quadrants
                 core_p = 1 if self._shell_count else 0
                 dpx = self._rawTubeCoordinatesList[core_p][0][dome_ix][0]
                 dpd1 = self._rawTubeCoordinatesList[core_p][2][dome_ix][0]
@@ -872,6 +877,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 triangle_abo.build()
                 triangle_abo.assign_d3(lambda tx, td1, td2: normalize(cross(td1, td2)))
                 core_octant.set_triangle_abo(triangle_abo)
+                # extract actual derivatives calculated on edges of triangle abo
+                _, _, aod3, _ = triangle_abo.get_edge_parameters13()
+                _, bomd1, bod3, _ = triangle_abo.get_edge_parameters23()
+                bod1 = [[-d for d in d1] for d1 in bomd1]
 
                 # make inner surface triangle 1-3-origin
                 triangle_aco = QuadTriangleMesh(
@@ -895,10 +904,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     use_cod1 = comd3
                     use_cod3 = cod1
                 triangle_aco.set_edge_parameters23(cox, use_cod1, cod2, use_cod3)
-
                 triangle_aco.build()
                 triangle_aco.assign_d3(lambda tx, td1, td2: normalize(cross(td1, td2)))
                 core_octant.set_triangle_aco(triangle_aco)
+                _, aco_cod1, _, aco_cod3 = triangle_aco.get_edge_parameters23()
 
                 # # make inner surface 2-3-origin
                 triangle_bco = QuadTriangleMesh(
@@ -911,19 +920,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 bcmd3 = [[-d for d in d3] for d3 in bcd3]
                 triangle_bco.set_edge_parameters12(bcx, bcd2, bcmd3, bcmd1)
                 triangle_bco.set_edge_parameters13(box, bod2, bod3, bod1)
-                if l == 0:
-                    use_cod1 = cod3
-                    use_cod3 = comd1
-                elif l == 1:
-                    use_cod1 = comd1
-                    use_cod3 = comd3
-                elif l == 2:
-                    use_cod1 = comd3
-                    use_cod3 = cod1
-                else:  # if l == 3:
-                    use_cod1 = cod1
-                    use_cod3 = cod3
-                triangle_bco.set_edge_parameters23(cox, use_cod1, cod2, use_cod3)
+                triangle_bco.set_edge_parameters23(cox, aco_cod3, cod2, [[-d for d in d3] for d3 in aco_cod1])
                 triangle_bco.build()
                 triangle_bco.assign_d3(lambda tx, td1, td2: normalize(cross(td1, td2)))
                 core_octant.set_triangle_bco(triangle_bco)
@@ -3649,14 +3646,14 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
 
         angleIncrement = 2.0 * math.pi / segmentsCount
         deltaAngle = 0.0
-        angle = 0.0
         magSum = 0.0
-        for s in range(1, segmentsCount):
-            angle += angleIncrement
+        angle = 0.0
+        for s in range(segmentsCount):
             deltaAngle += angles[sequence[s]] - angle
             magSum += magnitude(rd[sequence[s]])
+            angle += angleIncrement
         deltaAngle = deltaAngle / segmentsCount
-        d2Mean = magSum / segmentsCount
+        d2Mean = magSum / segmentsCount  # regular mean of d2 out from midpoint
 
         angle = deltaAngle
         sd = [None] * segmentsCount
