@@ -37,13 +37,11 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
         options = {}
         options["Base parameter set"] = parameterSetName
         options["Structure"] = (
-            # "1-2-3-4,"
-            # "4-5-6.1,"
-            "4-3-2-1),"
-            "6.1-5-4,"
+            "(1-2-3-4,"
+            "4-5-6.1,"
             "6.2-14-15-16-17-18-19,19-20,"
             "6.3-21-22-23-24-25-26,26-27,"
-            "6.4-7-8-9,"
+            "6.1-7-8-9,"
             "9-10-11-12-13.1,"
             "13.2-28-29-30-31-32,32-33-34,"
             "13.3-35-36-37-38-39,39-40-41")
@@ -318,8 +316,8 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
 
         headScale = headLength / headElementsCount
         nodeIdentifier = 1
-        d1 = [-headScale, 0.0, 0.0]
-        d2 = [0.0, -halfHeadWidth, 0.0]
+        d1 = [headScale, 0.0, 0.0]
+        d2 = [0.0, halfHeadWidth, 0.0]
         d3 = [0.0, 0.0, halfHeadDepth]
         id2 = mult(d2, innerProportionHead)
         id3 = mult(d3, innerProportionHead)
@@ -330,7 +328,6 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
             [[headInnerOffset, 0.0, 0.0], [headLength, 0.0, 0.0]],
             [[headLengthInner, 0.0, 0.0]] * 2,
             headElementsCount, derivativeMagnitudeEnd=headScale)[:2]
-        id1 = [[-d for d in v] for v in id1]
         for i in range(headElementsCount):
             node = nodes.findNodeByIdentifier(nodeIdentifier)
             fieldcache.setNode(node)
@@ -340,7 +337,7 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
             nodeIdentifier += 1
 
         neckScale = neckLength / neckElementsCount
-        d2 = [0.0, -halfHeadWidth, 0.0]
+        d2 = [0.0, halfHeadWidth, 0.0]
         d3 = [0.0, 0.0, halfHeadWidth]
         id2 = mult(d2, innerProportionHead)
         id3 = mult(d3, innerProportionHead)
@@ -349,7 +346,6 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
             fieldcache.setNode(node)
             x = [headLength + neckScale * i, 0.0, 0.0]
             d1 = [0.5 * (headScale + neckScale) if (i == 0) else neckScale, 0.0, 0.0]
-            d1[0] *= -1.0
             setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3)
             setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3)
             nodeIdentifier += 1
@@ -378,15 +374,8 @@ class MeshType_1d_human_body_network_layout1(MeshType_1d_network_layout1):
                 id2 = mult(d2, innerProportionDefault)
                 id12 = None
                 id3 = mult(d3, innerProportionDefault)
-            if i == 0:
-                md1 = [-d for d in d1]
-                setNodeFieldParameters(coordinates, fieldcache, x, md1, [-d for d in d2], d3, d12)
-                setNodeFieldParameters(innerCoordinates, fieldcache, x, md1, [-d for d in id2], id3, id12)
-                setNodeFieldVersionDerivatives(coordinates, fieldcache, 4, d1, d2, d3, d12)
-                setNodeFieldVersionDerivatives(innerCoordinates, fieldcache, 4, d1, id2, id3, id12)
-            else:
-                setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3, d12)
-                setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3, id12)
+            setNodeFieldParameters(coordinates, fieldcache, x, d1, d2, d3, d12)
+            setNodeFieldParameters(innerCoordinates, fieldcache, x, d1, id2, id3, id12)
             nodeIdentifier += 1
 
         abdomenScale = abdomenLength / abdomenElementsCount
@@ -880,9 +869,6 @@ class MeshType_3d_wholebody2(Scaffold_base):
 
         meshDimension = 3
         tubeNetworkMeshBuilder.build()
-        # swap left and right for head and neck groups
-        tubeNetworkMeshBuilder.setAnnotationLeftRightSwap("head", True)
-        tubeNetworkMeshBuilder.setAnnotationLeftRightSwap("neck", True)
 
         generateData = TubeNetworkMeshGenerateData(
             region, meshDimension,
