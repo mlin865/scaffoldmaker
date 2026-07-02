@@ -1032,24 +1032,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             rnids = ellipsoid.get_rim_node_identifiers12(en3, ri)
             self._rimNodeIds[n2].append(rnids)
 
-    def _sampleCoreCoordinates(self, elementsCountAlong):
-        """
-        Black box function for sampling coordinates for the solid core.
-        :param elementsCountAlong: A number of elements along a segment.
-        """
-        boxx, boxd1, boxd3 = [], [], []
-        transx, transd1, transd3 = [], [], []
-        for n2 in range(elementsCountAlong + 1):
-            coreCentre, arcCentre = self._determineCentrePoints(n2)
-            cbx, cbd1, cbd3, ctx, ctd1, ctd3 = self._generateCoreCoordinates(n2, coreCentre)
-            for lst, value in zip((boxx, boxd1, boxd3, transx, transd1, transd3),
-                                  (cbx, cbd1, cbd3, ctx, ctd1, ctd3)):
-                lst.append(value)
-        boxd2, transd2 = self._determineCoreD2Derivatives(boxx, boxd1, boxd3, transx, transd1, transd3)
-        self._boxCoordinates = boxx, boxd1, boxd2, boxd3
-        self._transitionCoordinates = transx, transd1, transd2, transd3
-        self._boxNodeIds = [None] * (elementsCountAlong + 1)
-
     def _getSampledCoreCardinalRadialParameters(self, n2, l: int):
         """
         Get lists of parameters from the core centre out to the shell.
@@ -1099,14 +1081,54 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             rd.append(copy.copy(self._rimCoordinates[i][n2][0][n1]))
         return rx, rd1, rd2, rd3
 
-    def _determineCentrePoints(self, n2):
+    def _sampleCoreCoordinates(self, elementsCountAlong):
         """
-        Calculates coordinates for the centre of the solid core based on outer and inner tube coordinates.
-        :param n2: Index for elements along the tube.
-        :return: Coordinates of the solid core.
+        Black box function for sampling coordinates for the solid core.
+        :param elementsCountAlong: The number of elements along a segment.
         """
-        ox = self._sampledTubeCoordinates[0][0][n2]
-        ix = self._sampledTubeCoordinates[1][0][n2]
+        boxx, boxd1, boxd2, boxd3 = [], [], [], []
+        transx, transd1, transd2, transd3 = [], [], [], []
+        coreBoxMajorNodesCount = self._elementsCountCoreBoxMajor + 1
+        coreBoxMinorNodesCount = self._elementsCountCoreBoxMinor + 1
+        dxi2 = 1.0E-4
+        for n2 in range(elementsCountAlong + 1):
+            stox = self._sampledTubeCoordinates[0][0][n2]
+            stod2 = self._sampledTubeCoordinates[0][2][n2]
+            stix = self._sampledTubeCoordinates[1][0][n2]
+            stid2 = self._sampledTubeCoordinates[1][2][n2]
+            ix = stix if self._shell_count else stox
+            id1 = self._sampledTubeCoordinates[1 if self._shell_count else 0][1][n2]
+            id3 = [sub(stox[q], stix[q]) for q in range(self._elementsCountAround)]
+            coreCentre = self._determineCoreCentrePoint(stox, stix)
+            cbx, cbd1, cbd3, ctx, ctd1, ctd3 = self._generateCoreCoordinates(ix, id1, id3, coreCentre)
+            # offset ix, ox by dxi2 * d2 to get offset coordinates; calculate d2 from difference
+            offset_stox = [add(stox[q], mult(stod2[q], dxi2)) for q in range(self._elementsCountAround)]
+            offset_stix = [add(stix[q], mult(stid2[q], dxi2)) for q in range(self._elementsCountAround)]
+            offset_ix = offset_stix if self._shell_count else offset_stox
+            offset_id3 = [sub(offset_stox[q], offset_stix[q]) for q in range(self._elementsCountAround)]
+            offset_coreCentre = self._determineCoreCentrePoint(offset_stox, offset_stix)
+            # assume offset_id1 would be negligibly different from id1
+            offset_cbx, _, _, offset_ctx, _, _ = self._generateCoreCoordinates(
+                offset_ix, id1, offset_id3, offset_coreCentre)
+            cbd2 = [[div(sub(offset_cbx[m][n], cbx[m][n]), dxi2) for n in range(coreBoxMinorNodesCount)]
+                    for m in range(coreBoxMajorNodesCount)]
+            ctd2 = [[div(sub(offset_ctx[n3][n1], ctx[n3][n1]), dxi2) for n1 in range(self._elementsCountAround)]
+                    for n3 in range(self._transition_count - 1)]
+            for lst, value in zip((boxx, boxd1, boxd2, boxd3, transx, transd1, transd2, transd3),
+                                  (cbx, cbd1, cbd2, cbd3, ctx, ctd1, ctd2, ctd3)):
+                lst.append(value)
+        self._boxCoordinates = boxx, boxd1, boxd2, boxd3
+        self._transitionCoordinates = transx, transd1, transd2, transd3
+        self._boxNodeIds = [None] * (elementsCountAlong + 1)
+
+    def _determineCoreCentrePoint(self, ox, ix):
+        """
+        Calculates coordinates of the centre of the solid core at a slice along the segment,
+        from outer and inner tube coordinates.
+        :param ox: Outer ring of coordinates at slice.
+        :param ix: Inner ring of coordinates at slice.
+        :return: Coordinates of the centre of solid core.
+        """
         cp = []
         for x in [ox, ix]:
             # get mean location of all points around
@@ -1117,7 +1139,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             mean = div(mean, self._elementsCountAround)
             cp.append(mean)
 
-        tol = 1e-10  # tolerance to avoid float division zero
+        tol = 1e-10  # tolerance to avoid float division by zero
         distBetweenOuterAndInner = magnitude(sub(cp[1], cp[0]))
         if distBetweenOuterAndInner == 0:
             distBetweenOuterAndInner = tol
@@ -1144,41 +1166,39 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             arcCentres.append(ac)
 
         coreCentre = [sum(e) / len(e) for e in zip(*coreCentres)]
-        arcCentre = [sum(e) / len(e) for e in zip(*arcCentres)]
+        # arcCentre = [sum(e) / len(e) for e in zip(*arcCentres)]
 
-        return coreCentre, arcCentre
+        return coreCentre
 
-    def _getRadialCoreCrossing(self, n1Start, n1Half, n2, centre, centreNormal=None):
+    def _getRadialCoreCrossing(self, ix, id1, id3, n1Start, n1Half, centre, centreNormal=None):
         """
         Get start, middle and end coordinates across solid core.
+        :param ix: Ring of coordinates around core at slice along tube.
+        :param id1: Ring of circumferencial d1 derivatives around core at slice along tube.
+        :param id3: Ring of outward d3 derivatives around core at slice along tube.
         :param n1Start: Start index around rim coordinates.
         :param n1Half: If True, initial n1 is halfway between n1Start and n1Start + 1
-        :param n2: Index along rim coordinates.
         :param centre: Centre coordinates.
         :param centreNormal: Optional normal to remove component in direction from centre.
         :return: Radial rx, rd1 (across), rd2(up) for points at n1, centre and opposite n1.
         """
-        ix = self._rimCoordinates[0][n2][0]
-        id1 = self._rimCoordinates[1][n2][0]
-        id3 = self._rimCoordinates[3][n2][0]
-        n1End = n1Start + self._elementsCountAround // 2
+        # get interpolation from a (start) to b (centre) to c (end at opposite side)
+        n1End = (n1Start + self._elementsCountAround // 2) % self._elementsCountAround
         if n1Half:
-            nx = self._rimCoordinates[0][n2][1]
-            nd1 = self._rimCoordinates[1][n2][1]
             ax, ad2 = evaluateCoordinatesOnCurve(ix, id1, (n1Start, 0.5), loop=True, derivative=True)
-            tx = evaluateCoordinatesOnCurve(nx, nd1, (n1Start, 0.5), loop=True)
-            ad1 = sub(ix, tx)
+            ad1 = add(id3[n1Start], id3[n1Start + 1])
             cx, cd2 = evaluateCoordinatesOnCurve(ix, id1, (n1End, 0.5), loop=True)
-            tx = evaluateCoordinatesOnCurve(nx, nd1, (n1End, 0.5), loop=True)
-            cd1 = sub(tx, ix)
-            cd2 = [-d for d in cd2]  # since these go around in RH sense
+            cd1 = add(id3[n1End], id3[(n1End + 1) % self._elementsCountAround])
         else:
-            ax = copy.copy(ix[n1Start])
-            ad1 = [-d for d in id3[n1Start]]
+            ax = ix[n1Start]
+            ad1 = id3[n1Start]
             ad2 = id1[n1Start]
-            cx = copy.copy(ix[n1End])
-            cd1 = copy.copy(id3[n1End])
-            cd2 = [-d for d in id1[n1End]]  # since these go around in RH sense
+            cx = ix[n1End]
+            cd1 = id3[n1End]
+            cd2 = id1[n1End]
+        # reverse to get ad1 & cd1, ad2 & cd2 in the same directions.
+        ad1 = [-d for d in ad1]
+        cd2 = [-d for d in cd2]
         bx = centre
         # following gives the core the expected S-shape distortion when twisted
         scaled_ad1 = set_magnitude_safe(ad1, magnitude(sub(bx, ax)))
@@ -1198,15 +1218,17 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             rd1 = smoothCubicHermiteDerivativesLine(rx, rd1, fixAllDirections=True)
         return rx, rd1, rd2
 
-    def _generateCoreCoordinates(self, n2, centre):
+    def _generateCoreCoordinates(self, ix, id1, id3, centre):
         """
         Sample core box and transition elements by sampling radial crossings along
         major -, minor |, diag1 /, diag2 \ directions.
         From these 3x3 array of points at the corners, centres and mid-sides of the box are determined,
         then the actual box elements are resampled from these.
         Transition elements are determined by blending from the outside of the box to the shell.
-        :param n2: Index along segment.
-        :param centre: Centre coordinates of core for n2.
+        :param ix: Ring of coordinates around core at slice along tube.
+        :param id1: Ring of circumferencial d1 derivatives around core at slice along tube.
+        :param id3: Ring of outward d3 derivatives around core at slice along tube.
+        :param centre: Centre coordinates of core for slice.
         :return: box coordinates cbx, cbd1, cbd3, transition coordinates ctx, ctd1, ctd3.
         Box coordinates are over [minorBoxNodeCount][majorBoxNodeCount]. Transition coordinates are over [n3][n1] and
         are only non-empty for at least 2 transition elements as they are the layers between the box and the shell.
@@ -1214,10 +1236,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         # sample radially across major, minor and both diagonals, like a Union Jack
         major_n1 = 0
         major_x, major_d1, major_d3 = self._getRadialCoreCrossing(
-            major_n1, (self._elementsCountCoreBoxMinor % 2) == 1, n2, centre)
+            ix, id1, id3, major_n1, (self._elementsCountCoreBoxMinor % 2) == 1, centre)
         minor_n1 = -((self._elementsCountAround + 3) // 4)
         minor_x, minor_d3, minor_d1 = self._getRadialCoreCrossing(
-            minor_n1, (self._elementsCountCoreBoxMajor % 2) == 1, n2, centre)
+            ix, id1, id3, minor_n1, (self._elementsCountCoreBoxMajor % 2) == 1, centre)
         minor_d1 = [[-d for d in v] for v in minor_d1]
         major_d3[1] = minor_d3[1]
         minor_d1[1] = major_d1[1]
@@ -1227,9 +1249,9 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         majorBoxSize = self._elementsCountCoreBoxMajor
         minorBoxSize = self._elementsCountCoreBoxMinor
         diag1_n1 = minorBoxSize // -2
-        diag1_x, diag1_d1, diag1_d3 = self._getRadialCoreCrossing(diag1_n1, False, n2, centre, centreNormal)
+        diag1_x, diag1_d1, diag1_d3 = self._getRadialCoreCrossing(ix, id1, id3, diag1_n1, False, centre, centreNormal)
         diag2_n1 = diag1_n1 + minorBoxSize
-        diag2_x, diag2_d1, diag2_d3 = self._getRadialCoreCrossing(diag2_n1, False, n2, centre, centreNormal)
+        diag2_x, diag2_d1, diag2_d3 = self._getRadialCoreCrossing(ix, id1, id3, diag2_n1, False, centre, centreNormal)
 
         # sample to sides and corners of core box
         majorXi = (2.0 * self._transition_count /
@@ -1354,9 +1376,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             for i in range(self._transition_count - 1):
                 for lst in (ctx, ctd1, ctd3):
                     lst.append([None] * self._elementsCountAround)
-            ix = self._rimCoordinates[0][n2][0]
-            id1 = self._rimCoordinates[1][n2][0]
-            id3 = self._rimCoordinates[3][n2][0]
             start_bn3 = minorBoxSize // 2
             topLeft_n1 = minorBoxSize - start_bn3
             topRight_n1 = topLeft_n1 + majorBoxSize
@@ -1426,67 +1445,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 ctd1[n3 - 1] = smoothCubicHermiteDerivativesLoop(ctx[n3 - 1], ctd1[n3 - 1], fixAllDirections=False)
 
         return cbx, cbd1, cbd3, ctx, ctd1, ctd3
-
-    def _determineCoreD2Derivatives(self, boxx, boxd1, boxd3, transx, transd1, transd3):
-        """
-        Compute d2 derivatives for the solid core.
-        :param boxx, boxd1, boxd3: Coordinates and derivatives (d1 & d3) of the core box nodes.
-        :param transx, transd1, transd3: Coordinates and derivatives (d1 & d3) of the core transition nodes.
-        :return: D2 derivatives of box and rim components of the core.
-        """
-        elementsCountAlong = len(boxx)
-        coreBoxMajorNodesCount = len(boxx[0])
-        coreBoxMinorNodesCount = len(boxx[0][0])
-
-        boxd2 = [[[None for _ in range(coreBoxMinorNodesCount)] for _ in range(coreBoxMajorNodesCount)]
-                 for _ in range(elementsCountAlong)]
-        transd2 = [[[None for _ in range(self._elementsCountAround)] for _ in range(self._transition_count - 1)]
-                   for _ in range(elementsCountAlong)]
-
-        # compute core d2 directions by weighting with 1/distance from inner coordinates
-
-        def get_d2(n2, x):
-            sum_weight = 0.0
-            sum_d2 = [0.0, 0.0, 0.0]
-            ix = self._rimCoordinates[0][n2][0]
-            id2 = self._rimCoordinates[2][n2][0]
-            for i in range(len(ix)):
-                distance_sq = 0.0
-                for c in range(3):
-                    delta = x[c] - ix[i][c]
-                    distance_sq += delta * delta
-                if distance_sq == 0.0:
-                    return id2[i]
-                weight = 1.0 / math.sqrt(distance_sq)
-                sum_weight += weight
-                for c in range(3):
-                    sum_d2[c] += weight * id2[i][c]
-            return [sum_d2[c] / sum_weight for c in range(3)]
-
-        for m in range(coreBoxMajorNodesCount):
-            for n in range(coreBoxMinorNodesCount):
-                tx, td2 = [], []
-                for n2 in range(elementsCountAlong):
-                    x = boxx[n2][m][n]
-                    tx.append(x)
-                    td2.append(get_d2(n2, x))
-                # td2 = smoothCubicHermiteDerivativesLine(tx, td2, fixAllDirections=True)
-                for n2 in range(elementsCountAlong):
-                    boxd2[n2][m][n] = td2[n2]
-
-        if self._transition_count > 1:
-            for n3 in range(self._transition_count - 1):
-                for n1 in range(self._elementsCountAround):
-                    tx, td2 = [], []
-                    for n2 in range(elementsCountAlong):
-                        x = transx[n2][n3][n1]
-                        tx.append(x)
-                        td2.append(get_d2(n2, x))
-                    # td2 = smoothCubicHermiteDerivativesLine(tx, td2, fixAllDirections=True)
-                    for n2 in range(elementsCountAlong):
-                        transd2[n2][n3][n1] = td2[n2]
-
-        return boxd2, transd2
 
     def _determineShellCoordinates(self, ox, od1, od2, ix, id1, id2, coreCentre, arcCentre):
         """

@@ -725,7 +725,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            expected_core_volume = 2.963897349992492
+            expected_core_volume = 2.9638976387311504
             expected_shell_volume = 1.7334178300002012
             expected_volume = expected_core_volume + expected_shell_volume
             self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
@@ -818,7 +818,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            expected_core_volume = 2.933155822423377
+            expected_core_volume = 2.9331557543828657
             expected_shell_volume = 1.7345029780165235
             expected_volume = expected_core_volume + expected_shell_volume  # 4.667658800439896
             self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
@@ -1040,7 +1040,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
 
             # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
-            expected_core_volume = 2.1422350774942873
+            expected_core_volume = 2.142234982806666
             expected_shell_volume = 2.041817728215633
             expected_volume = expected_core_volume + expected_shell_volume  # 4.184052805709905
             self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
@@ -1129,7 +1129,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
 
             # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
-            expected_core_volume = 2.1224249127702985
+            expected_core_volume = 2.1224260680855505
             expected_shell_volume = 2.0229377082224276
             expected_volume = expected_core_volume + expected_shell_volume  # 4.184052805709905
             self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)

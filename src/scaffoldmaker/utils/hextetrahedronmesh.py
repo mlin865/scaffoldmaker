@@ -329,7 +329,7 @@ class HexTetrahedronMesh:
             sampleHermiteCurve, nway_d_factor=self._nway_d_factor)
 
         # smooth sample from sides to 3-way points using end derivatives
-        min_weight = 1  # GRC revisit, remove?
+        min_weight = 1.0
         ax, ad1 = sampleHermiteCurve(
             point23[0], point23[1], None, x_4way, d_4way[0], None, self._box_counts[0],
             start_weight=self._box_counts[0] + min_weight, end_weight=1.0 + min_weight, end_transition=True)
@@ -493,7 +493,7 @@ class HexTetrahedronMesh:
                 [[0, 0, 1]], skip_end=True, blend=True)
 
         # average point coordinates across 3 directions between side faces and surfaces to 4 3-way lines.
-        min_weight = 1  # GRC revisit, remove?
+        min_weight = 1.0
         # 1-direction
         for n2 in range(1, self._box_counts[1]):
             for n3 in range(1, self._box_counts[2]):
