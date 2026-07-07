@@ -717,19 +717,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
             volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
             volumeField.setNumbersOfPoints(4)
-            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
             surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
             surfaceAreaField.setNumbersOfPoints(4)
-            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
-
-            expected_core_volume = 2.9638976387311504
-            expected_shell_volume = 1.7334178300002012
-            expected_volume = expected_core_volume + expected_shell_volume
-            self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
-            self.assertAlmostEqual(surfaceArea, 19.86481935487169, delta=X_TOL)
 
             # make groups for each half
             cmiss_number = fieldmodule.findFieldByName("cmiss_number")
@@ -742,14 +736,19 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_mesh3d = half2.getMeshGroup(mesh3d)
             half2_mesh3d.addElementsConditional(fieldmodule.createFieldGreaterThan(cmiss_number, middle_element_number))
 
+        expected_core_volume = 2.9638976954876455
+        expected_shell_volume = 1.7334178300002012
+        expected_total_volume = expected_core_volume + expected_shell_volume  # 4.667658800439896
+        expected_total_surface_area = 19.86481935487169
+
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(4, len(annotationGroups))
 
         expectedSizes3d = {
             "core": (192, expected_core_volume),
             "shell": (128, expected_shell_volume),
-            "half1": (160, 0.5 * expected_volume),
-            "half2": (160, 0.5 * expected_volume)
+            "half1": (160, 0.5 * expected_total_volume),
+            "half2": (160, 0.5 * expected_total_volume)
             }
         fieldcache = fieldmodule.createFieldcache()
         for name in expectedSizes3d:
@@ -762,6 +761,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
     def test_3d_tube_network_bone_core_8around_8along(self):
         """
@@ -810,19 +812,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
             volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
             volumeField.setNumbersOfPoints(4)
-            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
             surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
             surfaceAreaField.setNumbersOfPoints(4)
-            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
-
-            expected_core_volume = 2.9331557543828657
-            expected_shell_volume = 1.7345029780165235
-            expected_volume = expected_core_volume + expected_shell_volume  # 4.667658800439896
-            self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
-            self.assertAlmostEqual(surfaceArea, 19.860303567588733, delta=X_TOL)
 
             # make groups for each half
             cmiss_number = fieldmodule.findFieldByName("cmiss_number")
@@ -851,14 +847,19 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_shell_mesh3d = half2_shell.getMeshGroup(mesh3d)
             half2_shell_mesh3d.addElementsConditional(fieldmodule.createFieldAnd(half2.getGroup(), shell.getGroup()))
 
+        expected_core_volume = 2.9331557186740995
+        expected_shell_volume = 1.7345029780165235
+        expected_total_volume = expected_core_volume + expected_shell_volume
+        expected_total_surface_area = 19.860303567588733
+
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(8, len(annotationGroups))
 
         expectedSizes3d = {
             "core": (208, expected_core_volume),
             "shell": (144, expected_shell_volume),
-            "half1": (176, 0.5 * expected_volume),
-            "half2": (176, 0.5 * expected_volume),
+            "half1": (176, 0.5 * expected_total_volume),
+            "half2": (176, 0.5 * expected_total_volume),
             "half1_core": (104, 0.5 * expected_core_volume),
             "half2_core": (104, 0.5 * expected_core_volume),
             "half1_shell": (72, 0.5 * expected_shell_volume),
@@ -875,6 +876,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
     def test_3d_tube_network_bone_8around_8along(self):
         """
@@ -919,17 +923,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
             volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
             volumeField.setNumbersOfPoints(4)
-            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
             surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
             surfaceAreaField.setNumbersOfPoints(4)
-            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
-
-            expected_volume = 1.7345029780165235
-            self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
-            self.assertAlmostEqual(surfaceArea, 35.31362961180609, delta=X_TOL)
 
             # make groups for each half
             cmiss_number = fieldmodule.findFieldByName("cmiss_number")
@@ -942,12 +942,15 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_mesh3d = half2.getMeshGroup(mesh3d)
             half2_mesh3d.addElementsConditional(fieldmodule.createFieldGreaterThan(cmiss_number, middle_element_number))
 
+        expected_total_volume = 1.7345029780165235
+        expected_total_surface_area = 35.31362961180609
+
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(2, len(annotationGroups))
 
         expectedSizes3d = {
-            "half1": (72, 0.5 * expected_volume),
-            "half2": (72, 0.5 * expected_volume)
+            "half1": (72, 0.5 * expected_total_volume),
+            "half2": (72, 0.5 * expected_total_volume)
             }
         fieldcache = fieldmodule.createFieldcache()
         for name in expectedSizes3d:
@@ -986,6 +989,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, d3, expected_6way_d3, delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
     def test_3d_tube_network_sphere_core(self):
         """
@@ -1031,21 +1037,20 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
             volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
             volumeField.setNumbersOfPoints(4)
-            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
             surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
             surfaceAreaField.setNumbersOfPoints(4)
-            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
-            expected_core_volume = 2.142234982806666
-            expected_shell_volume = 2.041817728215633
-            expected_volume = expected_core_volume + expected_shell_volume  # 4.184052805709905
-            self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
-            # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
-            self.assertAlmostEqual(surfaceArea, 12.5569662702283, delta=X_TOL)
+        # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
+        expected_core_volume = 2.1422349725140952
+        expected_shell_volume = 2.041817728215633
+        expected_total_volume = expected_core_volume + expected_shell_volume  # 4.1840527007297282
+        # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
+        expected_total_surface_area = 12.5569662702283
 
         expectedSizes3d = {
             "core": (160, expected_core_volume),
@@ -1062,6 +1067,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
         # check nodes have symmetric d1, d2 magnitudes along axis3
         for node_identifier in [63, 104, 218, 259]:
@@ -1120,21 +1128,20 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
             volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
             volumeField.setNumbersOfPoints(4)
-            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
             surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
             surfaceAreaField.setNumbersOfPoints(4)
-            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
 
-            # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
-            expected_core_volume = 2.1224260680855505
-            expected_shell_volume = 2.0229377082224276
-            expected_volume = expected_core_volume + expected_shell_volume  # 4.184052805709905
-            self.assertAlmostEqual(volume, expected_volume, delta=X_TOL)
-            # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
-            self.assertAlmostEqual(surfaceArea, 12.482842286611568, delta=X_TOL)
+        # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
+        expected_core_volume = 2.1224259944920227
+        expected_shell_volume = 2.0229377082224276
+        expected_total_volume = expected_core_volume + expected_shell_volume  # 4.1453637027144503
+        # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
+        expected_total_surface_area = 12.482842286611568
 
         expectedSizes3d = {
             "core": (32, expected_core_volume),
@@ -1151,6 +1158,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
         # check nodes have symmetric d1, d2 magnitudes along axis3
         for node_identifier in [23, 57]:

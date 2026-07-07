@@ -102,11 +102,11 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
         # check some annotation groups:
 
         expectedSizes3d = {
-            'abdominal cavity': (40, 10.138475376405363),
+            'abdominal cavity': (40, 10.133113919623222),
             'core': (456, 49.06689096137938),
             'head': (112, 6.124221560163941),
             'shell': (296, 48.45056946176061),
-            'thoracic cavity': (40, 7.284876167428846)
+            'thoracic cavity': (40, 7.27744126306781)
         }
         for name in expectedSizes3d:
             term = get_body_term(name)
@@ -122,14 +122,14 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=tol)
 
         expectedSizes2d = {
-            'abdominal cavity boundary surface': (64, 27.41747555203272),
+            'abdominal cavity boundary surface': (64, 27.40775743766599),
             'diaphragm': (20, 3.0778646664612053),
             'left lower limb skin epidermis outer surface': (68, 55.200948405121075),
-            'left upper limb skin epidermis outer surface': (68, 21.457586819828144),
+            'left upper limb skin epidermis outer surface': (68, 21.457586819815013),
             'right lower limb skin epidermis outer surface': (68, 55.200948405121075),
-            'right upper limb skin epidermis outer surface': (68, 21.457586819828144),
+            'right upper limb skin epidermis outer surface': (68, 21.457586819815013),
             'skin epidermis outer surface': (376, 224.43852405713952),
-            'thoracic cavity boundary surface': (64, 21.043132767653276)
+            'thoracic cavity boundary surface': (64, 21.041355045545792)
         }
         for name in expectedSizes2d:
             term = get_body_term(name)

@@ -359,7 +359,7 @@ class Septum:
                 for n1 in range(elementsCountAround + 1):
                     self._nx[n2][n3][n1][1] = d1[n1]
 
-        # Calculate 6 way midpoint - could be replaced with GRC's QuadTriangleMesh later
+        # Calculate 6 way midpoint - could be replaced with QuadTriangleMesh later
         for n1 in range(elementsCountAround + 1):
             for n3 in range(2):
                 xSum = 0

@@ -638,6 +638,103 @@ def sampleCubicHermiteCurvesSmooth(nx, nd1, elementsCountOut,
     return px, pd1, pe, pxi, psf
 
 
+def sampleCubicHermiteCurvesTriple(nx, nd1, elements_count):
+    """
+    Sample between start, centre and end coordinates ensuring the centre point is the centre of the sampled curve.
+    :param nx: 3 sets of coordinates for start, beginning and end of curve.
+    :param nd1: 3 sets of derivatives along.
+    :return: sampled cx, cd1, cd1_middle (which is not in cd1 for odd elements_count)
+    """
+    assert len(nx) == 3
+    odd_count = (elements_count % 2) == 1
+    # if odd_count sample with double the element density to strike the centre point
+    half_count = elements_count if odd_count else elements_count // 2
+    ax, ad1 = sampleCubicHermiteCurvesSmooth(nx[:2], nd1[:2], half_count)[:2]
+    bx, bd1 = sampleCubicHermiteCurvesSmooth(nx[1:], nd1[1:], half_count)[:2]
+    cd1_mag = 2.0 / ((1.0 / magnitude(ad1[-1])) + (1.0 / magnitude(bd1[0])))  # harmonic mean centre magnitude
+    ax, ad1 = sampleCubicHermiteCurvesSmooth(nx[:2], nd1[:2], half_count, derivativeMagnitudeEnd=cd1_mag)[:2]
+    bx, bd1 = sampleCubicHermiteCurvesSmooth(nx[1:], nd1[1:], half_count, derivativeMagnitudeStart=cd1_mag)[:2]
+    if odd_count:
+        cx = []
+        cd1 = []
+        half_node_count = (elements_count + 1) // 2
+        for n in range(half_node_count):
+            n2 = 2 * n
+            cx.append(ax[n2])
+            cd1.append(mult(ad1[n2], 2.0))
+        for n in range(half_node_count):
+            n2 = 1 + 2 * n
+            cx.append(bx[n2])
+            cd1.append(mult(bd1[n2], 2.0))
+        cd1_middle = mult(bd1[0], 2.0)
+    else:
+        cx = ax + bx[1:]
+        cd1 = ad1 + bd1[1:]
+        cd1_middle = bd1[0]
+    return cx, cd1, cd1_middle
+
+
+def sampleCubicHermiteCurvesSideDerivativesTriple(cx, cd1, cd1_middle, nd2):
+    """
+    Counterpart to sampleCubicHermiteCurvesTriple for interpolating triple side derivatives. Takes into account
+    angle between d1 d2.
+    :param cx: Curve coordinates.
+    :param cd1: Curve derivatives.
+    :param cd1_middle: Middle value of cd1, returned by sampleCubicHermiteCurvesTriple.
+    :param nd2: 3 sets of side derivatives for start, beginning and end of curve.
+    :return: nd2 resampled to density of cx. First and last values are same as nd1[0] and nd2[2]; centre value
+    is same as nd2[1] if even number of elements.
+    """
+    assert len(nd2) == 3
+    elements_count = len(cx) - 1
+    odd_count = (elements_count % 2) == 1
+    half_count = elements_count // 2
+    length1, length2, _, lengths = getCubicHermiteTrimmedCurvesLengths(
+        cx, cd1, startLocation=(half_count, 0.5 if odd_count else 0.0))
+    nd12 = [mult(sub(nd2[1], nd2[0]), 2.0), [0.0, 0.0, 0.0], mult(sub(nd2[2], nd2[1]), 2.0)]
+    nd1 = [cd1[0], cd1_middle, cd1[-1]]
+    angles = []
+    for d1, d2 in zip(nd1, nd2):
+        mag_d1 = magnitude(d1)
+        mag_d2 = magnitude(d2)
+        angles.append((math.pi / 2.0) if ((mag_d1 == 0.0) or (mag_d2 == 0.0))
+                      else math.acos(dot(d1, d2) / (mag_d1 * mag_d2)))
+    dangles = [2.0 * (angles[1] - angles[0]), 0.0, 2.0 * (angles[2] - angles[1])]
+    mag_nd2 = [magnitude(d2) for d2 in nd2]
+    mag_nd12 = [2.0 * (mag_nd2[1] - mag_nd2[0]), 0.0, 2.0 * (mag_nd2[2] - mag_nd2[1])]
+    cd2 = [nd2[0]]
+    for i in range(1, elements_count):
+        if (i == half_count) and not odd_count:
+            d2 = nd2[1]  # use exact value since known
+        else:
+            if i <= half_count:
+                xi = lengths[i] / length1
+                na = 0
+                nb = 1
+            else:
+                xi = (lengths[i] - length1) / length2
+                na = 1
+                nb = 2
+            d2 = interpolateCubicHermite(nd2[na], nd12[na], nd2[nb], nd12[nb], xi)
+            final_mag_d2 = interpolateCubicHermite([mag_nd2[na]], [mag_nd12[na]], [mag_nd2[nb]], [mag_nd12[nb]], xi)[0]
+            angle = interpolateCubicHermite([angles[na]], [dangles[na]], [angles[nb]], [dangles[nb]], xi)[0]
+            if magnitude(d2) == 0.0:
+                d2 = [0.0, 0.0, 0.0]
+            else:
+                d1 = cd1[i]
+                normal = cross(cross(d1, d2), d1)
+                mag_normal = magnitude(normal)
+                if mag_normal > 0.0:
+                    normal = mult(normal, magnitude(d1) / mag_normal)
+                d2 = add(mult(d1, math.cos(angle)), mult(normal, math.sin(angle)))
+                start_mag_d2 = magnitude(d2)
+                if start_mag_d2 > 0.0:
+                    d2 = mult(d2, final_mag_d2 / start_mag_d2)
+        cd2.append(d2)
+    cd2.append(nd2[2])
+    return cd2
+
+
 def interpolateSampleCubicHermite(v, d, pe, pxi, psf):
     """
     Partner function to sampleCubicHermiteCurves for interpolating additional variables with

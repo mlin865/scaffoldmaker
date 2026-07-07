@@ -14,7 +14,8 @@ from scaffoldmaker.utils.interpolation import (
     DerivativeScalingMode, evaluateCoordinatesOnCurve, getCubicHermiteArcLength, getCubicHermiteTrimmedCurvesLengths,
     getNearestLocationOnCurve, interpolateCubicHermite, interpolateCubicHermiteDerivative,
     interpolateHermiteLagrangeDerivative, interpolateLagrangeHermiteDerivative, interpolateSampleCubicHermite,
-    linearlyInterpolateVectors, sampleCubicHermiteCurves, sampleCubicHermiteCurvesSmooth, sampleHermiteCurve,
+    linearlyInterpolateVectors, sampleCubicHermiteCurves, sampleCubicHermiteCurvesSmooth,
+    sampleCubicHermiteCurvesSideDerivativesTriple, sampleCubicHermiteCurvesTriple, sampleHermiteCurve,
     smoothCubicHermiteDerivativesLine, smoothCubicHermiteDerivativesLoop, smoothCurveSideCrossDerivatives,
     getNearestLocationBetweenCurves)
 from scaffoldmaker.utils.meshgeneratedata import MeshGenerateData
@@ -1097,19 +1098,21 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             stix = self._sampledTubeCoordinates[1][0][n2]
             stid2 = self._sampledTubeCoordinates[1][2][n2]
             ix = stix if self._shell_count else stox
-            id1 = self._sampledTubeCoordinates[1 if self._shell_count else 0][1][n2]
+            p = 1 if self._shell_count else 0
+            id1 = self._sampledTubeCoordinates[p][1][n2]
+            id12 = self._sampledTubeCoordinates[p][3][n2]
             id3 = [sub(stox[q], stix[q]) for q in range(self._elementsCountAround)]
             coreCentre = self._determineCoreCentrePoint(stox, stix)
             cbx, cbd1, cbd3, ctx, ctd1, ctd3 = self._generateCoreCoordinates(ix, id1, id3, coreCentre)
-            # offset ix, ox by dxi2 * d2 to get offset coordinates; calculate d2 from difference
+            # offset ix, ox by dxi2 * d2 to get offset core coordinates; calculate core d2 from difference
             offset_stox = [add(stox[q], mult(stod2[q], dxi2)) for q in range(self._elementsCountAround)]
             offset_stix = [add(stix[q], mult(stid2[q], dxi2)) for q in range(self._elementsCountAround)]
             offset_ix = offset_stix if self._shell_count else offset_stox
+            offset_id1 = [add(id1[q], mult(id12[q], dxi2)) for q in range(self._elementsCountAround)]
             offset_id3 = [sub(offset_stox[q], offset_stix[q]) for q in range(self._elementsCountAround)]
             offset_coreCentre = self._determineCoreCentrePoint(offset_stox, offset_stix)
-            # assume offset_id1 would be negligibly different from id1
             offset_cbx, _, _, offset_ctx, _, _ = self._generateCoreCoordinates(
-                offset_ix, id1, offset_id3, offset_coreCentre)
+                offset_ix, offset_id1, offset_id3, offset_coreCentre)
             cbd2 = [[div(sub(offset_cbx[m][n], cbx[m][n]), dxi2) for n in range(coreBoxMinorNodesCount)]
                     for m in range(coreBoxMajorNodesCount)]
             ctd2 = [[div(sub(offset_ctx[n3][n1], ctx[n3][n1]), dxi2) for n1 in range(self._elementsCountAround)]
@@ -1207,7 +1210,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         bd1c = interpolateLagrangeHermiteDerivative(bx, cx, scaled_cd1, 0.0)
         bd1 = mult(add(bd1a, bd1c), 0.5)
         bd2 = mult(add(ad2, cd2), 0.5)
-        rx = [ax, bx, cx]
+        rx = [copy.copy(ax), copy.copy(bx), copy.copy(cx)]
         rd1_us = [ad1, bd1, cd1]
         rd2 = [ad2, bd2, cd2]
         rd1 = smoothCubicHermiteDerivativesLine(rx, rd1_us, fixAllDirections=True)
@@ -1221,228 +1224,166 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
     def _generateCoreCoordinates(self, ix, id1, id3, centre):
         """
         Sample core box and transition elements by sampling radial crossings along
-        major -, minor |, diag1 /, diag2 \ directions.
-        From these 3x3 array of points at the corners, centres and mid-sides of the box are determined,
-        then the actual box elements are resampled from these.
-        Transition elements are determined by blending from the outside of the box to the shell.
+        major - and minor | axes then sample within quadrants using QuadTriangleMesh.
         :param ix: Ring of coordinates around core at slice along tube.
         :param id1: Ring of circumferencial d1 derivatives around core at slice along tube.
         :param id3: Ring of outward d3 derivatives around core at slice along tube.
         :param centre: Centre coordinates of core for slice.
         :return: box coordinates cbx, cbd1, cbd3, transition coordinates ctx, ctd1, ctd3.
-        Box coordinates are over [minorBoxNodeCount][majorBoxNodeCount]. Transition coordinates are over [n3][n1] and
+        Box coordinates are over [majorBoxNodeCount][minorBoxNodeCount]. Transition coordinates are over [n3][n1] and
         are only non-empty for at least 2 transition elements as they are the layers between the box and the shell.
         """
-        # sample radially across major, minor and both diagonals, like a Union Jack
-        major_n1 = 0
-        major_x, major_d1, major_d3 = self._getRadialCoreCrossing(
-            ix, id1, id3, major_n1, (self._elementsCountCoreBoxMinor % 2) == 1, centre)
+        # get start-centre-end coordinates across major (+d2 to -d2), up minor (-d3 to +d3)
+        major_box_count = self._elementsCountCoreBoxMajor
+        minor_box_count = self._elementsCountCoreBoxMinor
+        major_count = major_box_count + 2 * self._transition_count
+        minor_count = minor_box_count + 2 * self._transition_count
+        odd_major = (major_count % 2) == 1
+        odd_minor = (minor_count % 2) == 1
+        major_n1 = -1 if odd_minor else 0
+        major_x, major_d1, major_d3 = self._getRadialCoreCrossing(ix, id1, id3, major_n1, odd_minor, centre)
         minor_n1 = -((self._elementsCountAround + 3) // 4)
-        minor_x, minor_d3, minor_d1 = self._getRadialCoreCrossing(
-            ix, id1, id3, minor_n1, (self._elementsCountCoreBoxMajor % 2) == 1, centre)
-        minor_d1 = [[-d for d in v] for v in minor_d1]
-        major_d3[1] = minor_d3[1]
-        minor_d1[1] = major_d1[1]
-        d1_cross_d3 = cross(major_d1[1], major_d3[1])
-        mag_d1_cross_d3 = magnitude(d1_cross_d3)
-        centreNormal = div(d1_cross_d3, mag_d1_cross_d3) if (mag_d1_cross_d3 > 0.0) else d1_cross_d3
-        majorBoxSize = self._elementsCountCoreBoxMajor
-        minorBoxSize = self._elementsCountCoreBoxMinor
-        diag1_n1 = minorBoxSize // -2
-        diag1_x, diag1_d1, diag1_d3 = self._getRadialCoreCrossing(ix, id1, id3, diag1_n1, False, centre, centreNormal)
-        diag2_n1 = diag1_n1 + minorBoxSize
-        diag2_x, diag2_d1, diag2_d3 = self._getRadialCoreCrossing(ix, id1, id3, diag2_n1, False, centre, centreNormal)
+        minor_x, minor_d3, minor_d1 = self._getRadialCoreCrossing(ix, id1, id3, minor_n1, odd_major, centre)
+        minor_d1 = [[-d for d in d1] for d1 in minor_d1]
+        # sample major and minor to required density
+        mx, md1, minor_d1[1] = sampleCubicHermiteCurvesTriple(major_x, major_d1, major_count)
+        nx, nd3, major_d3[1] = sampleCubicHermiteCurvesTriple(minor_x, minor_d3, minor_count)
+        md3 = sampleCubicHermiteCurvesSideDerivativesTriple(mx, md1, minor_d1[1], major_d3)
+        nd1 = sampleCubicHermiteCurvesSideDerivativesTriple(nx, nd3, major_d3[1], minor_d1)
 
-        # sample to sides and corners of core box
-        majorXi = (2.0 * self._transition_count /
-                   (self._elementsCountCoreBoxMajor + 2 * self._transition_count))
-        majorXiR = 1.0 - majorXi
-        minorXi = (2.0 * self._transition_count /
-                   (self._elementsCountCoreBoxMinor + 2 * self._transition_count))
-        minorXiR = 1.0 - minorXi
-        # following expression adjusted to look best across all cases
-        boxDiagonalSize = math.sqrt(majorBoxSize * majorBoxSize + minorBoxSize * minorBoxSize)
-        diagXi = self._transition_count / (0.5 * boxDiagonalSize + self._transition_count + 0.5)
-        diagXiR = 1.0 - diagXi
+        # create arrays for box and transition parameters, latter only if transition count > 1
+        cbx, cbd1, cbd3 = [], [], []
+        for m in range(major_box_count + 1):
+            for lst in (cbx, cbd1, cbd3):
+                lst.append([None] * (minor_box_count + 1))
 
-        # 3x3 nodes (2x2 elements) giving extents of core box
-        tripleAngle = math.pi / 3.0
-        cosTripleAngle = math.cos(tripleAngle)
-        sinTripleAngle = math.sin(tripleAngle)
+        # create parameters for transition node layers, if transition count > 1
+        ctx, ctd1, ctd3 = [], [], []
+        for n1 in range(self._transition_count - 1):
+            for lst in (ctx, ctd1, ctd3):
+                lst.append([None] * (self._elementsCountAround))
 
-        e00x, e00dr = evaluateCoordinatesOnCurve(diag1_x, diag1_d1, (0, diagXi), derivative=True)
-        e00dc = set_magnitude_safe(add(mult(normalize_safe(diag1_d3[0]), diagXiR), mult(normalize_safe(diag1_d3[1]), diagXi)), magnitude(e00dr))
-        e00d1 = add(mult(e00dr, cosTripleAngle), mult(e00dc, -sinTripleAngle))
-        e00d3 = add(mult(e00dr, cosTripleAngle), mult(e00dc, sinTripleAngle))
+        half_major_box_count = major_box_count // 2
+        half_minor_box_count = minor_box_count // 2
+        half_major_count = major_count // 2
+        half_minor_count = minor_count // 2
+        bc_count = self._elementsCountAround // 4
+        # quadrants
+        for l in range(4):
+            abx, abd1, abd3 = [], [], []
+            acx, acd1, acd3 = [], [], []
+            if l == 0:
+                for m in range(half_major_count, -1, -1):
+                    abx.append(mx[m])
+                    abd1.append([-d for d in md1[m]])
+                    abd3.append(md3[m])
+                for n in range(half_minor_count, minor_count + 1):
+                    acx.append(nx[n])
+                    acd1.append([-d for d in nd1[n]])
+                    acd3.append(nd3[n])
+            elif l == 1:
+                for n in range(half_minor_count, minor_count + 1):
+                    abx.append(nx[n])
+                    abd1.append(nd3[n])
+                    abd3.append(nd1[n])
+                for m in range(half_major_count, major_count + 1):
+                    acx.append(mx[m])
+                    acd1.append(md3[m])
+                    acd3.append(md1[m])
+            elif l == 2:
+                for m in range(half_major_count, major_count + 1):
+                    abx.append(mx[m])
+                    abd1.append(md1[m])
+                    abd3.append([-d for d in md3[m]])
+                for n in range(half_minor_count, -1, -1):
+                    acx.append(nx[n])
+                    acd1.append(nd1[n])
+                    acd3.append([-d for d in nd3[n]])
+            else:  # l == 3:
+                for n in range(half_minor_count, -1, -1):
+                    abx.append(nx[n])
+                    abd1.append([-d for d in nd3[n]])
+                    abd3.append([-d for d in nd1[n]])
+                for m in range(half_major_count, -1, -1):
+                    acx.append(mx[m])
+                    acd1.append([-d for d in md3[m]])
+                    acd3.append([-d for d in md1[m]])
+            q_start = l * bc_count
+            bcx, bcd1, bcd3 = [], [], []
+            for bc in range(bc_count + 1):
+                q = (q_start + bc) % self._elementsCountAround
+                bcx.append(ix[q])
+                bcd1.append(id3[q])
+                bcd3.append(id1[q])
+            bcd1[0] = abd1[-1]
+            bcd1[-1] = acd3[-1]
+            ab_box_count = half_major_box_count if (l in (0, 2)) else half_minor_box_count
+            ac_box_count = half_minor_box_count if (l in (0, 2)) else half_major_box_count
 
-        e02x, e02dr = evaluateCoordinatesOnCurve(diag2_x, diag2_d1, (1, diagXiR), derivative=True)
-        e02dc = set_magnitude_safe(add(mult(normalize_safe(diag2_d3[1]), diagXi), mult(normalize_safe(diag2_d3[2]), diagXiR)), magnitude(e02dr))
-        e02d1 = add(mult(e02dr, cosTripleAngle), mult(e02dc, sinTripleAngle))
-        e02d3 = add(mult(e02dr, -cosTripleAngle), mult(e02dc, sinTripleAngle))
+            triangle_abc = QuadTriangleMesh(
+                self._transition_count, ab_box_count, ac_box_count,
+                sampleHermiteCurve, nway_d_factor=self._nway_d_factor)
+            triangle_abc.set_edge_parameters12(abx, abd1, abd3)
+            triangle_abc.set_edge_parameters13(acx, acd1, acd3)
+            triangle_abc.set_edge_parameters23(bcx, bcd1, bcd3)
+            triangle_abc.build()
 
-        e20x, e20dr = evaluateCoordinatesOnCurve(diag2_x, diag2_d1, (0, diagXi), derivative=True)
-        e20dc = set_magnitude_safe(add(mult(normalize_safe(diag2_d3[0]), diagXiR), mult(normalize_safe(diag2_d3[1]), diagXi)), magnitude(e20dr))
-        e20d1 = add(mult(e20dr, cosTripleAngle), mult(e20dc, sinTripleAngle))
-        e20d3 = add(mult(e20dr, -cosTripleAngle), mult(e20dc, sinTripleAngle))
+            for ac in range(ac_box_count + 1):
+                bx, bd1, bd3, _ = triangle_abc.get_parameters12(ac, count=(ab_box_count + 1))
+                if ac == ac_box_count:
+                    # realign derivatives
+                    for i in range(ab_box_count):
+                        bd1[i], bd3[i] = bd3[i], [-d for d in bd1[i]]
+                    bd1[-1], bd3[-1] = bd3[-1], [-d for d in add(bd1[-1], bd3[-1])]
+                if l == 0:
+                    n = half_minor_box_count + ac
+                elif l == 1:
+                    m = half_major_box_count + ac
+                elif l == 2:
+                    n = half_minor_box_count - ac
+                else:  # l == 3:
+                    m = half_major_box_count - ac
+                for ab in range(ab_box_count + 1):
+                    blend_d1 = blend_d3 = ((ac == 0) and (0 < ab < ab_box_count))
+                    if l == 0:
+                        m = half_major_box_count - ab
+                        d1 = [-d for d in bd1[ab]]
+                        d3 = bd3[ab]
+                        blend_d1 = blend_d3 = False
+                    elif l == 1:
+                        n = half_minor_box_count + ab
+                        d1 = bd3[ab]
+                        d3 = bd1[ab]
+                        blend_d3 = False
+                    elif l == 2:
+                        m = half_major_box_count + ab
+                        d1 = bd1[ab]
+                        d3 = [-d for d in bd3[ab]]
+                        blend_d1 = False
+                    else:  # l == 3:
+                        n = half_minor_box_count - ab
+                        d1 = [-d for d in bd3[ab]]
+                        d3 = [-d for d in bd1[ab]]
+                    cbx[m][n] = bx[ab]
+                    cbd1[m][n] = linearlyInterpolateVectors(
+                        cbd1[m][n], d1, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN) if blend_d1 \
+                        else d1
+                    cbd3[m][n] = linearlyInterpolateVectors(
+                        cbd3[m][n], d3, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN) if blend_d3 \
+                        else d3
 
-        e22x, e22dr = evaluateCoordinatesOnCurve(diag1_x, diag1_d1, (1, diagXiR), derivative=True)
-        e22dc = set_magnitude_safe(add(mult(normalize_safe(diag1_d3[1]), diagXi), mult(normalize_safe(diag1_d3[2]), diagXiR)), magnitude(e22dr))
-        e22d1 = add(mult(e22dr, cosTripleAngle), mult(e22dc, -sinTripleAngle))
-        e22d3 = add(mult(e22dr, cosTripleAngle), mult(e22dc, sinTripleAngle))
+            # get transition node layer parameters, if any
+            for n3 in range(0, self._transition_count - 1):
+                tx, td1, td3, _ = triangle_abc.get_parameters23(self._transition_count - n3 - 1)
+                for bc in range(bc_count + 1):
+                    q = (q_start + bc) % self._elementsCountAround
+                    ctx[n3][q] = tx[bc]
+                    ctd1[n3][q] = td3[bc]
+                    ctd3[n3][q] = td1[bc]
 
-        ex = [
-            e00x,
-            evaluateCoordinatesOnCurve(minor_x, minor_d3, (0, minorXi)),
-            e02x,
-            evaluateCoordinatesOnCurve(major_x, major_d1, (0, majorXi)),
-            centre,
-            evaluateCoordinatesOnCurve(major_x, major_d1, (1, majorXiR)),
-            e20x,
-            evaluateCoordinatesOnCurve(minor_x, minor_d3, (1, minorXiR)),
-            e22x
-        ]
-        majorScale = (2.0 / majorBoxSize) if (majorBoxSize > 0.0) else 1.0
-        minorScale = (2.0 / minorBoxSize) if (minorBoxSize > 0.0) else 1.0
-        major_ed1 = [
-            mult(interpolateCubicHermiteDerivative(major_x[0], major_d1[0], major_x[1], major_d1[1], majorXi), majorXiR),
-            mult(major_d1[1], majorXiR),
-            mult(interpolateCubicHermiteDerivative(major_x[1], major_d1[1], major_x[2], major_d1[2], majorXiR), majorXiR)]
-        minor_ed3 = [
-            mult(interpolateCubicHermiteDerivative(minor_x[0], minor_d3[0], minor_x[1], minor_d3[1], minorXi), minorXiR),
-            mult(minor_d3[1], minorXiR),
-            mult(interpolateCubicHermiteDerivative(minor_x[1], minor_d3[1], minor_x[2], minor_d3[2], minorXiR), minorXiR)]
-        mag_ed3 = (magnitude(minor_ed3[1]) * minorScale * majorXi + magnitude(major_d3[0]) * majorXiR) / minorScale
-        major_ed3 = [
-            set_magnitude_safe(add(mult(normalize_safe(major_d3[0]), majorXiR), mult(normalize_safe(major_d3[1]), majorXi)), mag_ed3),
-            minor_ed3[1],
-            set_magnitude_safe(add(mult(normalize_safe(major_d3[1]), majorXi), mult(normalize_safe(major_d3[2]), majorXiR)), mag_ed3)]
-        mag_ed1 = (magnitude(major_ed1[1]) * majorScale * minorXi + magnitude(minor_d1[0]) * minorXiR) / majorScale
-        minor_ed1 = [
-            set_magnitude_safe(add(mult(normalize_safe(minor_d1[0]), minorXiR), mult(normalize_safe(minor_d1[1]), minorXi)), mag_ed1),
-            major_ed1[1],
-            set_magnitude_safe(add(mult(normalize_safe(minor_d1[1]), minorXi), mult(normalize_safe(minor_d1[2]), minorXiR)), mag_ed1)]
-        ed1 = [
-            smoothCubicHermiteDerivativesLine(
-                [ex[0], ex[1]], [e00d1, minor_ed1[0]], fixStartDirection=True, fixEndDerivative=True)[0],
-            minor_ed1[0],
-            smoothCubicHermiteDerivativesLine(
-                [ex[1], ex[2]], [minor_ed1[0], e02d1], fixStartDerivative=True, fixEndDirection=True)[1],
-            major_ed1[0],
-            major_ed1[1],
-            major_ed1[2],
-            smoothCubicHermiteDerivativesLine(
-                [ex[6], ex[7]], [e20d1, minor_ed1[2]], fixStartDirection=True, fixEndDerivative=True)[0],
-            minor_ed1[2],
-            smoothCubicHermiteDerivativesLine(
-                [ex[7], ex[8]], [minor_ed1[2], e22d1], fixStartDerivative=True, fixEndDirection=True)[1],
-        ]
-        ed3 = [
-            smoothCubicHermiteDerivativesLine(
-                [ex[0], ex[3]], [e00d3, major_ed3[0]], fixStartDirection=True, fixEndDerivative=True)[0],
-            minor_ed3[0],
-            smoothCubicHermiteDerivativesLine(
-                [ex[2], ex[5]], [e02d3, major_ed3[2]], fixStartDirection=True, fixEndDerivative=True)[0],
-            major_ed3[0],
-            major_ed3[1],
-            major_ed3[2],
-            smoothCubicHermiteDerivativesLine(
-                [ex[3], ex[6]], [major_ed3[0], e20d3], fixStartDerivative=True, fixEndDirection=True)[1],
-            minor_ed3[2],
-            smoothCubicHermiteDerivativesLine(
-                [ex[5], ex[8]], [major_ed3[2], e22d3], fixStartDerivative=True, fixEndDirection=True)[1],
-        ]
-
-        # Create an empty list for the core with dimensions of (major - 1) x (minor - 1)
-        cbx, cbd1, cbd3, ctx, ctd1, ctd3 = [], [], [], [], [], []
-
-        trackSurface = TrackSurface(2, 2, ex, ed1, ed3)
-        for m in range(majorBoxSize + 1):
-            majorProportion = m / majorBoxSize
-            row_x = []
-            row_d1 = []
-            row_d3 = []
-            for n in range(minorBoxSize + 1):
-                minorProportion = (n / minorBoxSize) if (minorBoxSize > 0) else 0.0
-                position = trackSurface.createPositionProportion(majorProportion, minorProportion)
-                x, d1, d3 = trackSurface.evaluateCoordinates(position, derivatives=True)
-                row_x.append(x)
-                row_d1.append(mult(d1, majorScale))
-                row_d3.append(mult(d3, minorScale))
-            cbx.append(row_x)
-            cbd1.append(row_d1)
-            cbd3.append(row_d3)
-
-        if self._transition_count > 1:
-            for i in range(self._transition_count - 1):
-                for lst in (ctx, ctd1, ctd3):
-                    lst.append([None] * self._elementsCountAround)
-            start_bn3 = minorBoxSize // 2
-            topLeft_n1 = minorBoxSize - start_bn3
-            topRight_n1 = topLeft_n1 + majorBoxSize
-            bottomRight_n1 = topRight_n1 + minorBoxSize
-            bottomLeft_n1 = bottomRight_n1 + majorBoxSize
-            for n1 in range(self._elementsCountAround):
-                if n1 <= topLeft_n1:
-                    bn1 = 0
-                    bn3 = start_bn3 + n1
-                    if n1 < topLeft_n1:
-                        start_d1 = cbd3[bn1][bn3]
-                        start_d3 = [-d for d in cbd1[bn1][bn3]]
-                    else:
-                        start_d1 = add(cbd3[bn1][bn3], cbd1[bn1][bn3])
-                        start_d3 = sub(cbd3[bn1][bn3], cbd1[bn1][bn3])
-                elif n1 <= topRight_n1:
-                    bn1 = n1 - topLeft_n1
-                    bn3 = minorBoxSize
-                    if n1 < topRight_n1:
-                        start_d1 = cbd1[bn1][bn3]
-                        start_d3 = cbd3[bn1][bn3]
-                    else:
-                        start_d1 = sub(cbd1[bn1][bn3], cbd3[bn1][bn3])
-                        start_d3 = add(cbd1[bn1][bn3], cbd3[bn1][bn3])
-                elif n1 <= bottomRight_n1:
-                    bn1 = majorBoxSize
-                    bn3 = minorBoxSize - (n1 - topRight_n1)
-                    if n1 < bottomRight_n1:
-                        start_d1 = [-d for d in cbd3[bn1][bn3]]
-                        start_d3 = cbd1[bn1][bn3]
-                    else:
-                        start_d1 = [-d for d in add(cbd1[bn1][bn3], cbd3[bn1][bn3])]
-                        start_d3 = sub(cbd1[bn1][bn3], cbd3[bn1][bn3])
-                elif n1 <= bottomLeft_n1:
-                    bn1 = majorBoxSize - (n1 - bottomRight_n1)
-                    bn3 = 0
-                    if n1 < bottomLeft_n1:
-                        start_d1 = [-d for d in cbd1[bn1][bn3]]
-                        start_d3 = [-d for d in cbd3[bn1][bn3]]
-                    else:
-                        start_d1 = sub(cbd3[bn1][bn3], cbd1[bn1][bn3])
-                        start_d3 = [-d for d in add(cbd1[bn1][bn3], cbd3[bn1][bn3])]
-                else:
-                    bn1 = 0
-                    bn3 = n1 - bottomLeft_n1
-                    start_d1 = cbd3[bn1][bn3]
-                    start_d3 = [-d for d in cbd1[bn1][bn3]]
-                start_x = cbx[bn1][bn3]
-
-                nx = [start_x, ix[n1]]
-                nd3before = [[self._transition_count * d for d in start_d3], id3[n1]]
-                nd3 = [nd3before[0], computeCubicHermiteEndDerivative(nx[0], nd3before[0], nx[1], nd3before[1])]
-                tx, td3, pe, pxi, psf = sampleCubicHermiteCurvesSmooth(
-                    nx, nd3, self._transition_count,
-                    derivativeMagnitudeStart=magnitude(nd3[0]) / self._transition_count,
-                    derivativeMagnitudeEnd=magnitude(nd3[1]) / self._transition_count)
-                delta_id1 = sub(id1[n1], start_d1)
-                td1 = interpolateSampleCubicHermite([start_d1, id1[n1]], [delta_id1, delta_id1], pe, pxi, psf)[0]
-
-                for n3 in range(1, self._transition_count):
-                    ctx[n3 - 1][n1] = tx[n3]
-                    ctd1[n3 - 1][n1] = td1[n3]
-                    ctd3[n3 - 1][n1] = td3[n3]
-
-            # smooth td1 around:
-            for n3 in range(1, self._transition_count):
-                ctd1[n3 - 1] = smoothCubicHermiteDerivativesLoop(ctx[n3 - 1], ctd1[n3 - 1], fixAllDirections=False)
+        # smooth td1 around:
+        for n3 in range(self._transition_count - 1):
+            ctd1[n3] = smoothCubicHermiteDerivativesLoop(ctx[n3], ctd1[n3], fixAllDirections=False)
 
         return cbx, cbd1, cbd3, ctx, ctd1, ctd3
 

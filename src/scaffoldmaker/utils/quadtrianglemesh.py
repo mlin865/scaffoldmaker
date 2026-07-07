@@ -225,6 +225,34 @@ class QuadTriangleMesh:
             n12 += 1
         return px, pd1, pd2, pd3
 
+    def get_parameters23(self, n1):
+        """
+        Get parameters along 2-3 direction of triangle from 12 edge to 13 edge.
+        :param n1: Index in from opposite side from point1 where 0 is the 23 edge, up to box_count1 - 1.
+        :return: px, pd1, pd2, pd3
+        """
+        assert 0 <= n1 < self._box_count1
+        px = []
+        pd1 = []
+        pd2 = []
+        pd3 = []
+        for n23 in range(self._node_count23):
+            n12 = ((self._element_count12 - n1) if (n23 <= self._box_count3) else
+                   self._box_count2 - (n23 - self._box_count3))
+            n13 = n23 if (n23 < self._box_count3) else (self._element_count13 - n1)
+            x, d1, d2, d3 = self._nx[n13][n12]
+            if n23 < self._box_count3:
+                d1 = copy.copy(d1)
+                d2 = copy.copy(d2)
+            else:
+                d1 = [-d for d in d1]
+                d2 = [-d for d in d2]
+            px.append(copy.copy(x))
+            pd1.append(d1)
+            pd2.append(d2)
+            pd3.append(copy.copy(d3))
+        return px, pd1, pd2, pd3
+
     def get_parameters31(self, n12, count=None):
         """
         Get parameters along 3-1 direction of triangle.
