@@ -1172,6 +1172,129 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(magnitude(d1), magnitude(d2), delta=X_TOL)
 
+    def test_3d_tube_network_line_twist_core(self):
+        """
+        Test line twist 3-D tube network with solid core is generated correctly.
+        """
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Line twist")
+        settings = scaffoldPackage.getScaffoldSettings()
+        settings["Number of elements around"] = 8
+        settings["Target element density along longest segment"] = 4.0
+        settings["Core"] = True
+        settings["Number of elements across core box minor"] = 2
+        settings["Number of elements across core transition"] = 2
+
+        context = Context("Test")
+        region = context.getDefaultRegion()
+
+        self.assertTrue(region.isValid())
+        scaffoldPackage.generate(region)
+        annotationGroups = scaffoldPackage.getAnnotationGroups()
+        self.assertEqual(2, len(annotationGroups))
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "core") is not None)
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "shell") is not None)
+
+        fieldmodule = region.getFieldmodule()
+        mesh3d = fieldmodule.findMeshByDimension(3)
+        self.assertEqual(112, mesh3d.getSize())
+        mesh2d = fieldmodule.findMeshByDimension(2)
+        self.assertEqual(380, mesh2d.getSize())
+        mesh1d = fieldmodule.findMeshByDimension(1)
+        self.assertEqual(432, mesh1d.getSize())
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(165, nodes.getSize())
+        coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+
+        X_TOL = 1.0E-8
+
+        minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
+        assertAlmostEqualList(self, minimums, [0.0, -0.09982782069268835, -0.09982782069268835], X_TOL)
+        assertAlmostEqualList(self, maximums, [1.0, 0.09982782069268835, 0.09982782069268835], X_TOL)
+
+        with ChangeManager(fieldmodule):
+            one = fieldmodule.createFieldConstant(1.0)
+            isExterior = fieldmodule.createFieldIsExterior()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            fieldcache = fieldmodule.createFieldcache()
+
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
+            volumeField.setNumbersOfPoints(4)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+        expected_core_volume = 0.020084449597837638
+        expected_shell_volume = 0.011235647827508903
+        expected_total_volume = expected_core_volume + expected_shell_volume
+        expected_total_surface_area = 0.6901264247417831
+
+        expectedSizes3d = {
+            "core": (80, expected_core_volume),
+            "shell": (32, expected_shell_volume)
+            }
+        fieldcache = fieldmodule.createFieldcache()
+        for name in expectedSizes3d:
+            annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+            size = annotationGroup.getMeshGroup(mesh3d).getSize()
+            self.assertEqual(expectedSizes3d[name][0], size, name)
+            volumeMeshGroup = annotationGroup.getMeshGroup(mesh3d)
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, volumeMeshGroup)
+            volumeField.setNumbersOfPoints(4)
+            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+            self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
+
+        # check twist of centre nodes along model
+        expected_x = [
+            [0.0, 1.734723475976807e-18, -1.0408340855860843e-17],
+            [0.25001128145481993, 1.214306433183765e-17, -5.204170427930421e-18],
+            [0.5, 2.0816681711721685e-17, -6.938893903907228e-18],
+            [0.74998871854518, 8.673617379884035e-18, -7.806255641895632e-18],
+            [1.0, -6.938893903907228e-18, -1.214306433183765e-17]]
+        expected_d1 = [
+            [0.0, -0.025350651258193597, -0.014614550557958546],
+            [0.0, -0.025122103521202532, -0.012181503879516015],
+            [0.0, -0.026666666666666675, -1.687085467822282e-17],
+            [0.0, -0.025122103521202546, 0.012181503879515982],
+            [0.0, -0.0253506512581936, 0.014614550557958524]]
+        expected_d2 = [
+            [0.25002963869709516, -2.6020852139652106e-14, 5.204170427930421e-14],
+            [0.24999646305423617, -8.673617379884035e-15, -3.469446951953614e-14],
+            [0.24998450968705122, -1.734723475976807e-14, 6.938893903907228e-14],
+            [0.24999646305756684, -1.734723475976807e-14, 8.673617379884035e-15],
+            [0.25002963869757977, 1.734723475976807e-14, 4.336808689942018e-14]]
+        expected_d3 = [
+            [0.0, -0.014614550557958551, 0.025350651258193593],
+            [0.0, -0.012181503879516027, 0.025122103521202543],
+            [0.0, 2.2251485348737508e-17, 0.026666666666666672],
+            [0.0, 0.012181503879515979, 0.025122103521202557],
+            [0.0, 0.014614550557958522, 0.02535065125819361]]
+        for n in range(5):
+            xi = n / 4.0
+            node_identifier = 5 + n * 33
+            node = nodes.findNodeByIdentifier(node_identifier)
+            fieldcache.setNode(node)
+            result, x = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            result, d1 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            result, d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, x, expected_x[n], X_TOL)
+            assertAlmostEqualList(self, d1, expected_d1[n], X_TOL)
+            assertAlmostEqualList(self, d2, expected_d2[n], X_TOL)
+            assertAlmostEqualList(self, d3, expected_d3[n], X_TOL)
+
     def test_3d_tube_network_sphere_cube(self):
         """
         Test sphere cube 3-D tube network is generated correctly.

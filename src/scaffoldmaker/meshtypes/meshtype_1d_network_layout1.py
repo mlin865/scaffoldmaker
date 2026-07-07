@@ -1,7 +1,7 @@
 """
 Constructs a 1-D network layout mesh with specifiable structure.
 """
-from cmlibs.maths.vectorops import cross, magnitude, mult, normalize, sub
+from cmlibs.maths.vectorops import add, cross, magnitude, mult, normalize, set_magnitude, sub
 from cmlibs.utils.zinc.field import find_or_create_field_coordinates
 from cmlibs.utils.zinc.general import ChangeManager
 from cmlibs.utils.zinc.scene import scene_get_selection_group
@@ -23,10 +23,11 @@ class MeshType_1d_network_layout1(Scaffold_base):
     """
 
     parameterSetStructureStrings = {
-        "Default": "1-2",
         "Bifurcation": "1-2.1,2.2-3,2.3-4",
         "Bone": "(1-3.2,(2-3.3,3.1-4-5-6-7.1,7.2-8),7.3-9)",
         "Converging bifurcation": "1-3.1,2-3.2,3.3-4",
+        "Line": "1-2",
+        "Line twist": "1-2",
         "Loop": "1-2-3-4-5-6-7-8-1",
         "Snake": "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33",
         "Sphere": "(1-2-3)",
@@ -42,11 +43,13 @@ class MeshType_1d_network_layout1(Scaffold_base):
 
     @classmethod
     def getParameterSetNames(cls):
-        return list(cls.parameterSetStructureStrings.keys())
+        return ["Default"] + list(cls.parameterSetStructureStrings.keys())
 
     @classmethod
     def getDefaultOptions(cls, parameterSetName="Default"):
         options = {}
+        if parameterSetName == "Default":
+            parameterSetName = "Line"
         options["Base parameter set"] = parameterSetName
         options["Structure"] = cls.parameterSetStructureStrings[parameterSetName]
         options["Define inner coordinates"] = False  # can be overridden by parent scaffold
@@ -227,6 +230,27 @@ class MeshType_1d_network_layout1(Scaffold_base):
             if "Bone" == parameterSetName:
                 cls._defineBoneCoordinates(
                     innerCoordinates, 4.0, 1.0 - 0.5 * (1.0 - innerProportion), 0.5 * innerProportion)
+            elif "Line twist" == parameterSetName:
+                twistAngle = math.pi / 6.0
+                sinTwistAngle = math.sin(twistAngle)
+                for n in range(2):
+                    angle = (-0.5 if (n == 0) else 0.5) * twistAngle
+                    cosAngle = math.cos(angle)
+                    sinAngle = math.sin(angle)
+                    node = nodes.findNodeByIdentifier(n + 1)
+                    fieldcache.setNode(node)
+                    result, old_d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
+                    result, old_d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
+                    d2 = add(mult(old_d2, cosAngle), mult(old_d3, sinAngle))
+                    d3 = add(mult(old_d3, cosAngle), mult(old_d2, -sinAngle))
+                    mag_d2 = magnitude(d2)
+                    mag_d3 = magnitude(d3)
+                    d12 = set_magnitude([d2[0], -d2[2], d2[1]], mag_d2 * sinTwistAngle)
+                    d13 = set_magnitude([d3[0], -d3[2], d3[1]], mag_d3 * sinTwistAngle)
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS2, 1, d12)
+                    coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D2_DS1DS3, 1, d13)
             elif "Sphere" == parameterSetName:
                 cls._defineSphereCoordinates(innerCoordinates, innerProportion)
 
