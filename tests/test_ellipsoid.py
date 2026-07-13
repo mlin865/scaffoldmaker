@@ -12,7 +12,7 @@ import unittest
 
 class EllipsoidScaffoldTestCase(unittest.TestCase):
 
-    def test_ellipsoid_2D(self):
+    def test_ellipsoid_2d(self):
         """
         Test creation of 2-D ellipsoid surface.
         """
@@ -87,7 +87,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         for annotation_group in annotation_groups:
             self.assertEqual(44, annotation_group.getMeshGroup(mesh2d).getSize())
 
-    def test_ellipsoid_3D(self):
+    def test_ellipsoid_3d(self):
         """
         Test creation of 3-D ellipsoid volume.
         """
@@ -183,7 +183,72 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
                 self.assertTrue(name in ["left", "right", "back", "front", "bottom", "top"], msg=name)
                 self.assertEqual(68, annotation_group.getMeshGroup(mesh3d).getSize())
 
-    def test_ellipsoid_shell(self):
+    def test_ellipsoid_3d_core_symmetry(self):
+        """
+        Test creation of 3-D ellipsoid volume.
+        """
+        scaffold_class = MeshType_3d_ellipsoid1
+        options = scaffold_class.getDefaultOptions()
+        options["Numbers of elements across axes"] = [6, 6, 6]
+        options["Numbers of shell, transition elements"] = [0, 1]
+        options["Axes lengths"] = [1.0, 1.0, 1.0]
+        options["Axes shell thicknesses"] = [0.2, 0.2, 0.2]
+        options["Core"] = True
+
+        context = Context("Test")
+        region = context.getDefaultRegion()
+        scaffold_class.generateMesh(region, options)
+
+        fieldmodule = region.getFieldmodule()
+        mesh3d = fieldmodule.findMeshByDimension(3)
+        self.assertEqual(160, mesh3d.getSize())
+        mesh2d = fieldmodule.findMeshByDimension(2)
+        self.assertEqual(528, mesh2d.getSize())
+        mesh1d = fieldmodule.findMeshByDimension(1)
+        self.assertEqual(590, mesh1d.getSize())
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(223, nodes.getSize())
+
+        # check coordinates range, sphere volume
+        coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+        minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
+        TOL = 2.0E-8
+        assertAlmostEqualList(self, minimums, [-1.0, -1.0, -1.0], TOL)
+        assertAlmostEqualList(self, maximums, [1.0, 1.0, 1.0], TOL)
+
+        fieldcache = fieldmodule.createFieldcache()
+        with (ChangeManager(fieldmodule)):
+            is_exterior = fieldmodule.createFieldIsExterior()
+            surface_group = fieldmodule.createFieldGroup()
+            surface_mesh_group = surface_group.createMeshGroup(mesh2d)
+            surface_mesh_group.addElementsConditional(is_exterior)
+            self.assertEqual(96, surface_mesh_group.getSize())
+            one = fieldmodule.createFieldConstant(1.0)
+            surface_area_field = fieldmodule.createFieldMeshIntegral(one, coordinates, surface_mesh_group)
+            surface_area_field.setNumbersOfPoints(4)
+            volume_field = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
+            volume_field.setNumbersOfPoints(3)
+        result, surface_area = surface_area_field.evaluateReal(fieldcache, 1)
+        self.assertEqual(result, RESULT_OK)
+        result, volume = volume_field.evaluateReal(fieldcache, 1)
+        self.assertEqual(result, RESULT_OK)
+        self.assertAlmostEqual(surface_area, 12.561730858137276, delta=TOL)
+        # note exact ellipsoid volume is 4.0 / 3.0 * math.pi * a * b * c = 12.566370614359173
+        self.assertAlmostEqual(volume, 4.186442287004547, delta=TOL)
+
+        # these nodes should have +/- symmetry of coordinates
+        node_identifiers = [63, 65, 77, 79, 145, 147, 159, 161]
+        expected_value = 0.29334831
+        for node_identifier in node_identifiers:
+            node = nodes.findNodeByIdentifier(node_identifier)
+            fieldcache.setNode(node)
+            result, x = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            for value in x:
+                self.assertAlmostEqual(abs(value), expected_value, delta=TOL)
+
+    def test_ellipsoid_3d_shell(self):
         """
         Test creation of 3-D ellipsoid surface with a shell layer.
         """
@@ -267,7 +332,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
                 self.assertTrue(name in ["left", "right", "back", "front", "bottom", "top"])
                 self.assertEqual(48, annotation_group.getMeshGroup(mesh3d).getSize())
 
-    def test_ellipsoid_shell_only(self):
+    def test_ellipsoid_3d_shell_only(self):
         """
         Test creation of 3-D ellipsoid surface with only a 2-element thick shell layer.
         """

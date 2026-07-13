@@ -57,6 +57,7 @@ class EllipsoidMesh:
         self._core_group = None
         self._shell_group = None
         self._octant_group_lists = None
+        self._tube_core_box_layout = False  # set to true to layout core box derivatives for TubeNetworkMesh
         none_parameters = [None] * 4  # x, d1, d2, d3
         self._nx = []  # shield mesh with holes over n3, n2, n1, d
         self._nids = []
@@ -99,14 +100,13 @@ class EllipsoidMesh:
                 nids_layer.append(nids_row)
                 if n2 < self._element_counts[1]:
                     eids_layer.append([None] * self._element_counts[0])
-                merge_counts_layer.append([0.0 for _ in range(self._element_counts[0] + 1)])
+                merge_counts_layer.append([0 for _ in range(self._element_counts[0] + 1)])
                 # print(s)
             self._nx.append(nx_layer)
             self._nids.append(nids_layer)
             if n3 < self._element_counts[2]:
                 self._eids.append(eids_layer)
             self._merge_counts.append(merge_counts_layer)
-        self._added_node_layouts = False  # flag set when this is done once
         self._prescribed_node_layouts = []  # list of (n1, n2, n3, node_layout), sets node layout before node created
 
     def get_element_counts(self):
@@ -140,6 +140,20 @@ class EllipsoidMesh:
         """
         assert (octant_group_lists is None) or (len(octant_group_lists) == 8)
         self._octant_group_lists = octant_group_lists
+
+    def is_tube_core_box_layout(self):
+        """
+        Check whether layout of core derivatives is for TubeNetworkMesh.
+        :return: True if core derivatives layout is for TubeNetworkMesh i.e -d1, d3, d2
+        """
+        return self._tube_core_box_layout
+
+    def set_tube_core_box_layout(self, tube_core_box_layout):
+        """
+        Set whether layout of core derivatives is for TubeNetworkMesh.
+        :param tube_core_box_layout: Set to True to use core derivatives layout TubeNetworkMesh i.e -d1, d3, d2.
+        """
+        self._tube_core_box_layout = tube_core_box_layout
 
     def build(self, axes_lengths, axis2_x_rotation_radians=0, axis3_x_rotation_radians=math.pi/2.0,
               axes_shell_thicknesses=[0.0, 0.0, 0.0], nway_d_factor=0.6,
@@ -846,23 +860,25 @@ class EllipsoidMesh:
         if n3 == rim_count:
             if n2 == rim_count:
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(0)
+                    return node_layout_manager.getNodeLayout4WayPoints(1 if self._tube_core_box_layout else 0)
                 if rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(1)
+                    return node_layout_manager.getNodeLayout4WayPoints(0 if self._tube_core_box_layout else 1)
                 if (n1 > rim_count) and (rn1 > rim_count):
                     return node_layout_manager.getNodeLayout3WayPoints23(0)
             elif rn2 == rim_count:
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(2)
+                    return node_layout_manager.getNodeLayout4WayPoints(5 if self._tube_core_box_layout else 2)
                 if rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(3)
+                    return node_layout_manager.getNodeLayout4WayPoints(4 if self._tube_core_box_layout else 3)
                 if (n1 > rim_count) and (rn1 > rim_count):
-                    return node_layout_manager.getNodeLayout3WayPoints23(1)
+                    return node_layout_manager.getNodeLayout3WayPoints23(2 if self._tube_core_box_layout else 1)
             elif (n2 > rim_count) and (rn2 > rim_count):
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout3WayPoints13(0)
+                    return (node_layout_manager.getNodeLayout3WayPoints12(1) if self._tube_core_box_layout else
+                            node_layout_manager.getNodeLayout3WayPoints13(0))
                 if rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout3WayPoints13(1)
+                    return (node_layout_manager.getNodeLayout3WayPoints12(0) if self._tube_core_box_layout else
+                            node_layout_manager.getNodeLayout3WayPoints13(1))
                 if (n1 > rim_count) and (rn1 > rim_count):
                     return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
             return None
@@ -870,166 +886,50 @@ class EllipsoidMesh:
         if rn3 == rim_count:
             if n2 == rim_count:
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(4)
+                    return node_layout_manager.getNodeLayout4WayPoints(3 if self._tube_core_box_layout else 4)
                 if rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(5)
+                    return node_layout_manager.getNodeLayout4WayPoints(2 if self._tube_core_box_layout else 5)
                 if (n1 > rim_count) and (rn1 > rim_count):
-                    return node_layout_manager.getNodeLayout3WayPoints23(2)
+                    return node_layout_manager.getNodeLayout3WayPoints23(1 if self._tube_core_box_layout else 2)
             elif rn2 == rim_count:
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(6)
+                    return node_layout_manager.getNodeLayout4WayPoints(7 if self._tube_core_box_layout else 6)
                 elif rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout4WayPoints(7)
+                    return node_layout_manager.getNodeLayout4WayPoints(6 if self._tube_core_box_layout else 7)
                 if (n1 > rim_count) and (rn1 > rim_count):
                     return node_layout_manager.getNodeLayout3WayPoints23(3)
             elif (n2 > rim_count) and (rn2 > rim_count):
                 if n1 == rim_count:
-                    return node_layout_manager.getNodeLayout3WayPoints13(2)
+                    return (node_layout_manager.getNodeLayout3WayPoints12(3) if self._tube_core_box_layout else
+                            node_layout_manager.getNodeLayout3WayPoints13(2))
                 if rn1 == rim_count:
-                    return node_layout_manager.getNodeLayout3WayPoints13(3)
-                # no need for node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return (node_layout_manager.getNodeLayout3WayPoints12(2) if self._tube_core_box_layout else
+                            node_layout_manager.getNodeLayout3WayPoints13(3))
+                if (n1 > rim_count) and (rn1 > rim_count):
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
             return None
         # middle between +/- rim count, 3-way points on corners, permuted on faces
         if n2 == rim_count:
             if n1 == rim_count:
-                return node_layout_manager.getNodeLayout3WayPoints12(0)
+                return (node_layout_manager.getNodeLayout3WayPoints13(1) if self._tube_core_box_layout else
+                        node_layout_manager.getNodeLayout3WayPoints12(0))
             if rn1 == rim_count:
-                return node_layout_manager.getNodeLayout3WayPoints12(1)
+                return (node_layout_manager.getNodeLayout3WayPoints13(0) if self._tube_core_box_layout else
+                        node_layout_manager.getNodeLayout3WayPoints12(1))
             if (n1 > rim_count) and (rn1 > rim_count):
                 return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
         elif rn2 == rim_count:
             if n1 == rim_count:
-                return node_layout_manager.getNodeLayout3WayPoints12(2)
+                return (node_layout_manager.getNodeLayout3WayPoints13(3) if self._tube_core_box_layout else
+                        node_layout_manager.getNodeLayout3WayPoints12(2))
             if rn1 == rim_count:
-                return node_layout_manager.getNodeLayout3WayPoints12(3)
+                return (node_layout_manager.getNodeLayout3WayPoints13(2) if self._tube_core_box_layout else
+                        node_layout_manager.getNodeLayout3WayPoints12(3))
             if (n1 > rim_count) and (rn1 > rim_count):
                 return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
         elif ((n1 == rim_count) or (rn1 == rim_count)) and (n2 > rim_count) and (rn2 > rim_count):
             return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
         return None
-
-    def _add_node_layouts_3d(self, generate_data):
-        """
-        Fill map from node identifier to special node layout. Does not modify node layout mappings that already exist.
-        :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
-        """
-        if self._added_node_layouts:
-            return  # don't run again
-        self._added_node_layouts = True
-        node_layout_manager = generate_data.getHermiteNodeLayoutManager()
-        node_layout_permuted = node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
-        node_layout_3way12 = node_layout_manager.getNodeLayout3WayPoints12List()
-        node_layout_3way13 = node_layout_manager.getNodeLayout3WayPoints13List()
-        node_layout_3way23 = node_layout_manager.getNodeLayout3WayPoints23List()
-        node_layout_4way = node_layout_manager.getNodeLayout4WayPointsList()
-        upper_trans_counts = [self._element_counts[i] - self._rim_count for i in range(3)]
-        # bottom and top transition side face nodes are fully permuted
-        for nt in range(1, self._rim_count + 1):
-            # bottom transition
-            for n3 in (self._rim_count - nt, upper_trans_counts[2] + nt):
-                for n2 in range(self._rim_count + 1, upper_trans_counts[1]):
-                    for n1 in (self._rim_count - nt, upper_trans_counts[0] + nt):
-                        nid = self._nids[n3][n2][n1]
-                        generate_data.setNodeLayoutIfNew(nid, node_layout_permuted)
-                for n1 in range(self._rim_count + 1, upper_trans_counts[0]):
-                    for n2 in (self._rim_count - nt, upper_trans_counts[1] + nt):
-                        nid = self._nids[n3][n2][n1]
-                        generate_data.setNodeLayoutIfNew(nid, node_layout_permuted)
-        for n2 in range(self._element_counts[1] + 1):
-            for n1 in range(self._element_counts[0] + 1):
-                # nodes on boundary between bottom transition and box are 4-way on corners, 3-way on edges,
-                # fully permuted in between
-                nid = self._nids[self._rim_count][n2][n1]
-                if nid:
-                    node_layout = node_layout_permuted
-                    if n2 == self._rim_count:
-                        node_layout = node_layout_3way23[0]
-                        if n1 == self._rim_count:
-                            node_layout = node_layout_4way[0]
-                        elif n1 == upper_trans_counts[0]:
-                            node_layout = node_layout_4way[1]
-                    elif n2 == upper_trans_counts[1]:
-                        node_layout = node_layout_3way23[1]
-                        if n1 == self._rim_count:
-                            node_layout = node_layout_4way[2]
-                        elif n1 == upper_trans_counts[0]:
-                            node_layout = node_layout_4way[3]
-                    elif n1 == self._rim_count:
-                        node_layout = node_layout_3way13[0]
-                    elif n1 == upper_trans_counts[0]:
-                        node_layout = node_layout_3way13[1]
-                    generate_data.setNodeLayoutIfNew(nid, node_layout)
-                # nodes on boundary between top transition and box are 4-way on corners, 3-way on edges, None in between
-                nid = self._nids[upper_trans_counts[2]][n2][n1]
-                if nid:
-                    node_layout = None
-                    if n2 == self._rim_count:
-                        node_layout = node_layout_3way23[2]
-                        if n1 == self._rim_count:
-                            node_layout = node_layout_4way[4]
-                        elif n1 == upper_trans_counts[0]:
-                            node_layout = node_layout_4way[5]
-                    elif n2 == upper_trans_counts[1]:
-                        node_layout = node_layout_3way23[3]
-                        if n1 == self._rim_count:
-                            node_layout = node_layout_4way[6]
-                        elif n1 == upper_trans_counts[0]:
-                            node_layout = node_layout_4way[7]
-                    elif n1 == self._rim_count:
-                        node_layout = node_layout_3way13[2]
-                    elif n1 == upper_trans_counts[0]:
-                        node_layout = node_layout_3way13[3]
-                    if node_layout:
-                        generate_data.setNodeLayoutIfNew(nid, node_layout)
-        # 3-way points on box edges up middle, fully permuted on faces
-        for n3 in range(self._rim_count + 1, upper_trans_counts[2]):
-            for n2 in range(self._rim_count + 1, upper_trans_counts[1]):
-                for n1 in (self._rim_count, upper_trans_counts[0]):
-                    nid = self._nids[n3][n2][n1]
-                    generate_data.setNodeLayoutIfNew(nid, node_layout_permuted)
-            for n1 in range(self._rim_count + 1, upper_trans_counts[0]):
-                for n2 in (self._rim_count, upper_trans_counts[1]):
-                    nid = self._nids[n3][n2][n1]
-                    generate_data.setNodeLayoutIfNew(nid, node_layout_permuted)
-            nid = self._nids[n3][self._rim_count][self._rim_count]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[0])
-            nid = self._nids[n3][self._rim_count][upper_trans_counts[0]]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[1])
-            nid = self._nids[n3][upper_trans_counts[1]][self._rim_count]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[2])
-            nid = self._nids[n3][upper_trans_counts[1]][upper_trans_counts[0]]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[3])
-        # 3-way points on 8 corner transitions out from 4-way points
-        for nt in range(self._rim_count):
-            nid = self._nids[nt][nt][nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[1])
-            nid = self._nids[nt][nt][self._element_counts[0] - nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[0])
-            nid = self._nids[nt][self._element_counts[1] - nt][nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[3])
-            nid = self._nids[nt][self._element_counts[1] - nt][self._element_counts[0] - nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[2])
-            nid = self._nids[self._element_counts[2] - nt][nt][nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[0])
-            nid = self._nids[self._element_counts[2] - nt][nt][self._element_counts[0] - nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[1])
-            nid = self._nids[self._element_counts[2] - nt][self._element_counts[1] - nt][nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[2])
-            nid = self._nids[self._element_counts[2] - nt][self._element_counts[1] - nt][self._element_counts[0] - nt]
-            generate_data.setNodeLayoutIfNew(nid, node_layout_3way12[3])
-        # for n3 in range(self._element_counts[2] + 1):
-        #     for n2 in range(self._element_counts[1] + 1):
-        #         for n1 in range(self._element_counts[0] + 1):
-        #             new_node_layout = self.get_node_layout(n1, n2, n3, generate_data)
-        #             nid = self._nids[n3][n2][n1]
-        #             if nid:
-        #                 old_node_layout = generate_data.getNodeLayout(nid)
-        #                 assert new_node_layout == old_node_layout
-        #             else:
-        #                 if new_node_layout is not None:
-        #                     print("node indexes", n1, n2, n3)
-        #                 assert new_node_layout is None, str(n1) + ", " + str(n2) + ", " + str(n3)
-
 
     def get_node_identifier(self, n1, n2, n3):
         """
@@ -1292,9 +1192,8 @@ class EllipsoidMesh:
         """
         n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
         x, d1, d2, d3 = self._nx[n3][n2][n1]
-        rn3 =  - n3
         if transform and ((n3 < self._rim_count) or (n3 > (self._element_counts[2] - self._rim_count))):
-            # only the last rim row needs transforming into tube rim orientation
+            # only the end rim row needs transforming into tube rim orientation i.e. on the 3-way slice
             rn1 = self._element_counts[0] - n1
             rn2 = self._element_counts[1] - n2
             td1 = [0.0, 0.0, 0.0]
@@ -1483,8 +1382,11 @@ class EllipsoidMesh:
             nodetemplate.setValueNumberOfVersions(coordinates, -1, value_label, 1)
 
         for n3 in range(n3_start, n3_limit):
+            n3_box = self._rim_count <= n3 <= (self._element_counts[2] - self._rim_count)
             for n2 in range(self._element_counts[1] + 1):
+                n2_box = self._rim_count <= n2 <= (self._element_counts[1] - self._rim_count)
                 for n1 in range(self._element_counts[0] + 1):
+                    n1_box = self._rim_count <= n1 <= (self._element_counts[0] - self._rim_count)
                     n3_mod = n3
                     if box_diagonal:
                         # get rim index, 1 is first layer outside box
@@ -1515,12 +1417,20 @@ class EllipsoidMesh:
                     self._nids[n3_mod][n2][n1] = node_identifier
                     fieldcache.setNode(node)
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, x)
+                    if self._tube_core_box_layout and n1_box and n2_box and n3_box:
+                        d1 = [-d for d in d1] if d1 else None
+                        d2, d3 = d3, d2
+                        # put parameters back so picked up by elements when determining eft
+                        self._nx[n3_mod][n2][n1] = x, d1, d2, d3
                     if d1:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
                     if d2:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
                     if d3:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
+                    node_layout = self.get_node_layout(n1, n2, n3, generate_data)
+                    if node_layout:
+                        generate_data.setNodeLayoutIfNew(node_identifier, node_layout)
 
     def generate_elements(self, generate_data, e3_start=0, e3_limit=0):
         """
@@ -1740,7 +1650,6 @@ class EllipsoidMesh:
             elementtemplate_special.setElementShapeType(Element.SHAPE_TYPE_CUBE)
             box_counts = [half_counts[i] - self._rim_count for i in range(3)]
             dbox_counts = [2 * box_counts[i] for i in range(3)]
-            self._add_node_layouts_3d(generate_data)
 
             # bottom transition
             last_nids_layer = None
@@ -1868,11 +1777,20 @@ class EllipsoidMesh:
                             eft = eft_regular
                             scalefactors = None
                             node_layouts = [generate_data.getNodeLayout(nid) for nid in nids]
+                            if self._tube_core_box_layout:
+                                nids = [nids[1], nids[0], nids[5], nids[4], nids[3], nids[2], nids[7], nids[6]]
+                                node_layouts = [
+                                    node_layouts[1], node_layouts[0], node_layouts[5], node_layouts[4],
+                                    node_layouts[3], node_layouts[2], node_layouts[7], node_layouts[6]]
                             if any(node_layout is not None for node_layout in node_layouts):
                                 node_parameters = [last_nx_layer[i2 - 1][i1 - 1], last_nx_layer[i2 - 1][i1],
                                                    last_nx_layer[i2][i1 - 1], last_nx_layer[i2][i1],
                                                    last_nx_row[i1 - 1], last_nx_row[i1],
                                                    nx_row[i1 - 1], nx_row[i1]]
+                                if self._tube_core_box_layout:
+                                    node_parameters = [
+                                        node_parameters[1], node_parameters[0], node_parameters[5], node_parameters[4],
+                                        node_parameters[3], node_parameters[2], node_parameters[7], node_parameters[6]]
                                 eft, scalefactors = \
                                     determineCubicHermiteSerendipityEft(mesh, node_parameters, node_layouts)
                                 elementtemplate_special.defineField(coordinates, -1, eft)

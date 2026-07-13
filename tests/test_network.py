@@ -765,6 +765,15 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
+        # check derivatives around centre of ends are of the expected size
+        expected_d1 = [0.0, 0.0, 0.28545666738374775]
+        for node_identifier in [73, 352]:
+            node = nodes.findNodeByIdentifier(node_identifier)
+            fieldcache.setNode(node)
+            result, d1 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, d1, expected_d1, delta=X_TOL)
+
     def test_3d_tube_network_bone_core_8around_8along(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
@@ -1071,15 +1080,15 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
-        # check nodes have symmetric d1, d2 magnitudes along axis3
-        for node_identifier in [63, 104, 218, 259]:
+        # check nodes have symmetric d1, d3 magnitudes along axis3
+        for node_identifier in [63, 104, 161, 218, 259]:
             node = nodes.findNodeByIdentifier(node_identifier)
             fieldcache.setNode(node)
             result, d1 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, 3)
             self.assertEqual(result, RESULT_OK)
-            result, d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
+            result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
             self.assertEqual(result, RESULT_OK)
-            self.assertAlmostEqual(magnitude(d1), magnitude(d2), delta=X_TOL)
+            self.assertAlmostEqual(magnitude(d1), magnitude(d3), delta=X_TOL)
 
     def test_3d_tube_network_sphere_8around_2along_core(self):
         """
@@ -1162,15 +1171,15 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
-        # check nodes have symmetric d1, d2 magnitudes along axis3
-        for node_identifier in [23, 57]:
+        # check nodes have symmetric d1, d3 magnitudes along axis3
+        for node_identifier in [23, 40, 57]:
             node = nodes.findNodeByIdentifier(node_identifier)
             fieldcache.setNode(node)
             result, d1 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, 3)
             self.assertEqual(result, RESULT_OK)
-            result, d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
+            result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
             self.assertEqual(result, RESULT_OK)
-            self.assertAlmostEqual(magnitude(d1), magnitude(d2), delta=X_TOL)
+            self.assertAlmostEqual(magnitude(d1), magnitude(d3), delta=X_TOL)
 
     def test_3d_tube_network_line_twist_core(self):
         """

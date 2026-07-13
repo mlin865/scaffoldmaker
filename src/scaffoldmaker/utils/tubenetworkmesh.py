@@ -657,6 +657,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._dome_ellipsoid[dome_index] = EllipsoidMesh(
             element_counts, self._shell_count, self._transition_count,
             core=self._core, core_shell_scaling_mode=self._coreBoundaryScalingMode)
+        self._dome_ellipsoid[dome_index].set_tube_core_box_layout(True)
 
         # for each path p, get 4 cardinal longitudinal curves from tube to pole; dome0 is reversed, also in rotation
         rawNodesCountAlong = len(self._rawTubeCoordinatesList[0][0])
@@ -962,11 +963,18 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             box_count2 = self._elementsCountCoreBoxMinor
             bparameters = []
             bnids = [] if transfer_nodes else None
+
+            # transform derivatives to native ellipsoid layout for start dome, as transformed back when nodes created
+            # not necessary for end dome since the first row of nodes are made by the tube
+            ellipsoid_tube_core_box_layout = ellipsoid.is_tube_core_box_layout() and (dome_index == 0)
             for i2 in range(box_count2 + 1):
                 bparameters_row = []
                 bnids_row = []
                 for i1 in range(box_count1, -1, -1):
-                    bparameters_row.append([self._boxCoordinates[i][n2][i1][i2] for i in range(4)])
+                    x, d1, d2, d3 = (self._boxCoordinates[i][n2][i1][i2] for i in range(4))
+                    if ellipsoid_tube_core_box_layout:
+                        d1, d2, d3 = [-d for d in d1] if d1 else None, d3, d2
+                    bparameters_row.append([x, d1, d2, d3])
                     if transfer_nodes:
                         bnids_row.append(self._boxNodeIds[n2][i1][i2])
                 bparameters.append(bparameters_row)
@@ -1008,8 +1016,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
     def _transfer_dome_nodes_to_tube(self, dome_index):
         """
-        Transfer coordinates and optionally nodes from tube row (0 for dome_index 1, -1 for dome_index 1).
-        Nodes are only expected and transferred for dome_index == 1.
+        Transfer nodes from dome edge row to tube row (0 for dome_index 1, -1 for dome_index 1).
+        Only needs to be called for dome_index == 0.
         :param dome_index: 0 for start, 1 for end dome. Only start may be used.
         """
         ellipsoid = self._dome_ellipsoid[dome_index]
@@ -1331,7 +1339,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             for ac in range(ac_box_count + 1):
                 bx, bd1, bd3, _ = triangle_abc.get_parameters12(ac, count=(ab_box_count + 1))
                 if ac == ac_box_count:
-                    # realign derivatives
+                    # reassign derivatives on row to 3-way point
                     for i in range(ab_box_count):
                         bd1[i], bd3[i] = bd3[i], [-d for d in bd1[i]]
                     bd1[-1], bd3[-1] = bd3[-1], [-d for d in add(bd1[-1], bd3[-1])]
@@ -1597,7 +1605,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 ((element_counts[1] - rim_count + 1) if (n3 < 0) else rim_count) + n3,
                 element_counts[2] // 2 + ((n2 + 1) if (n2 < 0) else n2))
             if transform:
-                return x, [-d for d in d1], d3, d2
+                return x, [-d for d in d1] if d1 else None, d3, d2
             else:
                 return x, d1, d2, d3
         return (self._boxCoordinates[0][n2][n1][n3], self._boxCoordinates[1][n2][n1][n3],
@@ -1733,7 +1741,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param n2: Node index along segment. Can use negative indexes. Only values, 0, 1, -1, -2 can be used
         if there is an adjacent dome.
         :param n3: Node index from first core transition row or inner to outer shell.
-        :param transform: If True, transform into tube rim orientation (from dome).
+        :param transform: If True, transform into tube rim orientation from dome (on end 3-way slice only).
         :return: x, d1, d2, d3
         """
         if len(self._rimCoordinates[0]) == 1:
@@ -2124,8 +2132,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 elif startSkipCount:
                     n3_start += 1 # don't build first row beside junction
             self._dome_ellipsoid[1].generate_nodes(generateData, n3_start, n3_limit)
-            if n3_start == n3_start_full:
-                self._transfer_dome_nodes_to_tube(1)
+            # if n3_start == n3_start_full:
+            #     self._transfer_dome_nodes_to_tube(1)
 
         if n2Only is not None:
             return
@@ -4146,6 +4154,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                     # print('s =', s, 'n1 =', n1)
                     s_n2_params = []
                     for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
+                        # transform for rim derivatives applies only on the end slice with 3-way points
                         s_n2_params.append(self._segments[s].getRimCoordinates(n1, n2, n3, transform=True))
                     segmentsParameterLists.append(s_n2_params)
                 rx[n3][rimIndex], rd1[n3][rimIndex], rd2[n3][rimIndex], rd3[n3][rimIndex] = \
@@ -4161,6 +4170,7 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
                 for s, n1, n3 in segmentNodeList:
                     s_n2_params = []
                     for n2 in (-2, -1) if self._segmentsIn[s] else (1, 0):
+                        # must transform derivatives from dome since called before nodes created
                         s_n2_params.append(self._segments[s].getBoxCoordinates(n1, n2, n3, transform=True))
                     segmentsParameterLists.append(s_n2_params)
                 bx[boxIndex], bd1[boxIndex], bd2[boxIndex], bd3[boxIndex] = \

@@ -55,10 +55,12 @@ class HexTetrahedronMesh:
         self._box_counts = [self._axis_counts[i] - self._trans_count for i in range(3)]
         none_parameters = [None] * 4  # x, d1, d2, d3
         self._nx = []  # shield mesh with holes over n3, n2, n1, d
+        self._merge_counts = []  # Number of already merged nodes at location for weighting next nodes, for x only
         for n3 in range(axis_counts[2] + 1):
             # index into transition zone
             trans3 = self._trans_count + n3 - axis_counts[2]
             nx_layer = []
+            merge_counts_layer = []
             for n2 in range(axis_counts[1] + 1):
                 # index into transition zone
                 trans2 = self._trans_count + n2 - axis_counts[1]
@@ -79,8 +81,10 @@ class HexTetrahedronMesh:
                         # s += "  "
                     nx_row.append(parameters)
                 nx_layer.append(nx_row)
+                merge_counts_layer.append([0 for _ in range(axis_counts[0] + 1)])
                 # print(s)
             self._nx.append(nx_layer)
+            self._merge_counts.append(merge_counts_layer)
 
     def get_axis_counts(self):
         return self._axis_counts
@@ -239,12 +243,17 @@ class HexTetrahedronMesh:
                 pix = abs(spix)
                 if blend and nx[pix]:
                     if pix == 0:
-                        new_parameter = [0.5 * (nx[pix][c] + new_parameter[c]) for c in range(3)]
+                        xi = 1.0 / (self._merge_counts[indexes[2]][indexes[1]][indexes[0]] + 1)
+                        xir = 1.0 - xi
+                        new_parameter = [(xir * nx[pix][c] + xi * new_parameter[c]) for c in range(3)]
                     else:
                         # harmonic mean to cope with significant element size differences on boundary
                         new_parameter = linearlyInterpolateVectors(
                             nx[pix], new_parameter, 0.5, magnitudeScalingMode=DerivativeScalingMode.HARMONIC_MEAN)
                 nx[pix] = new_parameter
+                if pix == 0:
+                    self._merge_counts[indexes[2]][indexes[1]][indexes[0]] += 1
+
             last_trans = trans
 
     def _smooth_derivative_across(self, start_indexes, end_indexes, index_increments, derivative_indexes,
