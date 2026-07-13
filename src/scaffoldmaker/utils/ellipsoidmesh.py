@@ -1187,7 +1187,7 @@ class EllipsoidMesh:
         :param n3_box: Index along axis 3. Must be a valid box n3.
         :param ri: Rim index where 0 is first transition, or first shell row if no core
         :param ai: Index around rim starting at +axis1
-        :param transform: If True, transform into tube rim orientation (from dome).
+        :param transform: If True, transform dervatives on start/end 3-way slice into tube rim orientation (from dome).
         :return: x, d1, d2, d3
         """
         n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
