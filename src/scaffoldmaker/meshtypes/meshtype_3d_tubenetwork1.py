@@ -194,8 +194,8 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                     elif annotationAroundCounts[i] < 4:
                         annotationAroundCounts[i] = 4
 
-        if options["Number of elements through shell"] < 1:
-            options["Number of elements through shell"] = 1
+        if options["Number of elements through shell"] < 0:
+            options["Number of elements through shell"] = 0
 
         if options["Target element density along longest segment"] < 1.0:
             options["Target element density along longest segment"] = 1.0
@@ -224,6 +224,11 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         networkLayout.generate(layoutRegion)  # ask scaffold to generate to get user-edited parameters
         networkMesh = networkLayout.getConstructionObject()
 
+        shell_count = options["Number of elements through shell"]
+        core = options["Core"]
+        mesh_dimension = 3 if (shell_count or core) else 2
+        isLinearThroughShell = options["Use linear through shell"] or (mesh_dimension == 2)
+
         tubeNetworkMeshBuilder = TubeNetworkMeshBuilder(
             networkMesh,
             targetElementDensityAlongLongestSegment=options["Target element density along longest segment"],
@@ -231,16 +236,16 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
             annotationElementsCountsAlong=options["Annotation numbers of elements along"],
             defaultElementsCountAround=options["Number of elements around"],
             annotationElementsCountsAround=options["Annotation numbers of elements around"],
-            shell_count=options["Number of elements through shell"],
-            core=options["Core"],
+            shell_count=shell_count,
+            core=core,
             transition_count=options["Number of elements across core transition"],
             defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
             annotationElementsCountsCoreBoxMinor=options["Annotation numbers of elements across core box minor"],
             useOuterTrimSurfaces=options["Use outer trim surfaces"])
         tubeNetworkMeshBuilder.build()
         generateData = TubeNetworkMeshGenerateData(
-            region, 3,
-            isLinearThroughShell=options["Use linear through shell"],
+            region, mesh_dimension,
+            isLinearThroughShell=isLinearThroughShell,
             isShowTrimSurfaces=options["Show trim surfaces"])
         tubeNetworkMeshBuilder.generateMesh(generateData)
         annotationGroups = generateData.getAnnotationGroups()

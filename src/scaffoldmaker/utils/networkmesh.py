@@ -529,7 +529,6 @@ class NetworkMeshSegment(ABC):
         self._networkSegment = networkSegment
         self._pathParametersList = pathParametersList
         self._pathsCount = len(pathParametersList)
-        self._dimension = 3 if (self._pathsCount > 1) else 2
         self._annotationTerms = []
         self._junctions = []  # start, end junctions. Set when junctions are created.
         self._isLoop = False

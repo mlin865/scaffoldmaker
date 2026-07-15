@@ -764,7 +764,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
                 minElementsCountAround = options[key]
 
         if options["Number of elements through shell"] < 0:
-            options["Number of elements through shell"] = 1
+            options["Number of elements through shell"] = 0
 
         if options["Number of elements across core transition"] < 1:
             options["Number of elements across core transition"] = 1
@@ -805,7 +805,8 @@ class MeshType_3d_wholebody2(Scaffold_base):
         elementsCountAroundTorso = options["Number of elements around torso"]
         elementsCountAroundArm = options["Number of elements around arm"]
         elementsCountAroundLeg = options["Number of elements around leg"]
-        isCore = options["Use Core"]
+        shell_count = options["Number of elements through shell"]
+        core = options["Use Core"]
 
         layoutRegion = region.createRegion()
         networkLayout.generate(layoutRegion)  # ask scaffold to generate to get user-edited parameters
@@ -858,8 +859,8 @@ class MeshType_3d_wholebody2(Scaffold_base):
             annotationElementsCountsAlong=annotationAlongCounts,
             defaultElementsCountAround=options["Number of elements around head"],
             annotationElementsCountsAround=annotationAroundCounts,
-            shell_count=options["Number of elements through shell"],
-            core=isCore,
+            shell_count=shell_count,
+            core=core,
             transition_count=options['Number of elements across core transition'],
             defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
             annotationElementsCountsCoreBoxMinor=[],
@@ -867,7 +868,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
             annotationCoreBoundaryScalingMode=annotationCoreBoundaryScalingMode,
             useOuterTrimSurfaces=True)
 
-        meshDimension = 3
+        meshDimension = 3 if (shell_count or core) else 2
         tubeNetworkMeshBuilder.build()
 
         generateData = TubeNetworkMeshGenerateData(
@@ -877,7 +878,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         tubeNetworkMeshBuilder.generateMesh(generateData)
         annotationGroups = generateData.getAnnotationGroups()
 
-        if isCore:
+        if core:
             fieldmodule = region.getFieldmodule()
             mesh = fieldmodule.findMeshByDimension(meshDimension)
             thoraxGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("thorax"))
@@ -906,7 +907,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         :param annotationGroups: List of annotation groups for top-level elements.
         New face annotation groups are appended to this list.
         """
-        isCore = options["Use Core"]
+        is_core = options["Use Core"]
 
         # create 2-D surface mesh groups, 1-D spinal cord
         fieldmodule = region.getFieldmodule()
@@ -917,7 +918,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         is_face_xi3_0 = fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_0)
 
         skinGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_body_term("skin epidermis outer surface"))
-        is_skin = is_exterior if isCore else fieldmodule.createFieldAnd(
+        is_skin = is_exterior if is_core else fieldmodule.createFieldAnd(
             is_exterior, fieldmodule.createFieldNot(is_face_xi3_0))
         skinGroup.getMeshGroup(mesh2d).addElementsConditional(is_skin)
 
@@ -942,7 +943,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         rightLegSkinGroup.getMeshGroup(mesh2d).addElementsConditional(
             fieldmodule.createFieldAnd(rightLegGroup.getGroup(), is_exterior))
 
-        if isCore:
+        if is_core:
             headGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("head"))
             coreGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("core"))
             shellGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("shell"))

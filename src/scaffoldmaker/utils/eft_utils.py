@@ -1164,7 +1164,8 @@ def addTricubicHermiteSerendipityEftParameterScaling(eft, scalefactors, nodePara
     :param localNodeIndexes: Local node indexes to scale value label at. Currently must be in [5, 6, 7, 8].
     :param valueLabel: Single value label to scale. Currently only implemened for D_DS3.
     :param version: Set to a number > 1 to use that derivative version instead of scale factors, and client is
-    responsible for assigning that derivative version in proportion to the returned scale factors.
+    responsible for assigning that derivative version in proportion to the returned scale factors. Set to 0 to
+    merely return the additional scale factors for client to scale and assign to original derivative.
     :return: Modified eft, final scalefactors, add scalefactors (multiplying the affected derivatives; these are
     included in final scalefactors if version == 1, otherwise client must use these to scale versioned derivatives).
     """
@@ -1188,7 +1189,8 @@ def addTricubicHermiteSerendipityEftParameterScaling(eft, scalefactors, nodePara
         newScalefactors = scalefactors + addScalefactors if scalefactors else addScalefactors
         addScaleEftNodesValueLabel(eft, localNodeIndexes, Node.VALUE_LABEL_D_DS3, 3)
         return eft, newScalefactors, addScalefactors
-    remapEftNodeValueLabelsVersion(eft, localNodeIndexes, [valueLabel], version)
+    if version == 2:
+        remapEftNodeValueLabelsVersion(eft, localNodeIndexes, [valueLabel], version)
     return eft, scalefactors, addScalefactors
 
 
@@ -1202,14 +1204,14 @@ def resolveEftCoreBoundaryScaling(eft, scalefactors, nodeParameters, nodeIdentif
     :param nodeParameters: List over 8 (3-D) local nodes in Zinc ordering of 4 parameter vectors
     x, d1, d2, d3 each with 3 components.
     :param nodeIdentifiers: List over 8 3-D local nodes giving global node identifiers.
-    :param mode: 1 to set scale factors, 2 to add version 2 to d3 for the boundary nodes and assigning
-    values to that version equal to the scale factors x version 1.
+    :param mode: 0 to replace derivatives (for 0 shell count 0), 1 to set scale factors, 2 to add version 2 to d3
+    for the boundary nodes and assigning values to that version equal to the scale factors x version 1.
     :param nodes: Nodeset for nodes for mode 2.
     :param coordinates: Coordinate field for mode 2.
     :param fieldcache: Fieldcache for mode 2.
     :return: New eft, new scalefactors.
     """
-    assert mode in (1, 2)
+    assert mode in (0, 1, 2)
     eft, scalefactors, addScalefactors = addTricubicHermiteSerendipityEftParameterScaling(
         eft, scalefactors, nodeParameters, [5, 6, 7, 8], Node.VALUE_LABEL_D_DS3, version=mode)
     if mode == 2:
@@ -1231,5 +1233,14 @@ def resolveEftCoreBoundaryScaling(eft, scalefactors, nodeParameters, nodeIdentif
                     coordinates.setNodeParameters(fieldcache, -1, valueLabel, 1, value)
                 d3_v2 = mult(nodeParameters[n][3], scalefactor)
                 coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 2, d3_v2)
+            n += 1
+    elif mode == 0:
+        n = 4
+        for nodeIdentifier, scalefactor in zip(nodeIdentifiers[4:], addScalefactors):
+            node = nodes.findNodeByIdentifier(nodeIdentifier)
+            fieldcache.setNode(node)
+            result, x = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
+            d3 = mult(nodeParameters[n][3], scalefactor)
+            coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
             n += 1
     return eft, scalefactors

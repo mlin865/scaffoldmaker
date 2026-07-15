@@ -32,7 +32,7 @@ import math
 def normalize_safe(v):
     """
     :param v: Vector.
-    :return:  Normalized v if not a zero vector, otherwise a copy of v.
+    :return: Normalized v if not a zero vector, otherwise a copy of v.
     """
     mag_v = magnitude(v)
     if mag_v > 0.0:
@@ -66,6 +66,7 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
         super(TubeNetworkMeshGenerateData, self).__init__(
             region, meshDimension, coordinateFieldName, startNodeIdentifier, startElementIdentifier)
         self._isLinearThroughShell = isLinearThroughShell
+        d3Defined = (meshDimension == 3) and not isLinearThroughShell
         self._isShowTrimSurfaces = isShowTrimSurfaces
         self._trimAnnotationGroupCount = 0  # incremented to make unique annotation group names for trim surfaces
 
@@ -74,7 +75,7 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
         self._nodetemplate.defineField(self._coordinates)
         self._nodetemplate.setValueNumberOfVersions(self._coordinates, -1, Node.VALUE_LABEL_D_DS1, 1)
         self._nodetemplate.setValueNumberOfVersions(self._coordinates, -1, Node.VALUE_LABEL_D_DS2, 1)
-        if (meshDimension == 3) and not isLinearThroughShell:
+        if d3Defined:
             self._nodetemplate.setValueNumberOfVersions(self._coordinates, -1, Node.VALUE_LABEL_D_DS3, 1)
 
         # get element template and eft for standard case
@@ -83,12 +84,11 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
                                                      else Element.SHAPE_TYPE_SQUARE)
         self._elementbasis = self._fieldmodule.createElementbasis(
             meshDimension, Elementbasis.FUNCTION_TYPE_CUBIC_HERMITE_SERENDIPITY)
-        if (meshDimension == 3) and isLinearThroughShell:
+        if not d3Defined:
             self._elementbasis.setFunctionType(3, Elementbasis.FUNCTION_TYPE_LINEAR_LAGRANGE)
         self._standardEft = self._mesh.createElementfieldtemplate(self._elementbasis)
         self._standardElementtemplate.defineField(self._coordinates, -1, self._standardEft)
 
-        d3Defined = (meshDimension == 3) and not isLinearThroughShell
         self._nodeLayoutRegularPermuted = self._nodeLayoutManager.getNodeLayoutRegularPermuted(d3Defined)
         self._nodeLayoutTubeDomeBoundary = self._nodeLayoutManager.getNodeLayoutRegularPermuted(d3Defined=True)
         self._nodeLayout5Way = self._nodeLayoutManager.getNodeLayout5Way12(d3Defined)
@@ -227,8 +227,9 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
             self._shellGroup = self.getOrCreateAnnotationGroup(("shell", ""))
         return self._shellGroup
 
-    def getShellMeshGroup(self):
-        return self.getShellAnnotationGroup().getMeshGroup(self._mesh)
+    def getShellMeshGroup(self, shell_count):
+        mesh = self._mesh if shell_count else self._mesh.getFaceMesh()
+        return self.getShellAnnotationGroup().getMeshGroup(mesh)
 
     def getLeftMeshGroup(self):
         if not self._leftGroup:
@@ -294,13 +295,15 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         self._elementsCountCoreBoxMajor = (elementsCountAround // 2) - elementsCountCoreBoxMinor
         self._elementsCountCoreBoxMinor = elementsCountCoreBoxMinor
         self._transition_count = transition_count
-        self._coreBoundaryScalingMode = coreBoundaryScalingMode
+        self._coreBoundaryScalingMode = 0 if (shell_count == 0) else coreBoundaryScalingMode
         self._networkSegment = networkSegment
         self._nway_d_factor = 0.6  # currently only used in dome ellipsoid
         self._dome_ends = [(end_style == NetworkSegmentEndStyle.DOME) for end_style in networkSegment.getEndStyles()]
         self._dome_ellipsoid = [None] * 2
-        assert shell_count > 0
+        assert shell_count >= 0
         self._shell_count = shell_count
+        self._mesh_dimension = 3 if (shell_count or core) else 2
+        assert (self._mesh_dimension == 2) or (self._pathsCount == 2)
         self._rawTubeCoordinatesList = []
         self._rawTrackSurfaceList = []
         self._dome_raw_sample_count = 3  # index from end that dome ends on sampled raw tubes, if there is a dome
@@ -372,8 +375,11 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
     def getRawTubeCoordinates(self, pathIndex=0):
         return self._rawTubeCoordinatesList[pathIndex]
 
-    def getIsCore(self):
+    def getCore(self):
         return self._core
+
+    def getShellCount(self):
+        return self._shell_count
 
     def getElementsCountCoreBoxMajor(self):
         return self._elementsCountCoreBoxMajor
@@ -592,7 +598,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
         elementsCountAlong = len(self._sampledTubeCoordinates[0][0]) - 1
 
-        if self._dimension == 2:
+        if self._mesh_dimension == 2:
             # copy first sampled tube coordinates, but insert single-entry 'n3' index after n2
             self._rimCoordinates = (
                 [[ring] for ring in self._sampledTubeCoordinates[0][0]],
@@ -600,7 +606,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 [[ring] for ring in self._sampledTubeCoordinates[0][2]],
                 None)
         else:
-            shellFactor = 1.0 / self._shell_count
+            shellFactor = (1.0 / self._shell_count) if self._shell_count else 1.0
             ox, od1, od2 = self._sampledTubeCoordinates[0][:3]
             ix, id1, id2 = self._sampledTubeCoordinates[1][:3]
             rx, rd1, rd2, rd3 = [], [], [], []
@@ -609,25 +615,22 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     r.append([])
                 otx, otd1, otd2 = ox[n2], od1[n2], od2[n2]
                 itx, itd1, itd2 = ix[n2], id1[n2], id2[n2]
-                # wx, wd3 = self._determineShellCoordinates(otx, otd1, otd2, itx, itd1, itd2, coreCentre, arcCentre)
                 wd3 = [mult(sub(otx[n1], itx[n1]), shellFactor) for n1 in range(self._elementsCountAround)]
                 for n3 in range(self._shell_count + 1):
-                    oFactor = n3 / self._shell_count
+                    oFactor = (n3 / self._shell_count) if self._shell_count else 1.0
                     iFactor = 1.0 - oFactor
                     for r in (rx, rd1, rd2, rd3):
                         r[n2].append([])
                     for n1 in range(self._elementsCountAround):
-                        if n3 == 0:
-                            x, d1, d2 = itx[n1], itd1[n1], itd2[n1]
-                        elif n3 == self._shell_count:
+                        if n3 == self._shell_count:
                             x, d1, d2 = otx[n1], otd1[n1], otd2[n1]
+                        elif n3 == 0:
+                            x, d1, d2 = itx[n1], itd1[n1], itd2[n1]
                         else:
                             x = add(mult(itx[n1], iFactor), mult(otx[n1], oFactor))
-                            # x = wx[n3][n1]
                             d1 = add(mult(itd1[n1], iFactor), mult(otd1[n1], oFactor))
                             d2 = add(mult(itd2[n1], iFactor), mult(otd2[n1], oFactor))
                         d3 = wd3[n1]
-                        # d3 = wd3[n3][n1]
                         for r, value in zip((rx, rd1, rd2, rd3), (x, d1, d2, d3)):
                             r[n2][n3].append(value)
             self._rimCoordinates = rx, rd1, rd2, rd3
@@ -654,10 +657,10 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             self._elementsCountCoreBoxMajor + 2 * rim_count,
             self._elementsCountCoreBoxMinor + 2 * rim_count,
             self._dome_elements_count_along[dome_index] * 2]
-        self._dome_ellipsoid[dome_index] = EllipsoidMesh(
+        self._dome_ellipsoid[dome_index] = ellipsoid = EllipsoidMesh(
             element_counts, self._shell_count, self._transition_count,
             core=self._core, core_shell_scaling_mode=self._coreBoundaryScalingMode)
-        self._dome_ellipsoid[dome_index].set_tube_core_box_layout(True)
+        ellipsoid.set_tube_core_box_layout(True)
 
         # for each path p, get 4 cardinal longitudinal curves from tube to pole; dome0 is reversed, also in rotation
         rawNodesCountAlong = len(self._rawTubeCoordinatesList[0][0])
@@ -666,7 +669,9 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         pld2 = []
         # the following gives the index for both the pole of the dome and the end of the sampled raw coordinates
         dome_ix = 0 if dome0 else -1
-        for p in range(self._pathsCount):
+
+        paths = [0, 1] if (self._mesh_dimension == 3) else [0]
+        for p in paths:
             derivativeMagnitudePoleMajor = None
             derivativeMagnitudePoleMinor = None
             # first iteration gets end derivatives
@@ -716,7 +721,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         sample_curve_on_surface = []
         move_x_to_surface = []
         move_d_to_surface = []
-        for p in range(self._pathsCount):
+        for p in paths:
             sample_curve_on_surface.append(
                 lambda start_x, start_d1, start_d2, end_x, end_d1, end_d2, elements_count,
                        start_weight=None, end_weight=None, overweighting=1.0, end_transition=False:
@@ -775,7 +780,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
             outer_triangle_abc = None
             triangle_abc = None
-            for p in range(self._pathsCount):
+            for p in paths:
                 if p == 1:
                     for i in range(3):
                         half_counts[i] -= self._shell_count
@@ -809,15 +814,20 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 if p == 0:
                     outer_triangle_abc = triangle_abc
 
-            triangle_abc.assign_d3_difference(outer_triangle_abc, 1.0 / self._shell_count)
-            outer_triangle_abc.assign_d3_difference(triangle_abc, -1.0 / self._shell_count)
+            if self._mesh_dimension == 3:
+                shell_factor = (1.0 / self._shell_count) if self._shell_count else 1.0
+                triangle_abc.assign_d3_difference(outer_triangle_abc, shell_factor)
+                outer_triangle_abc.assign_d3_difference(triangle_abc, -shell_factor)
+
+            if self._shell_count == 0:
+                triangle_abc = outer_triangle_abc
 
             core_octant = None
             if self._core:
-                # extract actual derivatives calculated on edges of triangle abc
-                _, abd1, abd2, _ = triangle_abc.get_edge_parameters12()
-                _, acd1, acd2, _ = triangle_abc.get_edge_parameters13()
-                _, bcd1, bcd2, _ = triangle_abc.get_edge_parameters23()
+                # extract actual derivatives calculated on edges of triangle abc bounding corse
+                abx, abd1, abd2, abd3 = triangle_abc.get_edge_parameters12()
+                acx, acd1, acd2, acd3 = triangle_abc.get_edge_parameters13()
+                bcx, bcd1, bcd2, bcd3 = triangle_abc.get_edge_parameters23()
 
                 if self._shell_count:
                     # half_counts was reduced in earlier loop for inner surface
@@ -839,17 +849,15 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 ccd3 = self._boxCoordinates[3][n2][n1][n3]
                 # get dome pole coordinates. Note d1 is zero at the pole so use d2 in separate quadrants
                 core_p = 1 if self._shell_count else 0
-                dpx = self._rawTubeCoordinatesList[core_p][0][dome_ix][0]
-                dpd1 = self._rawTubeCoordinatesList[core_p][2][dome_ix][0]
+                dpx = plx[core_p][0][-1]
+                dpd1 = pld2[core_p][0][-1]
                 dpd2 = self._pathParametersList[core_p][1][dome_ix]  # direction only
-                dpd3 = self._rawTubeCoordinatesList[core_p][2][dome_ix][(3 * self._elementsCountAround) // 4]
+                dpd3 = pld2[core_p][1][-1]
                 if dome0:
                     ccd2 = [-d for d in ccd2]
-                    dpd1 = [-d for d in dpd1]
                     dpd2 = [-d for d in dpd2]
                 else:
                     ccd3 = [-d for d in ccd3]
-                dpd3 = [-d for d in dpd3]
                 # sample inner line from dome pole back to last tube line core centre
                 bx = ccx
                 bd = mult(ccd2, -half_counts[2])
@@ -870,7 +878,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 # make inner surface triangle 1-2-origin
                 triangle_abo = QuadTriangleMesh(
                     box_counts[0], box_counts[1], rim_count, sampleHermiteCurve, nway_d_factor=self._nway_d_factor)
-                abd3 = [[-d for d in d3] for d3 in triangle_abc.get_edge_parameters12()[3]]
+                abd3 = [[-d for d in d3] for d3 in abd3]
                 triangle_abo.set_edge_parameters12(abx, abd1, abd3, abd2)
                 aomd1 = [[-d for d in d1] for d1 in aod1]
                 triangle_abo.set_edge_parameters13(aox, aomd1, aod3, aod2)
@@ -906,12 +914,13 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     use_cod1 = comd3
                     use_cod3 = cod1
                 triangle_aco.set_edge_parameters23(cox, use_cod1, cod2, use_cod3)
+
                 triangle_aco.build()
                 triangle_aco.assign_d3(lambda tx, td1, td2: normalize(cross(td1, td2)))
                 core_octant.set_triangle_aco(triangle_aco)
                 _, aco_cod1, _, aco_cod3 = triangle_aco.get_edge_parameters23()
 
-                # # make inner surface 2-3-origin
+                # make inner surface 2-3-origin
                 triangle_bco = QuadTriangleMesh(
                     box_counts[1], box_counts[2], rim_count, sampleHermiteCurve, nway_d_factor=self._nway_d_factor)
                 _, bcd1, _, bcd3 = triangle_abc.get_edge_parameters23()
@@ -937,9 +946,9 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 octant.set_triangle_abc(triangle_abc)
 
             if dome0:
-                self._dome_ellipsoid[dome_index].merge_octant_minus3_quadrant(octant, l)
+                ellipsoid.merge_octant_minus3_quadrant(octant, l)
             else:
-                self._dome_ellipsoid[dome_index].merge_octant_plus3_quadrant(octant, l)
+                ellipsoid.merge_octant_plus3_quadrant(octant, l)
 
     def _transfer_tube_data_to_dome(self, generate_data, dome_index, transfer_nodes=False):
         """
@@ -1010,7 +1019,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             # ring of rim coordinates
             rparameters = []
             for a in range(self._elementsCountAround):
-                rparameters.append([rc[i][n2][i3][a] for i in range(4)])
+                rparameters.append([rc[i][n2][i3][a] if rc[i] else None for i in range(4)])
             rnids = self._rimNodeIds[n2][ri] if transfer_nodes else None
             ellipsoid.set_rim_node_parameters12(generate_data, en3, ri, rparameters, rnids)
 
@@ -1395,70 +1404,6 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
         return cbx, cbd1, cbd3, ctx, ctd1, ctd3
 
-    def _determineShellCoordinates(self, ox, od1, od2, ix, id1, id2, coreCentre, arcCentre):
-        """
-        Calculates rim coordinates and d3 derivatives based on the centre point of the solid core.
-        :param ox, od1, od2: Coordinates and (d1 and d2) derivatives for outermost rim.
-        :param ix, id1, id2: Coordinates and (d1 and d2) derivatives for innermost rim.
-        :param coreCentre: Centre point of the solid core.
-        :param arcCetnre: Centre point of the arc that passes through the core centre, inner rim and outer rim.
-        :return: Coordinates and d3 derivatives for rim nodes.
-        """
-        wx, wd3 = [], []
-
-        # check if the cross-section of cylinder is regular shaped or irregular.
-        dist1a = sub(ix[0], coreCentre)
-        dist1b = sub(ix[self._elementsCountAround // 2], coreCentre)
-        dist2a = sub(ix[self._elementsCountAround // 4], coreCentre)
-        dist2b = sub(ix[self._elementsCountAround // 4 * 3], coreCentre)
-        tol = 1e-3
-        if abs(magnitude(dist1a) - magnitude(dist1b)) > tol or \
-                abs(magnitude(dist2a) - magnitude(dist2b)) > tol:
-            isRegular = False
-        else:
-            isRegular = True
-
-        # Calculate d3 derivatives
-        tx, td3 = [], []
-        for n1 in range(self._elementsCountAround):
-            if isRegular:
-                tol = 1e-10
-                dist = sub(arcCentre, coreCentre)
-                if magnitude(dist) > tol:
-                    if dist > [tol, tol, tol]:
-                        oc = sub(ox[n1], arcCentre)
-                        ic = sub(ix[n1], arcCentre)
-                    else:
-                        oc = add(mult(oc[n1], -1), arcCentre)
-                        ic = add(mult(ic[n1], -1), arcCentre)
-                    ot = cross(oc, od1[n1])
-                    it = cross(ic, id1[n1])
-                else:
-                    ot, it = cross(od1[n1], od2[n1]), cross(id1[n1], id2[n1])
-                scalefactor = magnitude(sub(ox[n1], ix[n1])) / self._shell_count
-                od3 = mult(normalize(ot), scalefactor)
-                id3 = mult(normalize(it), scalefactor)
-            else:
-                shellFactor = 1.0 / self._shell_count
-                od3 = id3 = mult(sub(ox[n1], ix[n1]), shellFactor)
-
-            txm, td3m, pe, pxi, psf = sampleCubicHermiteCurves(
-                [ix[n1], ox[n1]], [id3, od3], self._shell_count, arcLengthDerivatives=True)
-
-            td3m = smoothCubicHermiteDerivativesLine(txm, td3m, fixStartDirection=True, fixEndDirection=True)
-
-            tx.append(txm)
-            td3.append(td3m)
-
-        for n3 in range(self._shell_count + 1):
-            wx.append([])
-            wd3.append([])
-            for n1 in range(self._elementsCountAround):
-                wx[n3].append(tx[n1][n3])
-                wd3[n3].append(td3[n1][n3])
-
-        return wx, wd3
-
     @classmethod
     def blendSampledCoordinates(cls, segment1, nodeIndexAlong1, segment2, nodeIndexAlong2):
         nodesCountAround = segment1._elementsCountAround
@@ -1521,18 +1466,16 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         """
         return self._sampledTubeCoordinates[pathIndex][0][nodeIndexAlong]
 
-    def getElementsCountShell(self):
-        """
-        :return: Number of elements through the non-core shell.
-        """
-        return max(1, len(self._rimCoordinates[0][0]) - 1)
-
     def getElementsCountRim(self):
         """
+        Get number of elements to generate through transition and shell.
+        Note this is 1 for 2-D mesh (self._shell_count == 0).
         :return: Number of elements radially outside core box if core is on,
         otherwise same as number through shell.
         """
-        elementsCountRim = self.getElementsCountShell()
+        if self._mesh_dimension == 2:
+            return 1
+        elementsCountRim = self._shell_count
         if self._core:
             elementsCountRim += self._transition_count
         return elementsCountRim
@@ -1919,8 +1862,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         :param meshGroup: Zinc MeshGroup to add elements to.
         """
         elementsCountRim = self.getElementsCountRim()
-        elementsCountShell = self._shell_count
-        e3ShellStart = elementsCountRim - elementsCountShell
+        e3ShellStart = 0 if (self._mesh_dimension == 2) else (elementsCountRim - self._shell_count)
         self._addRimElementsToMeshGroup(0, self._elementsCountAround, e3ShellStart, elementsCountRim, meshGroup)
         for dome_index in range(2):
             ellipsoid = self._dome_ellipsoid[dome_index]
@@ -2028,7 +1970,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 self._transfer_dome_nodes_to_tube(0)
 
         nodes = generateData.getNodes()
-        isLinearThroughShell = generateData.isLinearThroughShell()
+
+        d3Defined = (self._mesh_dimension == 3) and not generateData.isLinearThroughShell()
         nodetemplate = generateData.getNodetemplate()
         for n2 in range(elementsCountAlong + 1) if (n2Only is None) else (
                 [n2Only] if (0 <= n2Only <= elementsCountAlong) else []):
@@ -2105,7 +2048,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     rx = self._rimCoordinates[0][n2][n3p]
                     rd1 = self._rimCoordinates[1][n2][n3p]
                     rd2 = self._rimCoordinates[2][n2][n3p]
-                    rd3 = None if isLinearThroughShell else self._rimCoordinates[3][n2][n3p]
+                    rd3 = self._rimCoordinates[3][n2][n3p] if d3Defined else None
                 ringNodeIds = []
                 for n1 in range(self._elementsCountAround):
                     nodeIdentifier = generateData.nextNodeIdentifier()
@@ -2214,7 +2157,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 self._rimElementIds[e2].append(ringElementIds)
 
             # create regular rim elements - all elements outside first transition layer
-            elementsCountRimRegular = elementsCountRim - 1 if self._core else elementsCountRim
+            elementsCountRimRegular = (elementsCountRim - 1) if self._core else elementsCountRim
+            dimension3d = self._mesh_dimension == 3
             for e3 in range(elementsCountRimRegular):
                 ringElementIds = []
                 lastTransition = self._core and (e3 == (self._transition_count - 2))
@@ -2223,7 +2167,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     eft = eftStd
                     n1p = (e1 + 1) % self._elementsCountAround
                     nids = []
-                    for n3 in [e3, e3 + 1] if (self._dimension == 3) else [0]:
+                    for n3 in [e3, e3 + 1] if dimension3d else [0]:
                         nids += [self._rimNodeIds[e2][n3][e1], self._rimNodeIds[e2][n3][n1p],
                                  self._rimNodeIds[e2p][n3][e1], self._rimNodeIds[e2p][n3][n1p]]
                     elementIdentifier = generateData.nextElementIdentifier()
@@ -2287,7 +2231,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                 elementsCountAround)
 
         # create regular rim elements
-        elementsCountRimRegular = elementsCountRim - 1 if self._core else elementsCountRim
+        elementsCountRimRegular = (elementsCountRim - 1) if self._core else elementsCountRim
         annotationMeshGroups = generateData.getAnnotationMeshGroups(self.getAnnotationTerms())
         eftList = [None] * elementsCountAround
         scalefactorsList = [None] * elementsCountAround
@@ -2812,7 +2756,8 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         coordinates = generateData.getCoordinates()
         fieldcache = generateData.getFieldcache()
         nodes = generateData.getNodes()
-        isLinearThroughShell = generateData.isLinearThroughShell()
+        meshDimension = generateData.getMeshDimension()
+        d3Defined = (meshDimension == 3) and not generateData.isLinearThroughShell()
         nodetemplate = generateData.getNodetemplate()
 
         elementsCountThroughWall = len(self._patchCoordinates[0][0]) - 1
@@ -2825,7 +2770,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                 rx = self._patchCoordinates[0][n2][n3]
                 rd1 = self._patchCoordinates[1][n2][n3]
                 rd2 = self._patchCoordinates[2][n2][n3]
-                rd3 = None if isLinearThroughShell else self._patchCoordinates[3][n2][n3]
+                rd3 = self._patchCoordinates[3][n2][n3] if d3Defined else None
 
                 nodeIds = []
                 for n1 in range(elementsCountAround + 1):
@@ -2871,6 +2816,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         elementtemplateStd, eftStd = generateData.getStandardElementtemplate()
         nodeLayoutFlipD1D2 = generateData.getNodeLayoutFlipD1D2()
 
+        dimension3d = self._mesh_dimension == 3
         for e2 in range(elementsCountAlong):
             self._patchElementIds[e2] = [] if self._patchElementIds[e2] is None else self._patchElementIds[e2]
             for e3 in range(elementsCountThroughWall):
@@ -2880,7 +2826,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                     eft = eftStd
                     nids = []
                     if e2 < elementsCountAlong // 2:
-                        for n3 in [e3, e3 + 1] if (self._dimension == 3) else [0]:
+                        for n3 in [e3, e3 + 1] if dimension3d else [0]:
                             nids += [self._patchNodeIds[e2 + 1][n3][e1],
                                      self._patchNodeIds[e2 + 1][n3][e1 + 1],
                                      self._patchNodeIds[e2][n3][-(e1 + 1) if e2 == elementsCountAlong // 2 else e1],
@@ -2900,7 +2846,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                         for n3 in (e3, e3 + 1):
                             for n2 in (e2, e2 + 1):
                                 for n1 in (e1, e1 + 1):
-                                    nodeParameters.append(self.getPatchCoordinates(n1, n2, n3, isLinearThroughShell))
+                                    nodeParameters.append(self.getPatchCoordinates(n1, n2, n3, d3Defined))
                                     nodeLayouts.append(nodeLayoutFlipD1D2 if n2 == elementsCountAlong // 2 else
                                                        None)
                         elementIdentifier = generateData.nextElementIdentifier()
@@ -2954,19 +2900,19 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                                 elementIdPatch.append(sElementId[e2][e3][e1EndIdx])
                             self._rimElementIds[i] = [elementIdPatch]
 
-    def getPatchCoordinates(self, n1, n2, n3, isLinearThroughShell):
+    def getPatchCoordinates(self, n1, n2, n3, d3Defined):
         """
         Get patch parameters at a point.
         :param n1: Node index around.
         :param n2: Node index along patch.
         :param n3: Node index from inner to outer shell.
-        :param isLinearThroughShell: True for linear through shell so no d3 is returned.
+        :param d3Defined: True to return d3, otherwise None.
         :return: x, d1, d2, d3
         """
         return (self._patchCoordinates[0][n2][n3][n1],
                 self._patchCoordinates[1][n2][n3][n1],
                 self._patchCoordinates[2][n2][n3][n1],
-                None if isLinearThroughShell else self._patchCoordinates[3][n2][n3][n1])
+                self._patchCoordinates[3][n2][n3][n1] if d3Defined else None)
 
     def getRimIndexNodeLayoutSpecial(self, generateData, rimIndex):
         """
@@ -2989,8 +2935,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         elementtemplate = mesh.createElementtemplate()
         elementtemplate.setElementShapeType(
             Element.SHAPE_TYPE_CUBE if (meshDimension == 3) else Element.SHAPE_TYPE_SQUARE)
-        isLinearThroughShell = generateData.isLinearThroughShell()
-        d3Defined = (meshDimension == 3) and not isLinearThroughShell
+        d3Defined = (meshDimension == 3) and not generateData.isLinearThroughShell()
         coordinates = generateData.getCoordinates()
         nodes = generateData.getNodes()
         fieldcache = generateData.getFieldcache()
@@ -3038,7 +2983,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                     coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, sd1Smoothed[n1])
 
         # Recalculate d3 if not linear through shell
-        if not isLinearThroughShell:
+        if d3Defined:
             shellFactor = 1.0 / self._shell_count
             for n1 in range(elementsCountAround):
                 rimIndex = junction._segmentNodeToRimIndex[s][n1]
@@ -3205,7 +3150,9 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         self._rimNodeIds = None  # if set, nodeIdentifier[n3][rim index]
 
         # parameters used for solid core
-        self._core = self._segments[0].getIsCore()
+        self._core = self._segments[0].getCore()
+        self._shell_count = self._segments[0].getShellCount()
+        self._mesh_dimension = 3 if (self._shell_count or self._core) else 2
         self._boxCoordinates = None  # [nAlong][nAcrossMajor][nAcrossMinor]
         self._boxNodeIds = None
         # sequence of segment indexes for bifurcation or trifurcation, proceding in increasing angle around a plane.
@@ -3433,7 +3380,11 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         segmentsIn = [dot(sub(params[1][0], params[0][0]), params[1][2]) > 0.0 for params in segmentsParameterLists]
         segmentsCount = len(segmentsIn)
         assert segmentsCount > 1
-        d3Defined = segmentsParameterLists[0][0][3] is not None
+        d3Defined = True
+        for s in range(segmentsCount):
+            if segmentsParameterLists[s][0][3] is None:
+                d3Defined = False
+                break
         # for each segment get inward parameters halfway between last 2 parameters
         xi = 0.5
         hx = []
@@ -4120,15 +4071,11 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         aroundCounts = [segment.getElementsCountAround() for segment in self._segments]
         coreBoxMajorCounts = [segment.getElementsCountCoreBoxMajor() for segment in self._segments]
 
-        # determine junction sequence
         self._determineJunctionSequence()
-
         if self._segmentsCount == 3:
             rimIndexesCount, boxIndexesCount = self._sampleBifurcation(aroundCounts, coreBoxMajorCounts)
-
         elif self._segmentsCount == 4:
             rimIndexesCount, boxIndexesCount = self._sampleTrifurcation(aroundCounts, coreBoxMajorCounts)
-
         else:
             print("Tube network mesh not implemented for", self._segmentsCount, "segments at junction")
             return
@@ -4611,7 +4558,7 @@ class TubeNetworkMeshBuilder(NetworkMeshBuilder):
         # build core, shell
         if self._core:
             coreMeshGroup = generateData.getCoreMeshGroup()
-            shellMeshGroup = generateData.getShellMeshGroup()
+            shellMeshGroup = generateData.getShellMeshGroup(self._shell_count)
             for networkSegment in self._networkMesh.getNetworkSegments():
                 segment = self._segments[networkSegment]
                 segment.addCoreElementsToMeshGroup(coreMeshGroup)

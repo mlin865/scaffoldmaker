@@ -672,8 +672,8 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
     def test_3d_tube_network_bone_core_12around_6along(self):
         """
-        Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
-        the 4-way cap layer of the domes join the junction.
+        Test bone 3-D tube network with solid core is generated correctly with 4 along.
+        This tests the case where the 4-way cap layer of the domes join the junction.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
@@ -776,8 +776,8 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
     def test_3d_tube_network_bone_core_8around_8along(self):
         """
-        Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
-        regular layers of the domes join the junction.
+        Test bone 3-D tube network with solid core is generated correctly with 8 along.
+        This tests the case where regular layers of the domes join the junction.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
@@ -858,7 +858,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         expected_core_volume = 2.9331557186740995
         expected_shell_volume = 1.7345029780165235
-        expected_total_volume = expected_core_volume + expected_shell_volume
+        expected_total_volume = expected_core_volume + expected_shell_volume  # 4.667658696690623
         expected_total_surface_area = 19.860303567588733
 
         annotationGroups = scaffoldPackage.getAnnotationGroups()
@@ -885,6 +885,115 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, volume = volumeField.evaluateReal(fieldcache, 1)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
+
+    def test_3d_tube_network_bone_core_8around_8along_0shell(self):
+        """
+        Test bone 3-D tube network with solid core is generated correctly with 8 along, 0 shell elements.
+        This tests the case where regular layers of the domes join the junction.
+        """
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
+        settings = scaffoldPackage.getScaffoldSettings()
+        self.assertEqual(8, settings["Number of elements around"])
+        self.assertEqual(8.0, settings["Target element density along longest segment"])
+        settings["Core"] = True
+        settings["Number of elements through shell"] = 0
+
+        context = Context("Test")
+        region = context.getDefaultRegion()
+
+        self.assertTrue(region.isValid())
+        scaffoldPackage.generate(region)
+        annotationGroups = scaffoldPackage.getAnnotationGroups()
+        self.assertEqual(2, len(annotationGroups))
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "core") is not None)
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "shell") is not None)
+
+        fieldmodule = region.getFieldmodule()
+        mesh3d = fieldmodule.findMeshByDimension(3)
+        self.assertEqual(208, mesh3d.getSize())
+        mesh2d = fieldmodule.findMeshByDimension(2)
+        self.assertEqual(696, mesh2d.getSize())
+        mesh1d = fieldmodule.findMeshByDimension(1)
+        self.assertEqual(792, mesh1d.getSize())
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(305, nodes.getSize())
+        coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+
+        X_TOL = 1.0E-8
+
+        minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
+        assertAlmostEqualList(self, minimums, [-0.6612836030569434, -0.8660254037844386, -0.5], X_TOL)
+        assertAlmostEqualList(self, maximums, [4.661283603014371, 0.8660254037844387, 0.5], X_TOL)
+
+        with ChangeManager(fieldmodule):
+            one = fieldmodule.createFieldConstant(1.0)
+            isExterior = fieldmodule.createFieldIsExterior()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            fieldcache = fieldmodule.createFieldcache()
+
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
+            volumeField.setNumbersOfPoints(4)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            # make groups for each half
+            cmiss_number = fieldmodule.findFieldByName("cmiss_number")
+            self.assertTrue(cmiss_number.isValid())
+            middle_element_number = fieldmodule.createFieldConstant(104.5)
+            half1 = scaffoldPackage.createUserAnnotationGroup(("half1", ""))
+            half1_mesh3d = half1.getMeshGroup(mesh3d)
+            half1_mesh3d.addElementsConditional(fieldmodule.createFieldLessThan(cmiss_number, middle_element_number))
+            half2 = scaffoldPackage.createUserAnnotationGroup(("half2", ""))
+            half2_mesh3d = half2.getMeshGroup(mesh3d)
+            half2_mesh3d.addElementsConditional(fieldmodule.createFieldGreaterThan(cmiss_number, middle_element_number))
+            shell = findAnnotationGroupByName(annotationGroups, "shell")
+
+        expected_total_volume = 4.668017185448212  # was 4.667658696690623
+        expected_total_surface_area = 19.860657310573725  # was 19.860303567588733
+
+        annotationGroups = scaffoldPackage.getAnnotationGroups()
+        self.assertEqual(4, len(annotationGroups))
+
+        expectedSizes3d = {
+            "core": (208, expected_total_volume),
+            "half1": (104, 0.5 * expected_total_volume),
+            "half2": (104, 0.5 * expected_total_volume)
+            }
+        fieldcache = fieldmodule.createFieldcache()
+        for name in expectedSizes3d:
+            annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+            size = annotationGroup.getMeshGroup(mesh3d).getSize()
+            self.assertEqual(expectedSizes3d[name][0], size, name)
+            volumeMeshGroup = annotationGroup.getMeshGroup(mesh3d)
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, volumeMeshGroup)
+            volumeField.setNumbersOfPoints(4)
+            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+            self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        # expectedSizes2d = {
+        #     "shell": (100, expected_total_surface_area)
+        #     }
+        # fieldcache = fieldmodule.createFieldcache()
+        # for name in expectedSizes2d:
+        #     annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+        #     size = annotationGroup.getMeshGroup(mesh2d).getSize()
+        #     self.assertEqual(expectedSizes2d[name][0], size, name)
+        #     surfaceAreaMeshGroup = annotationGroup.getMeshGroup(mesh2d)
+        #     surfaceAreaField = fieldmodule.createFieldMeshIntegral(one, coordinates, surfaceAreaMeshGroup)
+        #     surfaceAreaField.setNumbersOfPoints(4)
+        #     result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+        #     self.assertEqual(result, RESULT_OK)
+        #     self.assertAlmostEqual(surfaceArea, expectedSizes2d[name][1], delta=X_TOL)
 
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
@@ -1089,6 +1198,97 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(magnitude(d1), magnitude(d3), delta=X_TOL)
+
+    def test_3d_tube_network_sphere_core_0shell(self):
+        """
+        Test sphere 3-D tube network with solid core and no shell is generated correctly.
+        """
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Sphere")
+        settings = scaffoldPackage.getScaffoldSettings()
+        settings["Core"] = True
+        settings["Number of elements through shell"] = 0
+
+        context = Context("Test")
+        region = context.getDefaultRegion()
+
+        self.assertTrue(region.isValid())
+        scaffoldPackage.generate(region)
+        annotationGroups = scaffoldPackage.getAnnotationGroups()
+        self.assertEqual(2, len(annotationGroups))
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "core") is not None)
+        self.assertTrue(findAnnotationGroupByName(annotationGroups, "shell") is not None)
+
+        fieldmodule = region.getFieldmodule()
+        mesh3d = fieldmodule.findMeshByDimension(3)
+        self.assertEqual(160, mesh3d.getSize())
+        mesh2d = fieldmodule.findMeshByDimension(2)
+        self.assertEqual(528, mesh2d.getSize())
+        mesh1d = fieldmodule.findMeshByDimension(1)
+        self.assertEqual(590, mesh1d.getSize())
+        nodes = fieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(223, nodes.getSize())
+        coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+
+        X_TOL = 1.0E-8
+
+        minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
+        assertAlmostEqualList(self, minimums, [-1.0, -1.0, -1.0], X_TOL)
+        assertAlmostEqualList(self, maximums, [1.0, 1.0, 1.0], X_TOL)
+
+        with ChangeManager(fieldmodule):
+            one = fieldmodule.createFieldConstant(1.0)
+            isExterior = fieldmodule.createFieldIsExterior()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            fieldcache = fieldmodule.createFieldcache()
+
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, mesh3d)
+            volumeField.setNumbersOfPoints(4)
+            result, total_volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            surfaceAreaField = fieldmodule.createFieldMeshIntegral(isExterior, coordinates, mesh2d)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+        # perfect volume would be 4.0 / 3.0 * math.pi = 4.1887902047863909846168578443727
+        expected_total_volume = 4.1840527007297282
+        # perfect surface area would be 4.0 * math.pi = 12.566370614359172953850573533118
+        expected_total_surface_area = 12.5569662702283
+
+        expectedSizes3d = {
+            "core": (160, expected_total_volume)
+            }
+        fieldcache = fieldmodule.createFieldcache()
+        for name in expectedSizes3d:
+            annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+            size = annotationGroup.getMeshGroup(mesh3d).getSize()
+            self.assertEqual(expectedSizes3d[name][0], size, name)
+            volumeMeshGroup = annotationGroup.getMeshGroup(mesh3d)
+            volumeField = fieldmodule.createFieldMeshIntegral(one, coordinates, volumeMeshGroup)
+            volumeField.setNumbersOfPoints(4)
+            result, volume = volumeField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+            self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
+
+        # expectedSizes2d = {
+        #     "shell": (100, expected_total_surface_area)
+        #     }
+        # fieldcache = fieldmodule.createFieldcache()
+        # for name in expectedSizes2d:
+        #     annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+        #     size = annotationGroup.getMeshGroup(mesh2d).getSize()
+        #     self.assertEqual(expectedSizes2d[name][0], size, name)
+        #     surfaceAreaMeshGroup = annotationGroup.getMeshGroup(mesh2d)
+        #     surfaceAreaField = fieldmodule.createFieldMeshIntegral(one, coordinates, surfaceAreaMeshGroup)
+        #     surfaceAreaField.setNumbersOfPoints(4)
+        #     result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+        #     self.assertEqual(result, RESULT_OK)
+        #     self.assertAlmostEqual(surfaceArea, expectedSizes2d[name][1], delta=X_TOL)
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
     def test_3d_tube_network_sphere_8around_2along_core(self):
         """

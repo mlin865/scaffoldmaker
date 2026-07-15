@@ -42,7 +42,8 @@ class EllipsoidMesh:
         :param core: Set to True to fill the core. If False and no shell elements, only makes nodes and 2-D elements
         on the surface.
         :param core_shell_scaling_mode: Mode controlling how core-shell derivative differences are scaled:
-        1 = use scale factors on last transition element, 2 = use separate version on last transition element.
+        1 = use scale factors on last transition element, 2 = use separate version on last transition element, or
+        0 to replace existing d3 to suit core.
         """
         assert all((count >= 4) and (count % 2 == 0) for count in element_counts)
         assert 1 <= transition_element_count <= (min(element_counts) // 2 - 1)
@@ -51,7 +52,7 @@ class EllipsoidMesh:
         self._shell_count = shell_element_count
         self._transition_count = transition_element_count
         self._core = core
-        self._core_shell_scaling_mode = core_shell_scaling_mode
+        self._core_shell_scaling_mode = 0 if (shell_element_count == 0) else core_shell_scaling_mode
         self._box_group = None
         self._transition_group = None
         self._core_group = None
@@ -1260,7 +1261,7 @@ class EllipsoidMesh:
         box_counts = [half_counts[i] - self._rim_count for i in range(3)]
         around_count = 4 * (box_counts[0] + box_counts[1])
         assert len(rparameters) == around_count
-        assert all(len(rd) == 4 for rd in rparameters)
+        assert all((rd is None or (len(rd) == 4)) for rd in rparameters)
         assert not rnids or (len(rnids) == around_count)
         n1_n2_list = self._get_rim_node_indexes12_list(ri)
         for ai, n1_n2 in enumerate(n1_n2_list):
