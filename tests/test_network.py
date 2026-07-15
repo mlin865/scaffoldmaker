@@ -736,10 +736,10 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_mesh3d = half2.getMeshGroup(mesh3d)
             half2_mesh3d.addElementsConditional(fieldmodule.createFieldGreaterThan(cmiss_number, middle_element_number))
 
-        expected_core_volume = 2.9638976954876455
-        expected_shell_volume = 1.7334178300002012
+        expected_core_volume = 2.9639678526918485
+        expected_shell_volume = 1.733506855128808
         expected_total_volume = expected_core_volume + expected_shell_volume  # 4.667658800439896
-        expected_total_surface_area = 19.86481935487169
+        expected_total_surface_area = 19.86510683832899
 
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(4, len(annotationGroups))
@@ -766,7 +766,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
         # check derivatives around centre of ends are of the expected size
-        expected_d1 = [0.0, 0.0, 0.28545666738374775]
+        expected_d1 = [0.0, 0.0, 0.28745150226471494]
         for node_identifier in [73, 352]:
             node = nodes.findNodeByIdentifier(node_identifier)
             fieldcache.setNode(node)
@@ -856,10 +856,10 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_shell_mesh3d = half2_shell.getMeshGroup(mesh3d)
             half2_shell_mesh3d.addElementsConditional(fieldmodule.createFieldAnd(half2.getGroup(), shell.getGroup()))
 
-        expected_core_volume = 2.9331557186740995
-        expected_shell_volume = 1.7345029780165235
+        expected_core_volume = 2.93335897647307
+        expected_shell_volume = 1.7346580626984778
         expected_total_volume = expected_core_volume + expected_shell_volume  # 4.667658696690623
-        expected_total_surface_area = 19.860303567588733
+        expected_total_surface_area = 19.860657310573725
 
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(8, len(annotationGroups))
@@ -1060,8 +1060,11 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             half2_mesh3d = half2.getMeshGroup(mesh3d)
             half2_mesh3d.addElementsConditional(fieldmodule.createFieldGreaterThan(cmiss_number, middle_element_number))
 
-        expected_total_volume = 1.7345029780165235
-        expected_total_surface_area = 35.31362961180609
+        expected_total_volume = 1.7346580626984778
+        expected_total_surface_area = 35.31423992969953
+
+        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
         annotationGroups = scaffoldPackage.getAnnotationGroups()
         self.assertEqual(2, len(annotationGroups))
@@ -1083,9 +1086,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(volume, expectedSizes3d[name][1], delta=X_TOL)
 
         # check symmetry of 6-way points between halves
-        expected_6way_x = [0.0023787001111386236, 1.7819542138160689e-12, 0.4974609527666738]
-        expected_6way_d1 = [0.21123706695321928, -0.3628435907018581, 0.006698372731079882]
-        expected_6way_d2 = [0.21123706695183203, 0.36284359070255023, 0.006698372737337653]
+        expected_6way_x = [0.0019108636038874666, 1.4486745136821355e-12, 0.49742413411115977]
+        expected_6way_d1 = [0.21323449908997336, -0.36687564649608395, 0.006704466598067782]
+        expected_6way_d2 = [0.2132344990888123, 0.36687564649664645, 0.006704466604210613]
         expected_6way_d3 = [-0.015227869859240711, 1.3415194880887309e-15, 0.09462613958074884]
         for node_identifier in (45, 213):
             node = nodes.findNodeByIdentifier(node_identifier)
@@ -1107,9 +1110,6 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, d3, expected_6way_d3, delta=X_TOL)
-
-        self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
-        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
     def test_3d_tube_network_sphere_core(self):
         """

@@ -690,7 +690,7 @@ class HexTetrahedronMesh:
         :param outer_triangle_abc: Outer triangle parameters.
         :return:
         """
-        assert 0 < shell_count < self._trans_count
+        assert 0 <= shell_count < self._trans_count
         for trimesh in (inner_triangle_abc, outer_triangle_abc):
             assert trimesh.get_element_count12() == self._diag_counts[0]
             assert trimesh.get_element_count13() == self._diag_counts[1]

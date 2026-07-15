@@ -698,6 +698,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         startLocation=self._sampledEndTubeLocations[q] if dome1 else None,
                         endLocation=self._sampledStartTubeLocations[q] if dome0 else None)
                     pd1 = interpolateSampleCubicHermite(cd1, cd12, pe, pxi, psf)[0]
+                    # correct tube-end pd1 which should exactly match the sampled tube coordinates d1 which was smoothed
+                    pd1[-1 if dome0 else 0] = self._sampledTubeCoordinates[p][1][dome_ix][q]
                     # make pd1 tangential to raw surface
                     for n in range(1, longElementsCount):
                         position = TrackSurfacePosition(q, pe[n], 0.0, pxi[n])
