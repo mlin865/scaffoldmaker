@@ -13,7 +13,6 @@ from cmlibs.zinc.node import Node
 from cmlibs.zinc.result import RESULT_OK
 from scaffoldmaker.annotation.annotationgroup import findAnnotationGroupByName
 from scaffoldmaker.meshtypes.meshtype_1d_network_layout1 import MeshType_1d_network_layout1
-from scaffoldmaker.meshtypes.meshtype_2d_tubenetwork1 import MeshType_2d_tubenetwork1
 from scaffoldmaker.meshtypes.meshtype_3d_boxnetwork1 import MeshType_3d_boxnetwork1
 from scaffoldmaker.meshtypes.meshtype_3d_tubenetwork1 import MeshType_3d_tubenetwork1
 from scaffoldmaker.scaffoldpackage import ScaffoldPackage
@@ -86,18 +85,20 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D tube bifurcation is generated correctly.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Bifurcation")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bifurcation")
         settings = scaffoldPackage.getScaffoldSettings()
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
-        self.assertFalse(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(6, len(settings))
+        self.assertTrue(networkLayoutSettings["Define inner coordinates"])
+        self.assertEqual(13, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
         self.assertEqual([0], settings["Annotation numbers of elements along"])
         settings["Target element density along longest segment"] = 3.3
-        MeshType_2d_tubenetwork1.checkOptions(settings)
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -113,7 +114,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         coordinates = fieldmodule.findFieldByName("coordinates").castFiniteElement()
         self.assertTrue(coordinates.isValid())
 
-        X_TOL = 1.0E-6
+        X_TOL = 1.0E-8
 
         minimums, maximums = evaluateFieldNodesetRange(coordinates, nodes)
         assertAlmostEqualList(self, minimums, [0.0, -0.5894427190999916, -0.10000000000000002], X_TOL)
@@ -132,18 +133,20 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D tube converging bifurcation is generated correctly.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Converging bifurcation")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Converging bifurcation")
         settings = scaffoldPackage.getScaffoldSettings()
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
-        self.assertFalse(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(6, len(settings))
+        self.assertTrue(networkLayoutSettings["Define inner coordinates"])
+        self.assertEqual(13, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
         self.assertEqual([0], settings["Annotation numbers of elements along"])
         settings["Target element density along longest segment"] = 3.3
-        MeshType_2d_tubenetwork1.checkOptions(settings)
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -178,10 +181,12 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D tube snake has radial elements.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Snake")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Snake")
         settings = scaffoldPackage.getScaffoldSettings()
         self.assertEqual(12.0, settings["Target element density along longest segment"])
-        MeshType_2d_tubenetwork1.checkOptions(settings)
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -224,16 +229,19 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D sphere cube is generated correctly.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Sphere cube")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Sphere cube")
         settings = scaffoldPackage.getScaffoldSettings()
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
-        self.assertFalse(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(6, len(settings))
+        self.assertTrue(networkLayoutSettings["Define inner coordinates"])
+        self.assertEqual(13, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
         self.assertEqual([0], settings["Annotation numbers of elements along"])
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -295,17 +303,19 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D tube triifurcation is generated correctly.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Trifurcation")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Trifurcation")
         settings = scaffoldPackage.getScaffoldSettings()
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
-        self.assertFalse(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(6, len(settings))
+        self.assertTrue(networkLayoutSettings["Define inner coordinates"])
+        self.assertEqual(13, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
         self.assertEqual([0], settings["Annotation numbers of elements along"])
-        MeshType_2d_tubenetwork1.checkOptions(settings)
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -340,10 +350,12 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         """
         Test 2D tube vase has near constant length elements despite radius changes.
         """
-        scaffoldPackage = ScaffoldPackage(MeshType_2d_tubenetwork1, defaultParameterSetName="Vase")
+        scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Vase")
         settings = scaffoldPackage.getScaffoldSettings()
         self.assertEqual(12.0, settings["Target element density along longest segment"])
-        MeshType_2d_tubenetwork1.checkOptions(settings)
+        settings["Number of elements through shell"] = 0
+        settings["Core"] = False
+        MeshType_3d_tubenetwork1.checkOptions(settings)
 
         context = Context("Test")
         region = context.getDefaultRegion()

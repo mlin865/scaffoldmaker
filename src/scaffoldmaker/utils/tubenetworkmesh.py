@@ -419,7 +419,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         endCurveLocations = []
         endLengths = []
         trimmedLengths = []  # only for p == 0 i.e. outer path
-        for p in range(self._pathsCount):
+        paths = [0, 1] if (self._mesh_dimension == 3) else [0]
+        for p in paths:
             px, pd1, pd2, pd12 = self._rawTubeCoordinatesList[p]
             startTrimSurface = self._junctions[0].getTrimSurfaces(self)[p]
             endTrimSurface = self._junctions[1].getTrimSurfaces(self)[p]
@@ -480,7 +481,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
         endTransitionStartLength = maxEndLength - endTransitionSize
         # print("Transition start min", minStartLength, "max", maxStartLength, "size", startTransitionSize, "end", startTransitionEndLength)
         # print("Transition end min", minEndLength, "max", maxEndLength, "size", endTransitionSize, "end", endTransitionStartLength)
-        for p in range(self._pathsCount):
+        for p in paths:
             startTrimSurface = self._junctions[0].getTrimSurfaces(self)[p]
             if startTrimSurface:
                 for q in range(self._elementsCountAround):
@@ -511,7 +512,7 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
             nLimit -= nEnd
             self._dome_elements_count_along[1] = nEnd - (domeMinElementsCountAround - 1) + rim_count
 
-        for p in range(self._pathsCount):
+        for p in paths:
 
             # get raw tube coordinates cycling over q (around) fastest, so sequential over n (along segment)
             altTubeCoordinatesList = [
