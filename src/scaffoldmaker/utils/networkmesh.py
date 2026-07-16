@@ -747,6 +747,13 @@ class NetworkMeshBuilder(ABC):
         self._targetElementLength = 1.0
         self._junctions = {}  # map from NetworkNode to NetworkMeshJunction-derived object
 
+    def getMetadata(self):
+        """
+        Override to add any metadata when used as a scaffold construction object.
+        :return: Dictionary of metadata.
+        """
+        return {}
+
     @abstractmethod
     def createSegment(self, networkSegment):
         """

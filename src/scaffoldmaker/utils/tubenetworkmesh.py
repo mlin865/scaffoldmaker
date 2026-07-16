@@ -5,6 +5,7 @@ from cmlibs.maths.vectorops import add, cross, div, dot, magnitude, mult, normal
 from cmlibs.zinc.element import Element, Elementbasis
 from cmlibs.zinc.node import Node
 
+from scaffoldmaker.annotation.annotationgroup import findOrCreateAnnotationGroupForTerm
 from scaffoldmaker.utils.eft_utils import (
     determineCubicHermiteSerendipityEft, resolveEftCoreBoundaryScaling)
 from scaffoldmaker.utils.ellipsoidmesh import EllipsoidMesh
@@ -227,9 +228,11 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
             self._shellGroup = self.getOrCreateAnnotationGroup(("shell", ""))
         return self._shellGroup
 
-    def getShellMeshGroup(self, shell_count):
-        mesh = self._mesh if shell_count else self._mesh.getFaceMesh()
-        return self.getShellAnnotationGroup().getMeshGroup(mesh)
+    def getShellMeshGroup(self):
+        """
+        Only call this for 2-D mesh or if there are 3-D shell elements.
+        """
+        return self.getShellAnnotationGroup().getMeshGroup(self._mesh)
 
     def getLeftMeshGroup(self):
         if not self._leftGroup:
@@ -2605,7 +2608,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
             sd2AlongPatchAllLayers.append(sd2AlongOrdered)
 
         rx, rd1, rd2, rd3 = [], [], [], []
-        shellFactor = 1.0 / self._shell_count
+        shellFactor = 1.0 / self._shell_count if self._shell_count else 1.0
         for n2 in range(len(sxAlongPatchAllLayers[0])):
             for r in (rx, rd1, rd2, rd3):
                 r.append([])
@@ -2613,7 +2616,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
             itx, itd1, itd2 = sxAlongPatchAllLayers[1][n2], sd1AlongPatchAllLayers[1][n2], sd2AlongPatchAllLayers[1][n2]
             wd3 = [mult(sub(otx[n1], itx[n1]), shellFactor) for n1 in range(len(otx))]
             for n3 in range(self._shell_count + 1):
-                oFactor = n3 / self._shell_count
+                oFactor = (n3 / self._shell_count) if self._shell_count else 1.0
                 iFactor = 1.0 - oFactor
                 for r in (rx, rd1, rd2, rd3):
                     r[n2].append([])
@@ -4485,6 +4488,7 @@ class TubeNetworkMeshBuilder(NetworkMeshBuilder):
         self._annotationElementsCountsAround = annotationElementsCountsAround
         self._shell_count = shell_count
         self._core = core
+        self._mesh_dimension = 3 if (self._shell_count or self._core) else 2
         self._transition_count = transition_count
         self._defaultElementsCountCoreBoxMinor = defaultElementsCountCoreBoxMinor
         self._annotationElementsCountsCoreBoxMinor = annotationElementsCountsCoreBoxMinor
@@ -4558,14 +4562,36 @@ class TubeNetworkMeshBuilder(NetworkMeshBuilder):
 
     def generateMesh(self, generateData):
         super(TubeNetworkMeshBuilder, self).generateMesh(generateData)
-        # build core, shell
         if self._core:
+            # fill core, shell annotation groups, 3-D only
+            # 2-D shell group must be filled by client call to defineFaceAnnotations
             coreMeshGroup = generateData.getCoreMeshGroup()
-            shellMeshGroup = generateData.getShellMeshGroup(self._shell_count)
+            shellMeshGroup = generateData.getShellMeshGroup() if (
+                (self._shell_count > 0) or (self._mesh_dimension == 2)) else None
             for networkSegment in self._networkMesh.getNetworkSegments():
                 segment = self._segments[networkSegment]
                 segment.addCoreElementsToMeshGroup(coreMeshGroup)
-                segment.addShellElementsToMeshGroup(shellMeshGroup)
+                if shellMeshGroup:
+                    segment.addShellElementsToMeshGroup(shellMeshGroup)
+
+    @classmethod
+    def defineFaceAnnotations(cls, region, annotationGroups, core, shell_count):
+        """
+        Client should call this after faces are defined to create and fill any standard face annotations.
+        :param region: Region containing 3-D mesh. Note this could be base region or refinement region.
+        :param annotationGroups: List of annotation groups for top-level elements.
+        :param core: True if core defined.
+        :param shell_count: Number of shell
+        New face annotation groups are appended to this list.
+        """
+        if core and (shell_count == 0):
+            fieldmodule = region.getFieldmodule()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            shell = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("shell", ""))
+            is_exterior = fieldmodule.createFieldIsExterior()
+            is_exterior_face_xi3_1 = fieldmodule.createFieldAnd(
+                fieldmodule.createFieldIsExterior(), fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_1))
+            shell.getMeshGroup(mesh2d).addElementsConditional(is_exterior_face_xi3_1)
 
 
 class BodyTubeNetworkMeshBuilder(TubeNetworkMeshBuilder):

@@ -250,4 +250,17 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         tubeNetworkMeshBuilder.generateMesh(generateData)
         annotationGroups = generateData.getAnnotationGroups()
 
-        return annotationGroups, None
+        return annotationGroups, tubeNetworkMeshBuilder
+
+    @classmethod
+    def defineFaceAnnotations(cls, region, options, annotationGroups):
+        """
+        Add face annotation groups from the highest dimension mesh.
+        Must have defined faces and added subelements for highest dimension groups.
+        :param region: Zinc region containing model.
+        :param options: Dict containing options. See getDefaultOptions().
+        :param annotationGroups: List of annotation groups for top-level elements.
+        New face annotation groups are appended to this list.
+        """
+        TubeNetworkMeshBuilder.defineFaceAnnotations(
+            region, annotationGroups, options["Core"], options["Number of elements through shell"])

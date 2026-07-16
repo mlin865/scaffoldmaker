@@ -20,10 +20,10 @@ class MeshRefinement:
     Class for refining a mesh from one region to another.
     """
 
-    def __init__(self, sourceRegion, targetRegion, sourceAnnotationGroups=[]):
+    def __init__(self, sourceRegion, targetRegion, sourceAnnotationGroups=None):
         """
         Assumes targetRegion is empty.
-        :param sourceAnnotationGroups: List of AnnotationGroup for source mesh in sourceRegion.
+        :param sourceAnnotationGroups: Optional list of AnnotationGroup for source mesh in sourceRegion.
         A copy containing the refined elements is created by the MeshRefinement.
         """
         self._sourceRegion = sourceRegion
@@ -76,10 +76,10 @@ class MeshRefinement:
         self._nodeIdentifier = 1
         self._elementIdentifier = 1
         # prepare annotation group map
-        self._sourceAnnotationGroups = sourceAnnotationGroups
+        self._sourceAnnotationGroups = sourceAnnotationGroups if sourceAnnotationGroups else []
         self._annotationGroups = []
         self._sourceAndTargetMeshGroups = []
-        for sourceAnnotationGroup in sourceAnnotationGroups:
+        for sourceAnnotationGroup in self._sourceAnnotationGroups:
             targetAnnotationGroup = AnnotationGroup(
                 self._targetRegion, sourceAnnotationGroup.getTerm(), isMarker=sourceAnnotationGroup.isMarker())
             self._annotationGroups.append(targetAnnotationGroup)
