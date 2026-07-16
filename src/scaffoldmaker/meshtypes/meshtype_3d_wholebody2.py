@@ -878,7 +878,7 @@ class MeshType_3d_wholebody2(Scaffold_base):
         tubeNetworkMeshBuilder.generateMesh(generateData)
         annotationGroups = generateData.getAnnotationGroups()
 
-        if core:
+        if core and shell_count:
             fieldmodule = region.getFieldmodule()
             mesh = fieldmodule.findMeshByDimension(meshDimension)
             thoraxGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("thorax"))
@@ -908,6 +908,8 @@ class MeshType_3d_wholebody2(Scaffold_base):
         New face annotation groups are appended to this list.
         """
         is_core = options["Use Core"]
+        shell_count = options["Number of elements through shell"]
+        BodyTubeNetworkMeshBuilder.defineFaceAnnotations(region, annotationGroups, is_core, shell_count)
 
         # create 2-D surface mesh groups, 1-D spinal cord
         fieldmodule = region.getFieldmodule()
@@ -918,32 +920,34 @@ class MeshType_3d_wholebody2(Scaffold_base):
         is_face_xi3_0 = fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_0)
 
         skinGroup = findOrCreateAnnotationGroupForTerm(annotationGroups, region, get_body_term("skin epidermis outer surface"))
-        is_skin = is_exterior if is_core else fieldmodule.createFieldAnd(
-            is_exterior, fieldmodule.createFieldNot(is_face_xi3_0))
+        one = fieldmodule.createFieldConstant(1.0)
+        is_skin = (is_exterior if is_core else fieldmodule.createFieldAnd(
+            is_exterior, fieldmodule.createFieldNot(is_face_xi3_0))) if (is_core or shell_count) else one
         skinGroup.getMeshGroup(mesh2d).addElementsConditional(is_skin)
 
         leftArmGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("left upper limb"))
         leftArmSkinGroup = findOrCreateAnnotationGroupForTerm(
             annotationGroups, region, get_body_term("left upper limb skin epidermis outer surface"))
         leftArmSkinGroup.getMeshGroup(mesh2d).addElementsConditional(
-            fieldmodule.createFieldAnd(leftArmGroup.getGroup(), is_exterior))
+            fieldmodule.createFieldAnd(leftArmGroup.getGroup(), is_skin))
         rightArmGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("right upper limb"))
         rightArmSkinGroup = findOrCreateAnnotationGroupForTerm(
             annotationGroups, region, get_body_term("right upper limb skin epidermis outer surface"))
         rightArmSkinGroup.getMeshGroup(mesh2d).addElementsConditional(
-            fieldmodule.createFieldAnd(rightArmGroup.getGroup(), is_exterior))
+            fieldmodule.createFieldAnd(rightArmGroup.getGroup(), is_skin))
         leftLegGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("left lower limb"))
         leftLegSkinGroup = findOrCreateAnnotationGroupForTerm(
             annotationGroups, region, get_body_term("left lower limb skin epidermis outer surface"))
         leftLegSkinGroup.getMeshGroup(mesh2d).addElementsConditional(
-            fieldmodule.createFieldAnd(leftLegGroup.getGroup(), is_exterior))
+            fieldmodule.createFieldAnd(leftLegGroup.getGroup(), is_skin))
         rightLegGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("right lower limb "))
         rightLegSkinGroup = findOrCreateAnnotationGroupForTerm(
             annotationGroups, region, get_body_term("right lower limb skin epidermis outer surface"))
         rightLegSkinGroup.getMeshGroup(mesh2d).addElementsConditional(
-            fieldmodule.createFieldAnd(rightLegGroup.getGroup(), is_exterior))
+            fieldmodule.createFieldAnd(rightLegGroup.getGroup(), is_skin))
 
-        if is_core:
+        if is_core and shell_count:
+            # define cavity surfaces, diaphragm and spinal cord
             headGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("head"))
             coreGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("core"))
             shellGroup = getAnnotationGroupForTerm(annotationGroups, get_body_term("shell"))

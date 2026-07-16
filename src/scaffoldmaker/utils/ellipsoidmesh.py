@@ -1469,6 +1469,9 @@ class EllipsoidMesh:
 
         mesh = generate_data.getMesh()
         half_counts = [count // 2 for count in self._element_counts]
+        box_counts = [half_counts[i] - self._rim_count for i in range(3)]
+        dbox_counts = [2 * box_counts[i] for i in range(3)]
+
         octant_mesh_group_lists = None
         if self._octant_group_lists:
             octant_mesh_group_lists = []
@@ -1524,6 +1527,9 @@ class EllipsoidMesh:
                             element_identifier = generate_data.nextElementIdentifier()
                             element = mesh.createElement(element_identifier, elementtemplate_regular)
                             element.setNodesByIdentifier(eft_regular, nids)
+                            e1 = self._element_counts[0] - self._rim_count - i1
+                            e2 = self._rim_count + i2 - 1
+                            self._eids[0][e2][e1] = element_identifier
                             # print("Element", element_identifier, "nids", nids)
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_n2 + octant_n1
@@ -1542,7 +1548,7 @@ class EllipsoidMesh:
             last_nids_row = None
             last_parameters_row = None
             last_corners_row = None
-            for n3 in rim_indexes[2]:
+            for i3, n3 in enumerate(rim_indexes[2]):
                 if (n3 < e3_start) and (e3_start >= rim_indexes[2][1]):
                     continue
                 if (n3 > e3_limit) and (e3_limit <= rim_indexes[2][-2]):
@@ -1607,6 +1613,9 @@ class EllipsoidMesh:
                         element.setNodesByIdentifier(eft, nids)
                         if scalefactors:
                             element.setScaleFactors(eft, scalefactors)
+                        e3 = self._rim_count + i3 - 1
+                        e1, e2 = self._get_rim_element_indexes12(e3, self._rim_count - 1, nc)
+                        self._eids[n3 - 1][e2][e1] = element_identifier
                         # print("Element", element_identifier, "nids", nids)
                         if octant_mesh_group_lists:
                             octant = octant_n3 + octant_nc[nc]
@@ -1633,6 +1642,9 @@ class EllipsoidMesh:
                             element_identifier = generate_data.nextElementIdentifier()
                             element = mesh.createElement(element_identifier, elementtemplate_regular)
                             element.setNodesByIdentifier(eft_regular, nids)
+                            e1 = self._rim_count + i1 - 1
+                            e2 = self._rim_count + i2 - 1
+                            self._eids[self._element_counts[2] - 1][e2][e1] = element_identifier
                             # print("Element", element_identifier, "nids", nids)
                             if octant_mesh_group_lists:
                                 octant = octant_n3 + octant_n2 + octant_n1
@@ -1649,8 +1661,6 @@ class EllipsoidMesh:
             elementtemplate_regular.defineField(coordinates, -1, eft_regular)
             elementtemplate_special = mesh.createElementtemplate()
             elementtemplate_special.setElementShapeType(Element.SHAPE_TYPE_CUBE)
-            box_counts = [half_counts[i] - self._rim_count for i in range(3)]
-            dbox_counts = [2 * box_counts[i] for i in range(3)]
 
             # bottom transition
             last_nids_layer = None
