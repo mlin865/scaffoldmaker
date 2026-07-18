@@ -2189,7 +2189,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                         eft, scalefactors = generateData.resolveEftCoreBoundaryScaling(
                             eft, scalefactors, nodeParameters, nids, self._coreBoundaryScalingMode)
                         elementtemplateTransition = mesh.createElementtemplate()
-                        elementtemplateTransition.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+                        elementtemplateTransition.setElementShapeType(
+                            Element.SHAPE_TYPE_CUBE if (self._mesh_dimension == 3) else Element.SHAPE_TYPE_SQUARE)
                         elementtemplateTransition.defineField(coordinates, -1, eft)
                         elementtemplate = elementtemplateTransition
                     element = mesh.createElement(elementIdentifier, elementtemplate)
@@ -2621,10 +2622,10 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                 for r in (rx, rd1, rd2, rd3):
                     r[n2].append([])
                 for n1 in range(len(otx)):
-                    if n3 == 0:
-                        x, d1, d2 = itx[n1], itd1[n1], itd2[n1]
-                    elif n3 == self._shell_count:
+                    if n3 == self._shell_count:
                         x, d1, d2 = otx[n1], otd1[n1], otd2[n1]
+                    elif n3 == 0:
+                        x, d1, d2 = itx[n1], itd1[n1], itd2[n1]
                     else:
                         x = add(mult(itx[n1], iFactor), mult(otx[n1], oFactor))
                         d1 = add(mult(itd1[n1], iFactor), mult(otd1[n1], oFactor))
@@ -2751,8 +2752,8 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         :param nodeIndexAlong: Node index from 0 to self._elementsCountAlong, or negative to count from end.
         :return: sx[nAround]
         """
-        pathIndexPatch = 0 if pathIndex else 1
-        return self._rimCoordinates[0][nodeIndexAlong][pathIndexPatch]
+        # pathIndexPatch = 0 if pathIndex else 1
+        return self._rimCoordinates[0][nodeIndexAlong][-1]  # pathIndexPatch]
 
     def generateMesh(self, generateData: TubeNetworkMeshGenerateData, n2Only=None):
         """
@@ -2766,12 +2767,13 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         d3Defined = (meshDimension == 3) and not generateData.isLinearThroughShell()
         nodetemplate = generateData.getNodetemplate()
 
-        elementsCountThroughWall = len(self._patchCoordinates[0][0]) - 1
+        nodesCountThroughWall = len(self._patchCoordinates[0][0])
+        elementsCountThroughWall = (nodesCountThroughWall - 1) if (meshDimension == 3) else 1
         elementsCountAlong = len(self._patchCoordinates[0]) - 1
         elementsCountAround = len(self._patchCoordinates[0][0][0]) - 1
         for n2 in range(elementsCountAlong + 1):
             self._patchNodeIds[n2] = [] if self._patchNodeIds[n2] is None else self._patchNodeIds[n2]
-            for n3 in range(elementsCountThroughWall + 1):
+            for n3 in range(nodesCountThroughWall):
                 # patch coordinates
                 rx = self._patchCoordinates[0][n2][n3]
                 rd1 = self._patchCoordinates[1][n2][n3]
@@ -2842,14 +2844,14 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                         element = mesh.createElement(elementIdentifier, elementtemplate)
                         element.setNodesByIdentifier(eft, nids)
                     else:
-                        for n3 in [e3, e3 + 1]:
+                        for n3 in [e3, e3 + 1] if dimension3d else [0]:
                             nids += [self._patchNodeIds[e2][n3][-(e1 + 1) if e2 == elementsCountAlong // 2 else e1],
                                      self._patchNodeIds[e2][n3][-(e1 + 2) if e2 == elementsCountAlong // 2 else e1 + 1],
                                      self._patchNodeIds[e2 + 1][n3][e1],
                                      self._patchNodeIds[e2 + 1][n3][e1 + 1]]
                         nodeParameters = []
                         nodeLayouts = []
-                        for n3 in (e3, e3 + 1):
+                        for n3 in [e3, e3 + 1] if dimension3d else [0]:
                             for n2 in (e2, e2 + 1):
                                 for n1 in (e1, e1 + 1):
                                     nodeParameters.append(self.getPatchCoordinates(n1, n2, n3, d3Defined))
@@ -2858,7 +2860,8 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                         elementIdentifier = generateData.nextElementIdentifier()
                         eft, scalefactors = determineCubicHermiteSerendipityEft(mesh, nodeParameters, nodeLayouts)
                         elementtemplate = mesh.createElementtemplate()
-                        elementtemplate.setElementShapeType(Element.SHAPE_TYPE_CUBE)
+                        elementtemplate.setElementShapeType(
+                            Element.SHAPE_TYPE_CUBE if (self._mesh_dimension == 3) else Element.SHAPE_TYPE_SQUARE)
                         elementtemplate.defineField(coordinates, -1, eft)
                         element = mesh.createElement(elementIdentifier, elementtemplate)
                         element.setNodesByIdentifier(eft, nids)
@@ -2878,7 +2881,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
 
         if elementsAroundPatch:
             for i in range(elementsAlongPatchRim):
-                for e3 in range(self._shell_count):
+                for e3 in range(elementsCountThroughWall):
                     if sElementId:
                         elementIdPatch = []
                         e2StartIdx = elementsAlongPatch // 2 - i - 1
@@ -2965,7 +2968,8 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
         n2 = (elementsCountAlong - 1) if junction._segmentsIn[s] else 1
 
         # smooth directions of midpoints
-        for n3 in range(elementsCountRimRegular + 1):
+        nodesCountThroughWall = len(self._patchCoordinates[0][0])
+        for n3 in range(nodesCountThroughWall):
             for i in range(2):
                 nids = []
                 sx = []
@@ -2996,7 +3000,7 @@ class PatchTubeNetworkMeshSegment(TubeNetworkMeshSegment):
                 ox = junction._rimCoordinates[0][-1][rimIndex]
                 ix = junction._rimCoordinates[0][0][rimIndex]
                 d3 = mult(sub(ox, ix), shellFactor)
-                for n3 in range(elementsCountRimRegular + 1):
+                for n3 in range(nodesCountThroughWall):
                     nid = junction._rimNodeIds[n3][rimIndex]
                     node = nodes.findNodeByIdentifier(nid)
                     fieldcache.setNode(node)

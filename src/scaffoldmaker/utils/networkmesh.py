@@ -859,7 +859,7 @@ class NetworkMeshBuilder(ABC):
 
     def setAnnotationLeftRightSwap(self, name, swap):
         """
-        Call after build but before generate mesh to swap left-right sense of segments with annotation name
+        Call after build but before generate mesh to swap left-right sense of segments with annotation name.
         :param group_name: Name of annotation group.
         :param swap: True to swap sense of left and right.
         """
@@ -868,6 +868,19 @@ class NetworkMeshBuilder(ABC):
                 if annotationTerm[0] == name:
                     segment.setLeftRightSwap(swap)
                     break
+
+    def setLeftRightSwap(self, swap):
+        """
+        Call after build but before generate mesh to swap left-right sense of segments with annotation names
+        not containing 'left' or 'right'.
+        :param swap: True to swap sense of left and right.
+        """
+        for segment in self._segments.values():
+            for annotationTerm in segment.getAnnotationTerms():
+                if ('left' in annotationTerm[0]) or ('right' in annotationTerm[0]):
+                    break
+            else:
+                 segment.setLeftRightSwap(swap)
 
     def generateMesh(self, generateData: MeshGenerateData):
         """

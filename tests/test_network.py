@@ -682,7 +682,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(volume, 0.03138195249662126, delta=X_TOL)
             self.assertAlmostEqual(surfaceArea, 0.6907451706120391, delta=X_TOL)
 
-    def test_3d_tube_network_bone_core_12around_6along(self):
+    def test_3d_tube_network_bone_core_12around_4along(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 4 along.
         This tests the case where the 4-way cap layer of the domes join the junction.
@@ -786,15 +786,16 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, d1, expected_d1, delta=X_TOL)
 
-    def test_3d_tube_network_bone_core_8around_8along(self):
+    def test_3d_tube_network_bone_core_8around_8along_1shell(self):
         """
-        Test bone 3-D tube network with solid core is generated correctly with 8 along.
+        Test bone 3-D tube network with solid core is generated correctly with 8 along, 1 shell element.
         This tests the case where regular layers of the domes join the junction.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(8.0, settings["Target element density along longest segment"])
+        self.assertEqual(1, settings["Number of elements through shell"])
         settings["Core"] = True
 
         context = Context("Test")
@@ -1010,7 +1011,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
-    def test_2d_tube_network_bone_8around_8along(self):
+    def test_2d_tube_network_bone_8around_8along_0shell(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 8 along, 0 shell elements.
         This tests the case where regular layers of the domes join the junction.
@@ -1090,10 +1091,10 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
-    def test_3d_tube_network_bone_8around_8along(self):
+    def test_3d_tube_network_bone_8around_8along_1shell(self):
         """
-        Test bone 3-D tube network with solid core is generated correctly with 4 along. This tests the case where
-        regular layers of the domes join the junction.
+        Test bone 3-D tube network with solid core is generated correctly with 8 along, 1 shell element.
+        This tests the case where regular layers of the domes join the junction.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
@@ -1203,12 +1204,13 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, d3, expected_6way_d3, delta=X_TOL)
 
-    def test_3d_tube_network_sphere_core(self):
+    def test_3d_tube_network_sphere_core_1shell(self):
         """
-        Test sphere 3-D tube network with solid core is generated correctly.
+        Test sphere 3-D tube network with solid core is generated correctly, 1 shell element.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Sphere")
         settings = scaffoldPackage.getScaffoldSettings()
+        self.assertEqual(1, settings["Number of elements through shell"])
         settings["Core"] = True
 
         context = Context("Test")
@@ -1293,7 +1295,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
     def test_3d_tube_network_sphere_core_0shell(self):
         """
-        Test sphere 3-D tube network with solid core and no shell is generated correctly.
+        Test sphere 3-D tube network with solid core and no shell is generated correctly with 0 shell elements.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Sphere")
         settings = scaffoldPackage.getScaffoldSettings()

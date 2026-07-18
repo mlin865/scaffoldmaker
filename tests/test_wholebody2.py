@@ -25,7 +25,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
         for term_ids in body_terms:
             self.assertTrue(check_annotation_term_ids(term_ids), "Invalid primary term id or order not UBERON < ILX < FMA for body annotation term ids " + str(term_ids)) 
 
-    def test_wholebody2_core_shell1(self):
+    def test_wholebody2_core_1shell(self):
         """
         Test creation of whole-body scaffold with solid core and 1 shell count.
         """
@@ -159,7 +159,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(length, expectedSizes1d[name][1], delta=tol)
 
-    def test_wholebody2_core_shell0(self):
+    def test_wholebody2_core_0shell(self):
         """
         Test creation of whole-body scaffold with solid core and 0 shell count.
         """
@@ -255,7 +255,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(surfaceArea, expectedSizes2d[name][1], delta=tol)
 
-    def test_wholebody2_shell1(self):
+    def test_wholebody2_1shell(self):
         """
         Test creation of whole-body scaffold without the solid core, 1 shell layer.
         """
@@ -339,7 +339,7 @@ class WholeBody2ScaffoldTestCase(unittest.TestCase):
             self.assertEqual(result, RESULT_OK)
             self.assertAlmostEqual(surfaceArea, expectedSizes2d[name][1], delta=tol)
 
-    def test_wholebody2_shell0(self):
+    def test_wholebody2_0shell(self):
         """
         Test creation of 2d whole-body scaffold without solid core but 0 shell count.
         """
