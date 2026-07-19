@@ -1,9 +1,10 @@
 """
-Generates a solid ellipsoid of hexahedral elements.
+Generates a solid 3d ellipsoid of hexahedral elements or a shell of hex (3d) or quad (2d) elements.
 """
 import math
 from cmlibs.utils.zinc.field import find_or_create_field_coordinates
-from scaffoldmaker.annotation.annotationgroup import AnnotationGroup
+from cmlibs.zinc.element import Element
+from scaffoldmaker.annotation.annotationgroup import AnnotationGroup, findOrCreateAnnotationGroupForTerm
 from scaffoldmaker.meshtypes.scaffold_base import Scaffold_base
 from scaffoldmaker.utils.ellipsoidmesh import EllipsoidMesh, EllipsoidSurfaceD3Mode
 from scaffoldmaker.utils.meshgeneratedata import MeshGenerateData
@@ -12,7 +13,7 @@ from scaffoldmaker.utils.meshrefinement import MeshRefinement
 
 class MeshType_3d_ellipsoid1(Scaffold_base):
     """
-    Generates a solid ellipsoid of hexahedral elements.
+    Generates a solid 3d ellipsoid of hexahedral elements or a shell of hex (3d) or quad (2d) elements.
     """
 
     @classmethod
@@ -204,3 +205,24 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         assert isinstance(meshRefinement, MeshRefinement)
         refineElementsCount = options["Refine number of elements"]
         meshRefinement.refineAllElementsCubeStandard3d(refineElementsCount, refineElementsCount, refineElementsCount)
+
+    @classmethod
+    def defineFaceAnnotations(cls, region, options, annotationGroups):
+        """
+        Add face annotation groups from the highest dimension mesh.
+        Must have defined faces and added subelements for highest dimension groups.
+        :param region: Zinc region containing model.
+        :param options: Dict containing options. See getDefaultOptions().
+        :param annotationGroups: List of annotation groups for top-level elements.
+        New face annotation groups are appended to this list.
+        """
+        core = options["Core"]
+        shell_count = options["Numbers of shell, transition elements"][0]
+        if core and (shell_count == 0):
+            fieldmodule = region.getFieldmodule()
+            mesh2d = fieldmodule.findMeshByDimension(2)
+            shell = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("shell", ""))
+            is_exterior = fieldmodule.createFieldIsExterior()
+            is_exterior_face_xi3_1 = fieldmodule.createFieldAnd(
+                fieldmodule.createFieldIsExterior(), fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_1))
+            shell.getMeshGroup(mesh2d).addElementsConditional(is_exterior_face_xi3_1)

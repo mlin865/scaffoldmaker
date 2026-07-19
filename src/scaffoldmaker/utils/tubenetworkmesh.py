@@ -4585,7 +4585,7 @@ class TubeNetworkMeshBuilder(NetworkMeshBuilder):
         :param region: Region containing 3-D mesh. Note this could be base region or refinement region.
         :param annotationGroups: List of annotation groups for top-level elements.
         :param core: True if core defined.
-        :param shell_count: Number of shell
+        :param shell_count: Number of 3d shell elements, where 0 means 1 2d shell layer.
         New face annotation groups are appended to this list.
         """
         if core and (shell_count == 0):
