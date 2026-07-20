@@ -700,6 +700,13 @@ class HermiteNodeLayoutManager:
             HermiteNodeLayout([[-1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, -1.0, 0.0], [0.0, 0.0, -1.0], [0.0, 0.0, 1.0]]),
             HermiteNodeLayout([[1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [-1.0, 1.0, 0.0], [0.0, 0.0, -1.0], [0.0, 0.0, 1.0]]),
             HermiteNodeLayout([[-1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [1.0, 1.0, 0.0], [0.0, 0.0, -1.0], [0.0, 0.0, 1.0]])]
+        # 2d / no d3 version of the above
+        # note these need to be organised to be clockwise about +d3 to work as only permutations around it are included
+        self._nodeLayout3WayPoints12_no_d3 = [
+            HermiteNodeLayout([[1.0, 0.0], [0.0, 1.0], [-1.0, -1.0]]),
+            HermiteNodeLayout([[0.0, 1.0], [-1.0, 0.0], [1.0, -1.0]]),
+            HermiteNodeLayout([[0.0, -1.0], [1.0, 0.0], [-1.0, 1.0]]),
+            HermiteNodeLayout([[-1.0, 0.0], [0.0, -1.0], [1.0, 1.0]])]
         self._nodeLayout3WayPoints13 = [
             HermiteNodeLayout([[1.0, 0.0, 0.0], [0.0, 0.0, 1.0], [-1.0, 0.0, -1.0], [0.0, -1.0, 0.0], [0.0, 1.0, 0.0]]),
             HermiteNodeLayout([[-1.0, 0.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, -1.0], [0.0, -1.0, 0.0], [0.0, 1.0, 0.0]]),
@@ -820,6 +827,15 @@ class HermiteNodeLayoutManager:
         :return: HermiteNodeLayout.
         """
         return self._nodeLayout3WayPoints12[i]
+
+    def getNodeLayout3WayPoints12_no_d3(self, i):
+        """
+        Get 3-way node layout for quadrants 12 = NN, NP, PN, PP.
+        Version for 2-D or no d3.
+        :param i: Index of variant from 0 to 3.
+        :return: HermiteNodeLayout.
+        """
+        return self._nodeLayout3WayPoints12_no_d3[i]
 
     def getNodeLayout3WayPoints13(self, i):
         """

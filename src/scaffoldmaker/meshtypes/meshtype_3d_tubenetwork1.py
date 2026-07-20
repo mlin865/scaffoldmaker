@@ -117,8 +117,10 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         # element counts across core box major/minor are used for domes even without a core so must be checked here
         networkLayoutOptions = options["Network layout"].getScaffoldSettings()
         structure_string = networkLayoutOptions["Structure"]
-        hasDomes = any(end_style in structure_string for end_style in ('(', ')'))
-        if options["Core"] or hasDomes:
+        has_domes = any(end_style in structure_string for end_style in ('(', ')'))
+        core = options["Core"]
+
+        if core or has_domes:
             if options["Number of elements around"] < 8:
                 options["Number of elements around"] = 8
             elif options["Number of elements around"] % 4:
@@ -176,11 +178,6 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                     dependentChanges = True
                 elif annotationCoreBoxMinorCounts[i] % 2:
                     annotationCoreBoxMinorCounts[i] += 1
-
-            if options["Use linear through shell"]:
-                options["Use linear through shell"] = False
-                dependentChanges = True
-
         else:
             if options["Number of elements around"] < 4:
                 options["Number of elements around"] = 4
@@ -193,6 +190,10 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                         annotationAroundCounts[i] = 0
                     elif annotationAroundCounts[i] < 4:
                         annotationAroundCounts[i] = 4
+
+        if core and options["Use linear through shell"]:
+            options["Use linear through shell"] = False
+            dependentChanges = True
 
         if options["Number of elements through shell"] < 0:
             options["Number of elements through shell"] = 0

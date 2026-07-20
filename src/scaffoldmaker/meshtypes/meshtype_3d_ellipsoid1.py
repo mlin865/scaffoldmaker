@@ -24,16 +24,17 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
     def getDefaultOptions(cls, parameterSetName='Default'):
         options = {
             "Numbers of elements across axes": [4, 6, 8],
-            "Numbers of shell, transition elements": [0, 1],
+            "Number of elements through shell": 0,
+            "Number of elements across core transition": 1,
             "Axes lengths": [1.0, 1.5, 2.0],
             "Axes shell thicknesses": [0.2, 0.2, 0.2],
             "Axis 2 x-rotation degrees": 0.0,
             "Axis 3 x-rotation degrees": 90.0,
-            "Advanced n-way derivative factor": 0.6,
-            "Advanced surface D3 mode": EllipsoidSurfaceD3Mode.SURFACE_NORMAL.value,
+            "Use linear through shell": False,
             "Core": True,
             "Core shell scaling mode": 1,
-            "Use linear through shell": False,
+            "Advanced n-way derivative factor": 0.6,
+            "Advanced surface D3 mode": EllipsoidSurfaceD3Mode.SURFACE_NORMAL.value,
             "Refine": False,
             "Refine number of elements": 4,
         }
@@ -43,16 +44,17 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
     def getOrderedOptionNames(cls):
         return [
             "Numbers of elements across axes",
-            "Numbers of shell, transition elements",
+            "Number of elements through shell",
+            "Number of elements across core transition",
             "Axes lengths",
             "Axes shell thicknesses",
             "Axis 2 x-rotation degrees",
             "Axis 3 x-rotation degrees",
+            "Use linear through shell",
             "Core",
             "Core shell scaling mode",
             "Advanced n-way derivative factor",
             "Advanced surface D3 mode",
-            # "Use linear through shell",
             "Refine",
             "Refine number of elements"
         ]
@@ -78,19 +80,18 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
             if (max_rim_count is None) or (transition_count < max_rim_count):
                 max_rim_count = transition_count
 
-        shell_transition_counts = options["Numbers of shell, transition elements"]
-        count = len(shell_transition_counts)
-        if count < 2:
-            shell_transition_counts.append(1)
-        elif count > 2:
-            del shell_transition_counts[2:]
-        if shell_transition_counts[0] > max_rim_count - 1:
-            shell_transition_counts[0] = max_rim_count - 1
+        # prioritise shell count if possible
+        shell_count = options["Number of elements through shell"]
+        if shell_count < 0:
+            shell_count = options["Number of elements through shell"] = 0
+        elif shell_count > max_rim_count - 1:
+            shell_count = options["Number of elements through shell"] = max_rim_count - 1
             dependent_changes = True
-        if shell_transition_counts[1] < 1:
-            shell_transition_counts[1] = 1
-        elif (shell_transition_counts[1] + shell_transition_counts[0]) > max_rim_count:
-            shell_transition_counts[1] = max_rim_count - shell_transition_counts[0]
+        transition_count = options["Number of elements across core transition"]
+        if transition_count < 1:
+            transition_count = options["Number of elements across core transition"] = 1
+        elif (shell_count + transition_count) > max_rim_count:
+            transition_count = options["Number of elements across core transition"] = max_rim_count - shell_count
             dependent_changes = True
 
         axes_lengths = options["Axes lengths"]
@@ -114,6 +115,11 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         for i, thickness in enumerate(axes_thicknesses):
             if thickness <= 0.0:
                 axes_thicknesses[i] = axes_lengths[i] * 0.2
+
+        core = options["Core"]
+        if core and options["Use linear through shell"]:
+            options["Use linear through shell"] = False
+            dependentChanges = True
 
         if options["Core shell scaling mode"] not in (1, 2):
             options["Core shell scaling mode"] = 1
@@ -144,7 +150,8 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         :return: empty list of AnnotationGroup, None
         """
         element_counts = options["Numbers of elements across axes"]
-        shell_element_count, transition_element_count = options["Numbers of shell, transition elements"]
+        shell_count = options["Number of elements through shell"]
+        transition_count = options["Number of elements across core transition"]
         axes_lengths = options["Axes lengths"]
         axes_shell_thicknesses = options["Axes shell thicknesses"]
 
@@ -158,7 +165,7 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         fieldmodule = region.getFieldmodule()
         coordinates = find_or_create_field_coordinates(fieldmodule)
 
-        ellipsoid = EllipsoidMesh(element_counts, shell_element_count, transition_element_count, core,
+        ellipsoid = EllipsoidMesh(element_counts, shell_count, transition_count, core,
                                   core_shell_scaling_mode=core_shell_scaling_mode)
 
         left_group = AnnotationGroup(region, ("left", ""))
@@ -182,7 +189,7 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
             transition_group = AnnotationGroup(region, ("transition", ""))
             core_group = AnnotationGroup(region, ("core", ""))
             annotation_groups += [box_group, core_group, transition_group]
-            shell_group = AnnotationGroup(region, ("shell", "")) if shell_element_count else None
+            shell_group = AnnotationGroup(region, ("shell", "")) if shell_count else None
             if shell_group:
                 annotation_groups.append(shell_group)
             ellipsoid.set_box_transition_groups(box_group.getGroup(), transition_group.getGroup())
@@ -190,7 +197,8 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
 
         ellipsoid.build(axes_lengths, axis2_x_rotation_radians, axis3_x_rotation_radians, axes_shell_thicknesses,
                         nway_d_factor=nway_d_factor, surface_d3_mode=surface_d3_mode)
-        generate_data = MeshGenerateData(region, meshDimension=(2 if ((shell_element_count == 0) and not core) else 3))
+        generate_data = MeshGenerateData(region, meshDimension=(2 if ((shell_count == 0) and not core) else 3))
+        generate_data.setLinearThroughShell(options["Use linear through shell"])
         ellipsoid.generate_mesh(generate_data)
 
         return annotation_groups, None
@@ -217,7 +225,7 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         New face annotation groups are appended to this list.
         """
         core = options["Core"]
-        shell_count = options["Numbers of shell, transition elements"][0]
+        shell_count = shell_count = options["Number of elements through shell"]
         if core and (shell_count == 0):
             fieldmodule = region.getFieldmodule()
             mesh2d = fieldmodule.findMeshByDimension(2)

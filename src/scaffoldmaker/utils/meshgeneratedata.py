@@ -29,6 +29,8 @@ class MeshGenerateData:
         self._nodeLayoutMap = {}
         self._annotationGroups = []  # list of AnnotationGroup to return for mesh's scaffold
         self._annotationGroupMap = {}  # map from annotation term (name, ontId) to AnnotationGroup in output region
+        # attributes valid for some mesh types
+        self._isLinearThroughShell = False
 
     def getCoordinates(self):
         """
@@ -176,3 +178,9 @@ class MeshGenerateData:
         :return: List of Zinc MeshGroup.
         """
         return [self._getAnnotationMeshGroup(annotationTerm) for annotationTerm in annotationTerms]
+
+    def isLinearThroughShell(self):
+        return self._isLinearThroughShell
+
+    def setLinearThroughShell(self, isLinearThroughShell: bool):
+        self._isLinearThroughShell = isLinearThroughShell

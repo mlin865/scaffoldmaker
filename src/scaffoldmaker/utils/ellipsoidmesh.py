@@ -19,6 +19,8 @@ import copy
 from enum import Enum
 import math
 
+from scaffoldmaker.utils.zinc_utils import generate_datapoints
+
 
 class EllipsoidSurfaceD3Mode(Enum):
     SURFACE_NORMAL = 1  # surface D3 are exact surface normals to ellipsoid
@@ -814,7 +816,12 @@ class EllipsoidMesh:
         :param n3: Index along axis 3.
         :return: Node layout or None.
         """
+        mesh_dimension = generate_data.getMeshDimension()
+        linear_through_shell = generate_data.isLinearThroughShell()
+        d3_defined = (mesh_dimension == 3) and not linear_through_shell
         node_layout_manager = generate_data.getHermiteNodeLayoutManager()
+        getShellNodeLayout3WayPoints12 = node_layout_manager.getNodeLayout3WayPoints12 if d3_defined \
+            else node_layout_manager.getNodeLayout3WayPoints12_no_d3
         rim_count = self._rim_count
         rn1 = self._element_counts[0] - n1
         rn2 = self._element_counts[1] - n2
@@ -823,39 +830,39 @@ class EllipsoidMesh:
         if n3 < rim_count:
             if n1 == n3:
                 if n1 == n2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(1)
+                    return getShellNodeLayout3WayPoints12(1)
                 if n1 == rn2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(3)
+                    return getShellNodeLayout3WayPoints12(3)
                 if (n2 > rim_count) and (rn2 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             elif rn1 == n3:
                 if rn1 == n2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(0)
+                    return getShellNodeLayout3WayPoints12(0)
                 if rn1 == rn2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(2)
+                    return getShellNodeLayout3WayPoints12(2)
                 if (n2 > rim_count) and (rn2 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             elif ((n2 == n3) or (rn2 == n3)) and (n1 > rim_count) and (rn1 > rim_count):
-                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             return None
         # top transition: 3-way along triple diagonals, permuted on double diagonals
         if rn3 < rim_count:
             if n1 == rn3:
                 if n1 == n2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(0)
+                    return getShellNodeLayout3WayPoints12(0)
                 if n1 == rn2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(2)
+                    return getShellNodeLayout3WayPoints12(2)
                 if (n2 > rim_count) and (rn2 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             elif rn1 == rn3:
                 if rn1 == n2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(1)
+                    return getShellNodeLayout3WayPoints12(1)
                 if rn1 == rn2:
-                    return node_layout_manager.getNodeLayout3WayPoints12(3)
+                    return getShellNodeLayout3WayPoints12(3)
                 if (n2 > rim_count) and (rn2 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             elif ((n2 == rn3) or (rn2 == rn3)) and (n1 > rim_count) and (rn1 > rim_count):
-                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             return None
         # nodes on bottom of n3 box are 4-way on corners, 3-way on edges, permuted in between
         if n3 == rim_count:
@@ -881,7 +888,7 @@ class EllipsoidMesh:
                     return (node_layout_manager.getNodeLayout3WayPoints12(0) if self._tube_core_box_layout else
                             node_layout_manager.getNodeLayout3WayPoints13(1))
                 if (n1 > rim_count) and (rn1 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             return None
         # nodes on top of n3 box are 4-way on corners, 3-way on edges, permuted in between
         if rn3 == rim_count:
@@ -907,7 +914,7 @@ class EllipsoidMesh:
                     return (node_layout_manager.getNodeLayout3WayPoints12(2) if self._tube_core_box_layout else
                             node_layout_manager.getNodeLayout3WayPoints13(3))
                 if (n1 > rim_count) and (rn1 > rim_count):
-                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                    return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
             return None
         # middle between +/- rim count, 3-way points on corners, permuted on faces
         if n2 == rim_count:
@@ -918,7 +925,7 @@ class EllipsoidMesh:
                 return (node_layout_manager.getNodeLayout3WayPoints13(0) if self._tube_core_box_layout else
                         node_layout_manager.getNodeLayout3WayPoints12(1))
             if (n1 > rim_count) and (rn1 > rim_count):
-                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
         elif rn2 == rim_count:
             if n1 == rim_count:
                 return (node_layout_manager.getNodeLayout3WayPoints13(3) if self._tube_core_box_layout else
@@ -927,9 +934,9 @@ class EllipsoidMesh:
                 return (node_layout_manager.getNodeLayout3WayPoints13(2) if self._tube_core_box_layout else
                         node_layout_manager.getNodeLayout3WayPoints12(3))
             if (n1 > rim_count) and (rn1 > rim_count):
-                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+                return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
         elif ((n1 == rim_count) or (rn1 == rim_count)) and (n2 > rim_count) and (rn2 > rim_count):
-            return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=True)
+            return node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=d3_defined)
         return None
 
     def get_node_identifier(self, n1, n2, n3):
@@ -1371,13 +1378,17 @@ class EllipsoidMesh:
         box_diagonal = (n3_limit == (n3_start + 1)) and (
                 (n3_start == self._rim_count) or (n3_start == (self._element_counts[2] - self._rim_count)))
 
+        mesh_dimension = generate_data.getMeshDimension()
+        linear_through_shell = generate_data.isLinearThroughShell()
+        d3_defined = (mesh_dimension == 3) and not linear_through_shell
+
         fieldcache = generate_data.getFieldcache()
         coordinates = generate_data.getCoordinates()
         nodes = generate_data.getNodes()
         nodetemplate = nodes.createNodetemplate()
         nodetemplate.defineField(coordinates)
         value_labels = [Node.VALUE_LABEL_D_DS1, Node.VALUE_LABEL_D_DS2]
-        if (self._shell_count > 0) or self._core:
+        if d3_defined:
             value_labels.append(Node.VALUE_LABEL_D_DS3)
         for value_label in value_labels:
             nodetemplate.setValueNumberOfVersions(coordinates, -1, value_label, 1)
@@ -1427,7 +1438,7 @@ class EllipsoidMesh:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, d1)
                     if d2:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, d2)
-                    if d3:
+                    if d3_defined and d3:
                         coordinates.setNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, d3)
                     node_layout = self.get_node_layout(n1, n2, n3, generate_data)
                     if node_layout:
@@ -1537,8 +1548,6 @@ class EllipsoidMesh:
                                     mesh_group.addElement(element)
                     last_nids_row = nids_row
             # around sides
-            node_layout_permuted = node_layout_manager.getNodeLayoutRegularPermuted(d3Defined=False)
-            node_layout_triple_points = node_layout_manager.getNodeLayoutTriplePoint2D()
             index_increments = [[0, 1, 0], [-1, 0, 0], [0, -1, 0], [1, 0, 0]]
             increment_number = 0
             index_increment = index_increments[0]
@@ -1592,18 +1601,7 @@ class EllipsoidMesh:
                             node_parameters = [
                                 last_parameters_row[nc], last_parameters_row[ncp],
                                 parameters_row[nc], parameters_row[ncp]]
-                            if n3 == rim_indexes[2][1]:
-                                node_layouts = [node_layout_permuted, node_layout_permuted, None, None]
-                                if last_corners_row[nc]:
-                                    node_layouts[0] = node_layout_triple_points[(5 - q) % 4]
-                                elif last_corners_row[ncp]:
-                                    node_layouts[1] = node_layout_triple_points[(5 - q) % 4]
-                            else:
-                                node_layouts = [None, None, node_layout_permuted, node_layout_permuted]
-                                if corners_row[nc]:
-                                    node_layouts[2] = node_layout_triple_points[q]
-                                elif corners_row[ncp]:
-                                    node_layouts[3] = node_layout_triple_points[q]
+                            node_layouts = [generate_data.getNodeLayout(nid) for nid in nids]
                             eft, scalefactors = \
                                 determineCubicHermiteSerendipityEft(mesh, node_parameters, node_layouts)
                             elementtemplate_special.defineField(coordinates, -1, eft)
@@ -1653,11 +1651,15 @@ class EllipsoidMesh:
                     last_nids_row = nids_row
         else:
             # 3-D mesh
+            linear_through_shell = generate_data.isLinearThroughShell()
+            assert not (linear_through_shell and self._core)
             elementtemplate_regular = mesh.createElementtemplate()
             elementtemplate_regular.setElementShapeType(Element.SHAPE_TYPE_CUBE)
-            tricubic_hermite_serendipity_basis = (
+            element_basis = (
                 fieldmodule.createElementbasis(3, Elementbasis.FUNCTION_TYPE_CUBIC_HERMITE_SERENDIPITY))
-            eft_regular = mesh.createElementfieldtemplate(tricubic_hermite_serendipity_basis)
+            if linear_through_shell:
+                element_basis.setFunctionType(3, Elementbasis.FUNCTION_TYPE_LINEAR_LAGRANGE)
+            eft_regular = mesh.createElementfieldtemplate(element_basis)
             elementtemplate_regular.defineField(coordinates, -1, eft_regular)
             elementtemplate_special = mesh.createElementtemplate()
             elementtemplate_special.setElementShapeType(Element.SHAPE_TYPE_CUBE)
@@ -1688,7 +1690,8 @@ class EllipsoidMesh:
                         e1 = self._rim_count + i1 - 1
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
-                        nx_row.append(self._nx[n3][n2][n1])
+                        nx_row.append(
+                            (self._nx[n3][n2][n1][:3] + [None]) if linear_through_shell else self._nx[n3][n2][n1])
                         if (n3 > e3_start) and (i2 > 0) and (i1 > 0):
                             nids = [last_nids_row[i1], last_nids_row[i1 - 1],
                                     nids_row[i1], nids_row[i1 - 1],
@@ -1712,7 +1715,7 @@ class EllipsoidMesh:
                                 # apply scale factors or versions on core-shell boundary
                                 if eft is eft_regular:
                                     # important: modify a non-shared eft
-                                    eft = mesh.createElementfieldtemplate(tricubic_hermite_serendipity_basis)
+                                    eft = mesh.createElementfieldtemplate(element_basis)
                                 eft, scalefactors = resolveEftCoreBoundaryScaling(
                                     eft, scalefactors, node_parameters, nids, self._core_shell_scaling_mode,
                                     generate_data.getNodes(), generate_data.getCoordinates(),
@@ -1883,6 +1886,8 @@ class EllipsoidMesh:
                         rim_nx_row.append(self._nx[n3_mod][n2][n1])
                         rim_eindexes_row.append((e1, e2, e3))
                         octant_nc.append(2 if n2 > half_counts[1] else 0)
+                    if linear_through_shell:
+                        rim_nx_row = [[params[0], params[1], params[2], None] for params in rim_nx_row]
                     if (n3 > n3_first) and (nt > 0):
                         rim_count = len(rim_nids_row)
                         for nc in range(rim_count):
@@ -1909,7 +1914,7 @@ class EllipsoidMesh:
                                 # apply scale factors or versions on core-shell boundary
                                 if eft is eft_regular:
                                     # important: modify a non-shared eft
-                                    eft = mesh.createElementfieldtemplate(tricubic_hermite_serendipity_basis)
+                                    eft = mesh.createElementfieldtemplate(element_basis)
                                 eft, scalefactors = resolveEftCoreBoundaryScaling(
                                     eft, scalefactors, node_parameters, nids, self._core_shell_scaling_mode,
                                     generate_data.getNodes(), generate_data.getCoordinates(),
@@ -1970,7 +1975,8 @@ class EllipsoidMesh:
                         e1 = self._rim_count + i1 - 1
                         octant_n1 = 1 if (n1 > half_counts[0]) else 0
                         nids_row.append(self._nids[n3][n2][n1])
-                        nx_row.append(self._nx[n3][n2][n1])
+                        nx_row.append(
+                            (self._nx[n3][n2][n1][:3] + [None]) if linear_through_shell else self._nx[n3][n2][n1])
                         if (nt < self._rim_count) and (n3 <= e3_limit) and (i2 > 0) and (i1 > 0):
                             nids = [last_nids_layer[i2 - 1][i1 - 1], last_nids_layer[i2 - 1][i1],
                                     last_nids_layer[i2][i1 - 1], last_nids_layer[i2][i1],
@@ -1994,7 +2000,7 @@ class EllipsoidMesh:
                                 # apply scale factors or versions on core-shell boundary
                                 if eft is eft_regular:
                                     # important: modify a non-shared eft
-                                    eft = mesh.createElementfieldtemplate(tricubic_hermite_serendipity_basis)
+                                    eft = mesh.createElementfieldtemplate(element_basis)
                                 eft, scalefactors = resolveEftCoreBoundaryScaling(
                                     eft, scalefactors, node_parameters, nids, self._core_shell_scaling_mode,
                                     generate_data.getNodes(), generate_data.getCoordinates(),

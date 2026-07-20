@@ -10,7 +10,7 @@ from cmlibs.zinc.context import Context
 from cmlibs.zinc.element import Element
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from cmlibs.zinc.result import RESULT_OK
+from cmlibs.zinc.result import RESULT_ERROR_NOT_FOUND, RESULT_OK
 from scaffoldmaker.annotation.annotationgroup import findAnnotationGroupByName
 from scaffoldmaker.meshtypes.meshtype_1d_network_layout1 import MeshType_1d_network_layout1
 from scaffoldmaker.meshtypes.meshtype_3d_boxnetwork1 import MeshType_3d_boxnetwork1
@@ -902,6 +902,32 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=X_TOL)
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
+        # check symmetry of 6-way points between halves
+        expected_6way_x = [0.0019108636038874666, 1.4486745136821355e-12, 0.49742413411115977]
+        expected_6way_d1 = [0.21323449908997336, -0.36687564649608395, 0.006704466598067782]
+        expected_6way_d2 = [0.2132344990888123, 0.36687564649664645, 0.006704466604210613]
+        expected_6way_d3 = [-0.015227869859240711, 1.3415194880887309e-15, 0.09462613958074884]
+        for node_identifier in (72, 333):
+            node = nodes.findNodeByIdentifier(node_identifier)
+            fieldcache.setNode(node)
+            if node_identifier == 333:
+                expected_6way_x[0] = 4.0 - expected_6way_x[0]
+                expected_6way_d1[2] = -expected_6way_d1[2]
+                expected_6way_d2[2] = -expected_6way_d2[2]
+                expected_6way_d3[0] = -expected_6way_d3[0]
+            result, x = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, x, expected_6way_x, delta=X_TOL)
+            result, d1 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS1, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, d1, expected_6way_d1, delta=X_TOL)
+            result, d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, d2, expected_6way_d2, delta=X_TOL)
+            result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
+            self.assertEqual(result, RESULT_OK)
+            assertAlmostEqualList(self, d3, expected_6way_d3, delta=X_TOL)
+
     def test_3d_tube_network_bone_core_8around_8along_0shell(self):
         """
         Test bone 3-D tube network with solid core is generated correctly with 8 along, 0 shell elements.
@@ -1091,16 +1117,18 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
 
-    def test_3d_tube_network_bone_8around_8along_1shell(self):
+    def test_3d_tube_network_bone_8around_8along_1shell_linear(self):
         """
-        Test bone 3-D tube network with solid core is generated correctly with 8 along, 1 shell element.
+        Test bone 3-D tube network with no core and 1 linear shell element is generated correctly with 8 along.
         This tests the case where regular layers of the domes join the junction.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Bone")
         settings = scaffoldPackage.getScaffoldSettings()
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(8.0, settings["Target element density along longest segment"])
+        self.assertEqual(1, settings["Number of elements through shell"])
         settings["Core"] = False
+        settings["Use linear through shell"] = True
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -1182,7 +1210,6 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         expected_6way_x = [0.0019108636038874666, 1.4486745136821355e-12, 0.49742413411115977]
         expected_6way_d1 = [0.21323449908997336, -0.36687564649608395, 0.006704466598067782]
         expected_6way_d2 = [0.2132344990888123, 0.36687564649664645, 0.006704466604210613]
-        expected_6way_d3 = [-0.015227869859240711, 1.3415194880887309e-15, 0.09462613958074884]
         for node_identifier in (45, 213):
             node = nodes.findNodeByIdentifier(node_identifier)
             fieldcache.setNode(node)
@@ -1190,7 +1217,6 @@ class NetworkScaffoldTestCase(unittest.TestCase):
                 expected_6way_x[0] = 4.0 - expected_6way_x[0]
                 expected_6way_d1[2] = -expected_6way_d1[2]
                 expected_6way_d2[2] = -expected_6way_d2[2]
-                expected_6way_d3[0] = -expected_6way_d3[0]
             result, x = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_VALUE, 1, 3)
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, x, expected_6way_x, delta=X_TOL)
@@ -1200,9 +1226,8 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             result, d2 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS2, 1, 3)
             self.assertEqual(result, RESULT_OK)
             assertAlmostEqualList(self, d2, expected_6way_d2, delta=X_TOL)
-            result, d3 = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)
-            self.assertEqual(result, RESULT_OK)
-            assertAlmostEqualList(self, d3, expected_6way_d3, delta=X_TOL)
+            result = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)[0]
+            self.assertEqual(result, RESULT_ERROR_NOT_FOUND)
 
     def test_3d_tube_network_sphere_core_1shell(self):
         """

@@ -4,7 +4,7 @@ from cmlibs.zinc.context import Context
 from cmlibs.zinc.element import Element
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.node import Node
-from cmlibs.zinc.result import RESULT_OK
+from cmlibs.zinc.result import RESULT_ERROR_NOT_FOUND, RESULT_OK
 from scaffoldmaker.annotation.annotationgroup import findAnnotationGroupByName
 from scaffoldmaker.meshtypes.meshtype_3d_ellipsoid1 import MeshType_3d_ellipsoid1
 from testutils import assertAlmostEqualList
@@ -21,9 +21,10 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(13, len(options))
+        self.assertEqual(14, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
-        self.assertEqual([0, 1], options["Numbers of shell, transition elements"])
+        self.assertEqual(0, options["Number of elements through shell"])
+        self.assertEqual(1, options["Number of elements across core transition"])
         self.assertEqual([1.0, 1.5, 2.0], options["Axes lengths"])
         self.assertEqual([0.2, 0.2, 0.2], options["Axes shell thicknesses"])
         self.assertTrue(options["Core"])
@@ -96,9 +97,10 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(13, len(options))
+        self.assertEqual(14, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
-        self.assertEqual([0, 1], options["Numbers of shell, transition elements"])
+        self.assertEqual(0, options["Number of elements through shell"])
+        self.assertEqual(1, options["Number of elements across core transition"])
         self.assertEqual([1.0, 1.5, 2.0], options["Axes lengths"])
         self.assertEqual([0.2, 0.2, 0.2], options["Axes shell thicknesses"])
         self.assertTrue(options["Core"])
@@ -222,7 +224,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         scaffold_class = MeshType_3d_ellipsoid1
         options = scaffold_class.getDefaultOptions()
         options["Numbers of elements across axes"] = [6, 6, 6]
-        options["Numbers of shell, transition elements"] = [0, 1]
+        options["Number of elements through shell"] = 0
         options["Axes lengths"] = [1.0, 1.0, 1.0]
         options["Axes shell thicknesses"] = [0.2, 0.2, 0.2]
         options["Core"] = True
@@ -282,15 +284,16 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
 
     def test_ellipsoid_3d_core_1shell(self):
         """
-        Test creation of 3-D ellipsoid surface with a shell layer.
+        Test creation of 3-D ellipsoid surface with 1 shell layer.
         """
         scaffold_class = MeshType_3d_ellipsoid1
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(13, len(options))
+        self.assertEqual(14, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
-        self.assertEqual([0, 1], options["Numbers of shell, transition elements"])
+        self.assertEqual(0, options["Number of elements through shell"])
+        self.assertEqual(1, options["Number of elements across core transition"])
         self.assertEqual([1.0, 1.5, 2.0], options["Axes lengths"])
         self.assertEqual([0.2, 0.2, 0.2], options["Axes shell thicknesses"])
         self.assertTrue(options["Core"])
@@ -303,7 +306,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertFalse(options["Refine"])
         self.assertEqual(4, options["Refine number of elements"])
         options["Numbers of elements across axes"] = [6, 6, 8]
-        options["Numbers of shell, transition elements"] = [1, 1]
+        options["Number of elements through shell"] = 1
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -381,17 +384,18 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=TOL)
         self.assertAlmostEqual(total_volume, expected_total_volume, delta=TOL)
 
-    def test_ellipsoid_3d_1shell(self):
+    def test_ellipsoid_3d_2shell_linear(self):
         """
-        Test creation of 3-D ellipsoid surface with only a 2-element thick shell layer.
+        Test creation of 3-D ellipsoid surface with only a 2-element thick linear shell layer.
         """
         scaffold_class = MeshType_3d_ellipsoid1
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(13, len(options))
+        self.assertEqual(14, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
-        self.assertEqual([0, 1], options["Numbers of shell, transition elements"])
+        self.assertEqual(0, options["Number of elements through shell"])
+        self.assertEqual(1, options["Number of elements across core transition"])
         self.assertEqual([1.0, 1.5, 2.0], options["Axes lengths"])
         self.assertEqual([0.2, 0.2, 0.2], options["Axes shell thicknesses"])
         self.assertTrue(options["Core"])
@@ -404,8 +408,9 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertFalse(options["Refine"])
         self.assertEqual(4, options["Refine number of elements"])
         options["Numbers of elements across axes"] = [8, 8, 8]
-        options["Numbers of shell, transition elements"] = [2, 1]
+        options["Number of elements through shell"] = 2
         options["Core"] = False
+        options["Use linear through shell"] = True
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -434,6 +439,11 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         fieldcache = fieldmodule.createFieldcache()
 
         with (ChangeManager(fieldmodule)):
+            node1 = nodes.findNodeByIdentifier(1)
+            fieldcache.setNode(node1)
+            result = coordinates.getNodeParameters(fieldcache, -1, Node.VALUE_LABEL_D_DS3, 1, 3)[0]
+            self.assertEqual(result, RESULT_ERROR_NOT_FOUND)
+
             is_exterior = fieldmodule.createFieldIsExterior()
             is_xi3_0 = fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_0)
             is_xi3_1 = fieldmodule.createFieldIsOnFace(Element.FACE_TYPE_XI3_1)

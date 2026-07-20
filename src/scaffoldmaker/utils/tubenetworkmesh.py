@@ -66,7 +66,7 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
         """
         super(TubeNetworkMeshGenerateData, self).__init__(
             region, meshDimension, coordinateFieldName, startNodeIdentifier, startElementIdentifier)
-        self._isLinearThroughShell = isLinearThroughShell
+        self.setLinearThroughShell(isLinearThroughShell)
         d3Defined = (meshDimension == 3) and not isLinearThroughShell
         self._isShowTrimSurfaces = isShowTrimSurfaces
         self._trimAnnotationGroupCount = 0  # incremented to make unique annotation group names for trim surfaces
@@ -208,9 +208,6 @@ class TubeNetworkMeshGenerateData(MeshGenerateData):
 
     def getNodetemplate(self):
         return self._nodetemplate
-
-    def isLinearThroughShell(self):
-        return self._isLinearThroughShell
 
     def isShowTrimSurfaces(self):
         return self._isShowTrimSurfaces
