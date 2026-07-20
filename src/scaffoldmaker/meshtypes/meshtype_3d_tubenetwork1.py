@@ -123,8 +123,10 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         if core or has_domes:
             if options["Number of elements around"] < 8:
                 options["Number of elements around"] = 8
+                dependentChanges = True
             elif options["Number of elements around"] % 4:
                 options["Number of elements around"] += 4 - (options["Number of elements around"] % 4)
+                dependentChanges = True
 
             annotationAroundCounts = options["Annotation numbers of elements around"]
             minAroundCount = options["Number of elements around"]
@@ -132,31 +134,34 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                 annotationAroundCounts = options["Annotation numbers of elements around"] = [0]
             else:
                 for i in range(len(annotationAroundCounts)):
-                    if annotationAroundCounts[i] <= 0:
+                    if annotationAroundCounts[i] < 0:
                         annotationAroundCounts[i] = 0
+                        dependentChanges = True
                     else:
                         if annotationAroundCounts[i] < 8:
                             annotationAroundCounts[i] = 8
+                            dependentChanges = True
                         elif annotationAroundCounts[i] % 4:
                             annotationAroundCounts[i] += 4 - (annotationAroundCounts[i] % 4)
+                            dependentChanges = True
                         if annotationAroundCounts[i] < minAroundCount:
                             minAroundCount = annotationAroundCounts[i]
-
-            if options["Number of elements across core transition"] < 1:
-                options["Number of elements across core transition"] = 1
 
             maxCoreBoxMinorCount = options["Number of elements around"] // 2 - 2
             if options["Number of elements across core box minor"] < 2:
                 options["Number of elements across core box minor"] = 2
+                dependentChanges = True
             elif options["Number of elements across core box minor"] > maxCoreBoxMinorCount:
                 options["Number of elements across core box minor"] = maxCoreBoxMinorCount
                 dependentChanges = True
             elif options["Number of elements across core box minor"] % 2:
                 options["Number of elements across core box minor"] += 1
+                dependentChanges = True
 
             annotationCoreBoxMinorCounts = options["Annotation numbers of elements across core box minor"]
             if len(annotationCoreBoxMinorCounts) == 0:
                 annotationCoreBoxMinorCounts = options["Annotation numbers of elements across core box minor"] = [0]
+                dependentChanges = True
             if len(annotationCoreBoxMinorCounts) > len(annotationAroundCounts):
                 annotationCoreBoxMinorCounts = options["Annotation numbers of elements across core box minor"] = \
                     annotationCoreBoxMinorCounts[:len(annotationAroundCounts)]
@@ -173,11 +178,13 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                         dependentChanges = True
                 elif annotationCoreBoxMinorCounts[i] < 2:
                     annotationCoreBoxMinorCounts[i] = 2
+                    dependentChanges = True
                 elif annotationCoreBoxMinorCounts[i] > maxCoreBoxMinorCount:
                     annotationCoreBoxMinorCounts[i] = maxCoreBoxMinorCount
                     dependentChanges = True
                 elif annotationCoreBoxMinorCounts[i] % 2:
                     annotationCoreBoxMinorCounts[i] += 1
+                    dependentChanges = True
         else:
             if options["Number of elements around"] < 4:
                 options["Number of elements around"] = 4
@@ -197,6 +204,9 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
 
         if options["Number of elements through shell"] < 0:
             options["Number of elements through shell"] = 0
+
+        if options["Number of elements across core transition"] < 1:
+            options["Number of elements across core transition"] = 1
 
         if options["Target element density along longest segment"] < 1.0:
             options["Target element density along longest segment"] = 1.0

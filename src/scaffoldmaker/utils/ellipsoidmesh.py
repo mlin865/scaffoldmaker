@@ -1584,7 +1584,7 @@ class EllipsoidMesh:
                         index_increment = index_increments[increment_number]
                     else:
                         corners_row.append(False)
-                if n3 > e3_start:
+                if (n3 > e3_start) and last_nids_row:
                     octant_nc = []
                     for nc in range(elements_count_around12):
                         ncp = (nc + 1) % elements_count_around12
