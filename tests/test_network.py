@@ -2,6 +2,7 @@ import math
 import unittest
 
 from cmlibs.maths.vectorops import magnitude
+from cmlibs.utils.zinc.field import find_or_create_field_group
 from cmlibs.utils.zinc.finiteelement import evaluateFieldNodesetRange
 from cmlibs.utils.zinc.general import ChangeManager
 from cmlibs.utils.zinc.group import identifier_ranges_to_string, mesh_group_add_identifier_ranges, \
@@ -16,6 +17,7 @@ from scaffoldmaker.meshtypes.meshtype_1d_network_layout1 import MeshType_1d_netw
 from scaffoldmaker.meshtypes.meshtype_3d_boxnetwork1 import MeshType_3d_boxnetwork1
 from scaffoldmaker.meshtypes.meshtype_3d_tubenetwork1 import MeshType_3d_tubenetwork1
 from scaffoldmaker.scaffoldpackage import ScaffoldPackage
+from scaffoldmaker.utils.meshrefinement import MeshRefinement
 from scaffoldmaker.utils.zinc_utils import get_nodeset_path_ordered_field_parameters
 
 
@@ -90,7 +92,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
@@ -138,7 +140,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
@@ -234,7 +236,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
@@ -308,7 +310,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
         self.assertEqual(4.0, settings["Target element density along longest segment"])
@@ -403,7 +405,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -416,6 +418,9 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         self.assertEqual(2, settings["Number of elements across core box minor"])
         self.assertEqual(1, settings["Number of elements across core transition"])
         self.assertEqual([0], settings["Annotation numbers of elements across core box minor"])
+        self.assertFalse(settings["Refine"])
+        self.assertEqual(4, settings["Refine number of elements"])
+        self.assertEqual(2, settings["Refine number of elements through shell"])
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -475,7 +480,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -537,7 +542,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -628,7 +633,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -1103,7 +1108,6 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             "half1": (72, 0.5 * expected_total_surface_area),
             "half2": (72, 0.5 * expected_total_surface_area)
             }
-        fieldcache = fieldmodule.createFieldcache()
         for name in expectedSizes2d:
             annotationGroup = findAnnotationGroupByName(annotationGroups, name)
             size = annotationGroup.getMeshGroup(mesh2d).getSize()
@@ -1116,6 +1120,75 @@ class NetworkScaffoldTestCase(unittest.TestCase):
             self.assertAlmostEqual(surfaceArea, expectedSizes2d[name][1], delta=X_TOL)
 
         self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
+
+        # refine 2x2 and check
+        # first remove faces/lines and any surface annotation groups as they are re-added by defineFaceAnnotations
+        removeAnnotationGroups = []
+        for annotationGroup in annotationGroups:
+            if annotationGroup.getDimension() == 1:
+                removeAnnotationGroups.append(annotationGroup)
+        for annotationGroup in removeAnnotationGroups:
+            annotationGroups.remove(annotationGroup)
+        self.assertEqual(2, len(annotationGroups))
+        # must keep all faces and lines as used for refinement
+
+        refineRegion = region.createRegion()
+        refineFieldmodule = refineRegion.getFieldmodule()
+        settings['Refine number of elements'] = 2
+        settings['Refine number of elements through shell'] = 1
+        meshrefinement = MeshRefinement(region, refineRegion, annotationGroups)
+        MeshType_3d_tubenetwork1.refineMesh(meshrefinement, settings)
+        annotationGroups = meshrefinement.getAnnotationGroups()
+        coordinates = refineFieldmodule.findFieldByName("coordinates").castFiniteElement()
+        self.assertTrue(coordinates.isValid())
+
+        refineFieldmodule.defineAllFaces()
+        self.assertEqual(2, len(annotationGroups))
+
+        mesh3d = refineFieldmodule.findMeshByDimension(3)
+        self.assertEqual(0, mesh3d.getSize())
+        mesh2d = refineFieldmodule.findMeshByDimension(2)
+        self.assertEqual(576, mesh2d.getSize())
+        mesh1d = refineFieldmodule.findMeshByDimension(1)
+        self.assertEqual(1152, mesh1d.getSize())
+        nodes = refineFieldmodule.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
+        self.assertEqual(578, nodes.getSize())
+
+        with ChangeManager(refineFieldmodule):
+            one = refineFieldmodule.createFieldConstant(1.0)
+            mesh2d = refineFieldmodule.findMeshByDimension(2)
+            fieldcache = refineFieldmodule.createFieldcache()
+
+            surfaceAreaField = refineFieldmodule.createFieldMeshIntegral(one, coordinates, mesh2d)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, total_surface_area = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+
+            # check no exterior lines
+            exterior_group = find_or_create_field_group(refineFieldmodule, "exterior")
+            exterior_lines = exterior_group.createMeshGroup(mesh1d)
+            exterior_lines.addElementsConditional(refineFieldmodule.createFieldIsExterior())
+            self.assertEqual(0, exterior_lines.getSize())
+            del exterior_lines
+            del exterior_group
+
+        expected_total_surface_area = 19.63988770848942
+        self.assertAlmostEqual(total_surface_area, expected_total_surface_area, delta=X_TOL)
+
+        refineExpectedSizes2d = {
+            "half1": (288, 0.5 * expected_total_surface_area),
+            "half2": (288, 0.5 * expected_total_surface_area)
+            }
+        for name in expectedSizes2d:
+            annotationGroup = findAnnotationGroupByName(annotationGroups, name)
+            size = annotationGroup.getMeshGroup(mesh2d).getSize()
+            self.assertEqual(refineExpectedSizes2d[name][0], size, name)
+            surfaceAreaMeshGroup = annotationGroup.getMeshGroup(mesh2d)
+            surfaceAreaField = refineFieldmodule.createFieldMeshIntegral(one, coordinates, surfaceAreaMeshGroup)
+            surfaceAreaField.setNumbersOfPoints(4)
+            result, surfaceArea = surfaceAreaField.evaluateReal(fieldcache, 1)
+            self.assertEqual(result, RESULT_OK)
+            self.assertAlmostEqual(surfaceArea, refineExpectedSizes2d[name][1], delta=X_TOL)
 
     def test_3d_tube_network_bone_8around_8along_1shell_linear(self):
         """
@@ -1632,7 +1705,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -1727,7 +1800,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -1853,7 +1926,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])
@@ -1947,7 +2020,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
         networkLayoutScaffoldPackage = settings["Network layout"]
         networkLayoutSettings = networkLayoutScaffoldPackage.getScaffoldSettings()
         self.assertTrue(networkLayoutSettings["Define inner coordinates"])
-        self.assertEqual(13, len(settings))
+        self.assertEqual(16, len(settings))
         self.assertEqual(8, settings["Number of elements around"])
         self.assertEqual(1, settings["Number of elements through shell"])
         self.assertEqual([0], settings["Annotation numbers of elements around"])

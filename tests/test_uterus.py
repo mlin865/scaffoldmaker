@@ -39,7 +39,7 @@ class UterusScaffoldTestCase(unittest.TestCase):
                          "23.4-24-25-26-27-28-29,29-30-31,31-32-33-34-35-36-37-38",
                          networkLayoutSettings["Structure"])
 
-        self.assertEqual(15, len(options))
+        self.assertEqual(14, len(options))
         self.assertEqual(20, options.get("Number of elements around"))
         self.assertEqual(8, options.get("Number of elements around oviduct/uterine horn"))
         self.assertEqual(1, options.get("Number of elements through wall"))
@@ -124,8 +124,7 @@ class UterusScaffoldTestCase(unittest.TestCase):
 
         refineRegion = region.createRegion()
         refineFieldmodule = refineRegion.getFieldmodule()
-        options['Refine number of elements along'] = 2
-        options['Refine number of elements around'] = 2
+        options['Refine number of elements'] = 2
         options['Refine number of elements through wall'] = 2
         meshrefinement = MeshRefinement(region, refineRegion, annotationGroups)
         scaffold.refineMesh(meshrefinement, options)

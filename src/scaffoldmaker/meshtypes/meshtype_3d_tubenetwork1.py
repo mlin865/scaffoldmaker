@@ -47,7 +47,10 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
             "Core": False,
             "Number of elements across core box minor": 2,
             "Number of elements across core transition": 1,
-            "Annotation numbers of elements across core box minor": [0]
+            "Annotation numbers of elements across core box minor": [0],
+            "Refine": False,
+            "Refine number of elements": 4,
+            "Refine number of elements through shell": 2
         }
         if parameterSetName in ["Loop", "Snake", "Vase"]:
             options["Target element density along longest segment"] = 12.0
@@ -74,7 +77,10 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
             "Core",
             "Number of elements across core box minor",
             "Number of elements across core transition",
-            "Annotation numbers of elements across core box minor"
+            "Annotation numbers of elements across core box minor",
+            "Refine",
+            "Refine number of elements",
+            "Refine number of elements through shell"
         ]
 
     @classmethod
@@ -220,6 +226,13 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
                 elif annotationAlongCounts[i] < 1:
                     annotationAlongCounts[i] = 1
 
+        for key in [
+            "Refine number of elements",
+            "Refine number of elements through shell"
+        ]:
+            if options[key] < 1:
+                options[key] = 1
+
         return dependentChanges
 
     @classmethod
@@ -262,6 +275,27 @@ class MeshType_3d_tubenetwork1(Scaffold_base):
         annotationGroups = generateData.getAnnotationGroups()
 
         return annotationGroups, tubeNetworkMeshBuilder
+
+    @classmethod
+    def refineMesh(cls, meshRefinement, options):
+        """
+        Refine source mesh into separate region, with change of basis.
+        :param meshRefinement: MeshRefinement, which knows source and target region.
+        :param options: Dict containing options. See getDefaultOptions().
+        """
+        refine_count = options["Refine number of elements"]
+        refine_shell_count = options["Refine number of elements through shell"]
+        shell_count = options["Number of elements through shell"]
+        core = options["Core"]
+        mesh_dimension = 3 if (shell_count or core) else 2
+        if mesh_dimension == 3:
+            refine_count3 = refine_count if core else refine_shell_count
+            annotation_refinements = {
+                "shell": (refine_count, refine_count, refine_shell_count)} if (shell_count and core) else None
+            meshRefinement.refineAllElementsCubeStandard3d(
+                refine_count, refine_count, refine_count3, annotation_refinements)
+        else:
+            meshRefinement.refineAllElementsSquareStandard2d(refine_count, refine_count)
 
     @classmethod
     def defineFaceAnnotations(cls, region, options, annotationGroups):

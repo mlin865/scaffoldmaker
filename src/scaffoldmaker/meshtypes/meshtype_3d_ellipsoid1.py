@@ -37,6 +37,7 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
             "Advanced surface D3 mode": EllipsoidSurfaceD3Mode.SURFACE_NORMAL.value,
             "Refine": False,
             "Refine number of elements": 4,
+            "Refine number of elements through shell": 2
         }
         return options
 
@@ -56,7 +57,8 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
             "Advanced n-way derivative factor",
             "Advanced surface D3 mode",
             "Refine",
-            "Refine number of elements"
+            "Refine number of elements",
+            "Refine number of elements through shell"
         ]
 
     @classmethod
@@ -134,7 +136,8 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
             options["Advanced surface D3 mode"] = EllipsoidSurfaceD3Mode.SURFACE_NORMAL.value
 
         for key in [
-            "Refine number of elements"
+            "Refine number of elements",
+            "Refine number of elements through shell"
         ]:
             if options[key] < 1:
                 options[key] = 1
@@ -210,9 +213,19 @@ class MeshType_3d_ellipsoid1(Scaffold_base):
         :param meshRefinement: MeshRefinement, which knows source and target region.
         :param options: Dict containing options. See getDefaultOptions().
         """
-        assert isinstance(meshRefinement, MeshRefinement)
-        refineElementsCount = options["Refine number of elements"]
-        meshRefinement.refineAllElementsCubeStandard3d(refineElementsCount, refineElementsCount, refineElementsCount)
+        refine_count = options["Refine number of elements"]
+        refine_shell_count = options["Refine number of elements through shell"]
+        shell_count = options["Number of elements through shell"]
+        core = options["Core"]
+        mesh_dimension = 3 if (shell_count or core) else 2
+        if mesh_dimension == 3:
+            refine_count3 = refine_count if core else refine_shell_count
+            annotation_refinements = {
+                "shell": (refine_count, refine_count, refine_shell_count)} if (shell_count and core) else None
+            meshRefinement.refineAllElementsCubeStandard3d(
+                refine_count, refine_count, refine_count3, annotation_refinements)
+        else:
+            meshRefinement.refineAllElementsSquareStandard2d(refine_count, refine_count)
 
     @classmethod
     def defineFaceAnnotations(cls, region, options, annotationGroups):

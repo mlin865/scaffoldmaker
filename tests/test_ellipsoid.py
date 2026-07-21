@@ -21,7 +21,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(14, len(options))
+        self.assertEqual(15, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
         self.assertEqual(0, options["Number of elements through shell"])
         self.assertEqual(1, options["Number of elements across core transition"])
@@ -97,7 +97,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(14, len(options))
+        self.assertEqual(15, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
         self.assertEqual(0, options["Number of elements through shell"])
         self.assertEqual(1, options["Number of elements across core transition"])
@@ -112,6 +112,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertFalse(options["Use linear through shell"])
         self.assertFalse(options["Refine"])
         self.assertEqual(4, options["Refine number of elements"])
+        self.assertEqual(2, options["Refine number of elements through shell"])
 
         context = Context("Test")
         region = context.getDefaultRegion()
@@ -290,7 +291,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(14, len(options))
+        self.assertEqual(15, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
         self.assertEqual(0, options["Number of elements through shell"])
         self.assertEqual(1, options["Number of elements across core transition"])
@@ -305,6 +306,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertFalse(options["Use linear through shell"])
         self.assertFalse(options["Refine"])
         self.assertEqual(4, options["Refine number of elements"])
+        self.assertEqual(2, options["Refine number of elements through shell"])
         options["Numbers of elements across axes"] = [6, 6, 8]
         options["Number of elements through shell"] = 1
 
@@ -392,7 +394,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         parameter_set_names = scaffold_class.getParameterSetNames()
         self.assertEqual(parameter_set_names, ["Default"])
         options = scaffold_class.getDefaultOptions("Default")
-        self.assertEqual(14, len(options))
+        self.assertEqual(15, len(options))
         self.assertEqual([4, 6, 8], options["Numbers of elements across axes"])
         self.assertEqual(0, options["Number of elements through shell"])
         self.assertEqual(1, options["Number of elements across core transition"])
@@ -407,6 +409,7 @@ class EllipsoidScaffoldTestCase(unittest.TestCase):
         self.assertFalse(options["Use linear through shell"])
         self.assertFalse(options["Refine"])
         self.assertEqual(4, options["Refine number of elements"])
+        self.assertEqual(2, options["Refine number of elements through shell"])
         options["Numbers of elements across axes"] = [8, 8, 8]
         options["Number of elements through shell"] = 2
         options["Core"] = False
