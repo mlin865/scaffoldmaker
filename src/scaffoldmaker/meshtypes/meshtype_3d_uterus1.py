@@ -2035,7 +2035,6 @@ class MeshType_3d_uterus1(Scaffold_base):
         shell_count = options['Number of elements through wall']
         mesh_dimension = 3 if shell_count else 2
 
-        # Create 2d surface mesh groups
         fm = region.getFieldmodule()
         mesh1d = fm.findMeshByDimension(1)
         mesh2d = fm.findMeshByDimension(2)
@@ -2333,27 +2332,31 @@ class MeshType_3d_uterus1(Scaffold_base):
                                                                  get_uterus_term("lumen of left uterine horn"))
             lumenOfLeftHorn.getMeshGroup(mesh2d).addElementsConditional(is_leftHorn_inner)
 
-        lumenOfCervix = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("lumen of uterine cervix", ""))
-        lumenOfCervix.getMeshGroup(mesh2d).addElementsConditional(is_cervix_inner)
+        if mesh_dimension == 3:
+            lumenOfCervix = findOrCreateAnnotationGroupForTerm(annotationGroups, region, ("lumen of uterine cervix", ""))
+            lumenOfCervix.getMeshGroup(mesh2d).addElementsConditional(is_cervix_inner)
 
-        mesh3d = fm.findMeshByDimension(3)
-        cervixGroup.getMeshGroup(mesh3d).removeAllElements()
-        cervixGroup.getMeshGroup(mesh2d).addElementsConditional(lumenOfCervix.getGroup())
-        annotationGroups.remove(bodyNotCervixGroup)
-        del bodyNotCervixGroup
-        annotationGroups.remove(lumenOfCervix)
-        del lumenOfCervix
+            mesh3d = fm.findMeshByDimension(3)
+            cervixGroup.getMeshGroup(mesh3d).removeAllElements()
+            cervixGroup.getMeshGroup(mesh2d).addElementsConditional(lumenOfCervix.getGroup())
+            annotationGroups.remove(bodyNotCervixGroup)
+            del bodyNotCervixGroup
+            annotationGroups.remove(lumenOfCervix)
+            del lumenOfCervix
 
-        if isRat and (mesh_dimension == 3):
-            septumCervixGroup = getAnnotationGroupForTerm(annotationGroups, ("septum cervix", ""))
-            isSeptumCervixExterior = fm.createFieldAnd(is_exterior_face_xi1, septumCervixGroup.getGroup())
-            cervixGroup.getMeshGroup(mesh2d).addElementsConditional(isSeptumCervixExterior)
-            annotationGroups.remove(septumCervixGroup)
-            del septumCervixGroup
-            annotationGroups.remove(septumBodyGroup)
-            del septumBodyGroup
-            annotationGroups.remove(lumenOfFundus)
-            del lumenOfFundus
+            if isRat:
+                septumCervixGroup = getAnnotationGroupForTerm(annotationGroups, ("septum cervix", ""))
+                isSeptumCervixExterior = fm.createFieldAnd(is_exterior_face_xi1, septumCervixGroup.getGroup())
+                cervixGroup.getMeshGroup(mesh2d).addElementsConditional(isSeptumCervixExterior)
+                annotationGroups.remove(septumCervixGroup)
+                del septumCervixGroup
+                annotationGroups.remove(septumBodyGroup)
+                del septumBodyGroup
+                annotationGroups.remove(lumenOfFundus)
+                del lumenOfFundus
+        else:
+            annotationGroups.remove(cervixGroup)
+            del cervixGroup
 
 
 def setNodeFieldParameters(field, fieldcache, x, d1, d2, d3, d12=None, d13=None):
