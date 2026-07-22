@@ -220,7 +220,7 @@ class UterusScaffoldTestCase(unittest.TestCase):
         for annotationGroup in annotationGroups:
             annotationGroup.addSubelements()
         scaffold.defineFaceAnnotations(region, options, annotationGroups)
-        self.assertEqual(45, len(annotationGroups))
+        self.assertEqual(44, len(annotationGroups))
 
         # check some annotation groups
         expectedSizes3d = {

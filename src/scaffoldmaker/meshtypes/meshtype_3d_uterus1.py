@@ -2339,8 +2339,6 @@ class MeshType_3d_uterus1(Scaffold_base):
             mesh3d = fm.findMeshByDimension(3)
             cervixGroup.getMeshGroup(mesh3d).removeAllElements()
             cervixGroup.getMeshGroup(mesh2d).addElementsConditional(lumenOfCervix.getGroup())
-            annotationGroups.remove(bodyNotCervixGroup)
-            del bodyNotCervixGroup
             annotationGroups.remove(lumenOfCervix)
             del lumenOfCervix
 
@@ -2357,6 +2355,8 @@ class MeshType_3d_uterus1(Scaffold_base):
         else:
             annotationGroups.remove(cervixGroup)
             del cervixGroup
+        annotationGroups.remove(bodyNotCervixGroup)
+        del bodyNotCervixGroup
 
 
 def setNodeFieldParameters(field, fieldcache, x, d1, d2, d3, d12=None, d13=None):
