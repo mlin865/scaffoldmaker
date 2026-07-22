@@ -1242,12 +1242,12 @@ class EllipsoidMesh:
 
     def get_rim_node_layout(self, generate_data, n3_box, ri, ai):
         """
-        Get rim node identifier from polar indexes around and radially from axis3.
+        Get rim node layout from polar indexes around and radially from axis3.
         :param generate_data: MeshGenerateData with region, field, node/element identifier and node layout data.
         :param n3_box: Index along axis 3. Must be a valid box n3.
         :param ri: Rim index where 0 is first transition, or first shell row if no core
         :param ai: Index around rim starting at +axis1
-        :return: Node identifier, or None if not set.
+        :return: HermiteNodeLayout, or None if not used at that location.
         """
         n1, n2, n3 = self._get_rim_node_indexes123(n3_box, ri, ai)
         return self.get_node_layout(n1, n2, n3, generate_data)

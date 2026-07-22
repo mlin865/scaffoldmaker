@@ -643,6 +643,7 @@ def sampleCubicHermiteCurvesTriple(nx, nd1, elements_count):
     Sample between start, centre and end coordinates ensuring the centre point is the centre of the sampled curve.
     :param nx: 3 sets of coordinates for start, beginning and end of curve.
     :param nd1: 3 sets of derivatives along.
+    :param elements_count: Number of elements to sample.
     :return: sampled cx, cd1, cd1_middle (which is not in cd1 for odd elements_count)
     """
     assert len(nx) == 3

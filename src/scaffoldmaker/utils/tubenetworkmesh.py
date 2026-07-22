@@ -732,7 +732,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
                     start_x, start_d1, start_d2, end_x, end_d1, end_d2, elements_count,
                     start_weight, end_weight, overweighting, end_transition))
             move_x_to_surface.append(lambda x: self._rawTrackSurfaceList[p].makeCoordinatesOnSurface(x))
-            move_d_to_surface.append(lambda x, d: self._rawTrackSurfaceList[p].makeDerivativeOnSurface(x, d))
+            move_d_to_surface.append(
+                lambda x, d: self._rawTrackSurfaceList[p].makeCoordinatesAndDerivativeOnSurface(x, d)[1])
 
         # core cardinal-direction radial parameters, ensuring dome0 is reversed and reordered around -axis3
         crx = []
@@ -1589,8 +1590,8 @@ class TubeNetworkMeshSegment(NetworkMeshSegment):
 
     def getBoxCornerIndex(self, n1, n3):
         """
-        Determing which corner of box the location is on, if any.
-        :return: Index of corner starting with 0 for next after +axis2 in direction of +axis3.
+        Determine which corner of box the location is on, if any.
+        :return: Index of corner starting with 0 for next after +axis2 in direction of +axis3, or None if not a corner.
         """
         n1_min = n1 == 0
         n1_max = n1 == self._elementsCountCoreBoxMajor
@@ -3381,8 +3382,8 @@ class TubeNetworkMeshJunction(NetworkMeshJunction):
         """
         Get mid-point coordinates and derivatives within junction from 2 or more segments' parameters.
         :param segmentsParameterLists: List over segment indexes s of [last two n2s][x, d1, d2, d3].
-        The n2 values are 2nd nearsest then nearest to junction. d3 will be None for 2-D or bicubic-linear.
-        :return: Mid-point x, d1, d2, d3. Derivative magnitudes will need smoothing.`
+        The n2 values are 2nd nearest, then nearest to junction. d3 will be None for 2-D or bicubic-linear.
+        :return: Mid-point x, d1, d2, d3. Derivative magnitudes will need smoothing.
         """
         segmentsIn = [dot(sub(params[1][0], params[0][0]), params[1][2]) > 0.0 for params in segmentsParameterLists]
         segmentsCount = len(segmentsIn)
@@ -4727,7 +4728,7 @@ def getPathRawTubeCoordinates(pathParameters, elementsCountAround, radius=1.0, p
     If any are True, extra sub-samples are made between the respective end and the next path parameter to capture the
     ellipse shape, and >= 2 samples are made between each other parameter to keep near original scaling.
     :return: px[][], pd1[][], pd2[][], pd12[][] with first index in range(pointsCountAlong),
-    second inner index in range(elementsCountAround), dome_sample_count
+    second inner index in range(elementsCountAround).
     """
     assert len(pathParameters) == 6
     pointsCountAlong = len(pathParameters[0])

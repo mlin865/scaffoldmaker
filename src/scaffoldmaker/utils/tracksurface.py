@@ -368,27 +368,18 @@ class TrackSurface:
         """
         Return nearest coordinate to start_x on the surface.
         :param start_x: Coordinates on or near surface.
-        :return: Nearest coordinates to start_x on surfacde.
+        :return: Nearest coordinates to start_x on surface.
         """
         position = self.findNearestPosition(start_x, startPosition=self.findNearestPositionSample(start_x)[0])
         return self.evaluateCoordinates(position)
 
-    def makeDerivativeOnSurface(self, x, start_d):
-        """
-        Finds nearest position on TrackSurface to x and makes get tangent version of d with same
-        :param x: Coordinates on or near surface of TrackSurface.
-        :param start_d: Derivative near tangential to TrackSurface at nearest surface point to x.
-        :return: Derivative made tangential to surface with same magnitude as start_d.
-        """
-        return self.makeCoordinatesAndDerivativeOnSurface(x, start_d)[1]
-
     def makeCoordinatesAndDerivativeOnSurface(self, start_x, start_d):
         """
         Finds nearest position on TrackSurface to start_x and returns both coordinates there and start_d converted
-        to a surface tangent.
-        :param x: Coordinates on or near surface of TrackSurface.
+        to a surface tangent at that position.
+        :param start_x: Coordinates on or near surface of TrackSurface.
         :param start_d: Derivative near tangential to TrackSurface at nearest surface point to x.
-        :return: Coordinates at neares point on surface, dDerivative made tangential to surface there with same
+        :return: Coordinates at nearest point on surface, derivative made tangential to surface there with same
         magnitude as start_d.
         """
         position = self.findNearestPosition(start_x, startPosition=self.findNearestPositionSample(start_x)[0])
@@ -460,7 +451,7 @@ class TrackSurface:
                 end_d2 = cross(normal, pd1[-1])
             pd2 = [start_d2]
             if end_transition:
-                # adjust xi scale to get propor proportion when magnitude of end_d1 differs from regular derivatives
+                # get xi scale giving the appropriate end element size for magnitude of end_d1 vs. regular derivatives
                 reg_d1_mag = magnitude(pd1[-2])
                 end_d1_mag = magnitude(end_d1)
                 xi_scale = reg_d1_mag / ((elements_count - 0.5) * reg_d1_mag + 0.5 * end_d1_mag)

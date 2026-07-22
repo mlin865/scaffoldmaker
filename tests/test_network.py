@@ -303,7 +303,7 @@ class NetworkScaffoldTestCase(unittest.TestCase):
 
     def test_2d_tube_network_trifurcation(self):
         """
-        Test 2D tube triifurcation is generated correctly.
+        Test 2D tube trifurcation is generated correctly.
         """
         scaffoldPackage = ScaffoldPackage(MeshType_3d_tubenetwork1, defaultParameterSetName="Trifurcation")
         settings = scaffoldPackage.getScaffoldSettings()
