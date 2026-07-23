@@ -274,7 +274,7 @@ vagus_branch_terms = [
     ("left branch of vagus nerve to ipsilateral internal jugular vein", "ILX:0794081"),
     ("left branch to thryoid gland from the cervical vagus", "ILX:0796543"),
     ("left broken branch of vagus nerve", "ILX:0795586"),
-    ("left cardiovascular and cardiopulmonary branch of vagus nerve", "ILX:0795951"),
+    ("left cardiovascular and cardiopulmonary branch of vagus nerve", "ILX:0795951", "cardiovascular and cardiopulmonary branch of left vagus nerve"),
     ("left cardiovascular branch group of cervical vagus nerve", "ILX:0795395"),
     ("left cardiovascular branch group of thoracic vagus nerve", "ILX:0795428"),
     ("left cervical cardiac branch of vagus nerve", "ILX:0794171", "left cervical cardiac branch"),
