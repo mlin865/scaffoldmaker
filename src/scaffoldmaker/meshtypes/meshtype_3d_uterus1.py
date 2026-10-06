@@ -17,7 +17,7 @@ from scaffoldmaker.scaffoldpackage import ScaffoldPackage
 from scaffoldmaker.utils.eft_utils import determineCubicHermiteSerendipityEft, HermiteNodeLayoutManager
 from scaffoldmaker.utils.interpolation import smoothCurveSideCrossDerivatives, smoothCubicHermiteDerivativesLine, \
     interpolateCubicHermite, sampleCubicHermiteCurves, computeCubicHermiteDerivativeScaling, \
-    interpolateLagrangeHermiteDerivative
+    interpolateLagrangeHermiteDerivative, getCubicHermiteCurvesPointAtArcDistance
 from scaffoldmaker.utils.networkmesh import NetworkMesh
 from scaffoldmaker.utils.tubenetworkmesh import BodyTubeNetworkMeshBuilder, TubeNetworkMeshGenerateData
 from scaffoldmaker.utils.zinc_utils import (
@@ -1450,44 +1450,41 @@ class MeshType_1d_uterus_network_layout1(MeshType_1d_network_layout1):
         rotMat = axis_angle_to_rotation_matrix([0.0, 1.0, 0.0], anteversionAngleRad)
         vaginalStartX = bodyLength + cervicalLength
 
-        turningPtIdx = 1
-        xTurningPt = [vaginalStartX + vaginalScale * turningPtIdx, 0.0, 0.0]
-        xTranslateMat = sub(xTurningPt, xBodyJunction)
-
-        li = list(range(2, vaginaElementsCount + 1))
-
-        # one node before vagina
+        # Set up path from cervix to end of vagina
         nx = []
         nd1 = []
-        nx.append([vaginalStartX - cervicalScale, 0.0, 0.0])
-        nd1.append([cervicalScale, 0.0, 0.0])
-        for i in li:
-            x = [vaginalStartX + vaginalScale * i, 0.0, 0.0]
-            d1 = [0.5 * (vaginalScale + cervicalScale) if i == 0 else vaginalScale, 0.0, 0.0]
-            if i > turningPtIdx:
-                xTranslate = sub(x, xTranslateMat)
-                xRot = [rotMat[j][0] * xTranslate[0] + rotMat[j][1] * xTranslate[1] + rotMat[j][2] * xTranslate[2]
-                        for j in range(3)]
-                x = add(xRot, xTranslateMat)
-                d1 = [rotMat[j][0] * d1[0] + rotMat[j][1] * d1[1] + rotMat[j][2] * d1[2] for j in range(3)]
+        nx.append([bodyLength, 0.0, 0.0])
+        nd1.append(nd1Body[-1])
+
+        xTurningPt = [vaginalStartX + 0.15 * vaginaLength, 0.0, 0.0]
+        xTranslateMat = sub(xTurningPt, xBodyJunction)
+
+        for i in range(2, 11):
+            x = [vaginalStartX + 0.1 * i * vaginaLength, 0.0, 0.0]
+            d1 = [0.1 * vaginaLength, 0.0, 0.0]
+
+            xTranslate = sub(x, xTranslateMat)
+            xRot = [rotMat[j][0] * xTranslate[0] + rotMat[j][1] * xTranslate[1] + rotMat[j][2] * xTranslate[2]
+                    for j in range(3)]
+            x = add(xRot, xTranslateMat)
+            d1 = [rotMat[j][0] * d1[0] + rotMat[j][1] * d1[1] + rotMat[j][2] * d1[2] for j in range(3)]
             nx.append(x)
             nd1.append(d1)
 
-        xSampledCurve, d1SampledCurve = sampleCubicHermiteCurves(nx, nd1, vaginaElementsCount + 1,
-                                                                 arcLengthDerivatives=True)[0:2]
-        d1SmoothedCurve = smoothCubicHermiteDerivativesLine(xSampledCurve, d1SampledCurve, fixStartDirection=True)
+        nd1Smoothed = smoothCubicHermiteDerivativesLine(nx, nd1)
 
-        # assign points to cervix
-        nodeIdentifier -= 1
-        cervixStartX = bodyLength
-        nxCervix = [[cervixStartX, 0.0, 0.0]] + xSampledCurve[0:2]
-        nd1Cervix = [[0.5 * (fundusScalePostBodyJunction + cervicalScale), 0.0, 0.0]] + d1SmoothedCurve[0:2]
+        xCervixEnd, d1CervixEnd, elementCervixEnd = \
+            getCubicHermiteCurvesPointAtArcDistance(nx, nd1Smoothed, cervicalLength)[0:3]
+
+        xRawCervix = [[bodyLength, 0.0, 0.0], xCervixEnd]
+        d1RawCervix = [[0.5 * (fundusScalePostBodyJunction + cervicalScale), 0.0, 0.0], d1CervixEnd]
+
         nxCervixSampled, nd1CervixSampled = \
-            sampleCubicHermiteCurves(nxCervix, nd1Cervix, cervixElementsCount, arcLengthDerivatives=True)[0:2]
+            sampleCubicHermiteCurves(xRawCervix, d1RawCervix, cervixElementsCount, arcLengthDerivatives=True)[0:2]
         nd1CervixSampled[0] = [0.5 * (fundusScalePostBodyJunction + cervicalScale), 0.0, 0.0]
         nd1CervixSmoothed = smoothCubicHermiteDerivativesLine(nxCervixSampled, nd1CervixSampled,
-                                                              fixStartDerivative=True,
-                                                              fixEndDerivative=True)
+                                                              fixStartDerivative=True, fixEndDerivative=False)
+
         nd2Cervix = []
         nd3Cervix = []
         for i in range(cervixElementsCount + 1):
@@ -1500,38 +1497,31 @@ class MeshType_1d_uterus_network_layout1(MeshType_1d_network_layout1):
             d3Direction = cross(normalize(d1), normalize(d2))
             nd3Cervix.append(set_magnitude(d3Direction, halfCervixDepth))
 
-        nxVagina = []
-        nd1Vagina = []
+        # Vagina
+        xRawVagina = [xCervixEnd] + nx[elementCervixEnd + 1:]
+        d1RawVagina = [nd1CervixSmoothed[-1]] + nd1Smoothed[elementCervixEnd + 1:]
+        nxVaginaSampled, nd1VaginaSampled = \
+            sampleCubicHermiteCurves(xRawVagina, d1RawVagina, vaginaElementsCount, arcLengthDerivatives=True)[0:2]
+        nd1VaginaSampled = smoothCubicHermiteDerivativesLine(nxVaginaSampled, nd1VaginaSampled)
+        nd1VaginaSampled[0] = smoothCubicHermiteDerivativesLine(nxCervixSampled[-2:] + [nxVaginaSampled[1]],
+                                                                nd1CervixSmoothed[-2:] + [nd1VaginaSampled[1]])[1]
+        nd1VaginaSmoothed = smoothCubicHermiteDerivativesLine(nxVaginaSampled, nd1VaginaSampled,
+                                                              fixStartDerivative=True, fixEndDerivative=False)
+
         nd2Vagina = []
         nd3Vagina = []
 
-        del xSampledCurve[0]
-        del d1SmoothedCurve[0]
-
         for i in range(vaginaElementsCount + 1):
             xi = i / vaginaElementsCount
-            nxVagina.append(xSampledCurve[i])
-            nd1Vagina.append(d1SmoothedCurve[i])
-            d2 = \
-                interpolateCubicHermite(
-                    [0.0, halfCervicalWidthExternalOs, 0.0],
-                    [0.0, (halfCervicalWidthExternalOs - halfCervicalWidthInternalOs) / cervixElementsCount, 0.0],
-                    [0.0, halfVaginaOrificeWidth, 0.0],
-                    [0.0, (halfVaginaOrificeWidth - halfCervicalWidthExternalOs) / vaginaElementsCount, 0.0], xi)
+            d1 = nd1VaginaSmoothed[i]
+            halfVaginaWidth = xi * halfVaginaOrificeWidth + (1 - xi) * halfCervicalWidthExternalOs
+            halfVaginaDepth = xi * halfVaginaOrificeDepth + (1 - xi) * halfCervicalDepthExternalOs
+            d2 = [0.0, halfVaginaWidth, 0.0]
 
-            if i > turningPtIdx:
-                d2 = [rotMat[j][0] * d2[0] + rotMat[j][1] * d2[1] + rotMat[j][2] * d2[2] for j in range(3)]
             nd2Vagina.append(d2)
 
-            d3 = cross(normalize(d1SmoothedCurve[i]), normalize(d2))
-            d3Interpolated = \
-                interpolateCubicHermite(
-                    [0.0, 0.0, halfCervicalDepthExternalOs],
-                    [0.0, 0.0, (halfCervicalDepthExternalOs - halfCervicalDepthInternalOs) / cervixElementsCount],
-                    [0.0, 0.0, halfVaginaOrificeDepth],
-                    [0.0, 0.0, (halfVaginaOrificeDepth - halfCervicalDepthExternalOs) / vaginaElementsCount], xi)
-            d3 = set_magnitude(d3, magnitude(d3Interpolated))
-            nd3Vagina.append(d3)
+            d3Direction = cross(normalize(d1), normalize(d2))
+            nd3Vagina.append(set_magnitude(d3Direction, halfVaginaDepth))
 
         nd2 = nd2Cervix + nd2Vagina[1:]
         nd3 = nd3Cervix + nd3Vagina[1:]
@@ -1550,6 +1540,7 @@ class MeshType_1d_uterus_network_layout1(MeshType_1d_network_layout1):
         nd13Cervix = nd13[0:cervixElementsCount + 1]
         nd13Vagina = nd13[cervixElementsCount:]
 
+        nodeIdentifier -= 1
         for i in range(cervixElementsCount):
             node = nodes.findNodeByIdentifier(nodeIdentifier)
             fieldcache.setNode(node)
@@ -1575,8 +1566,8 @@ class MeshType_1d_uterus_network_layout1(MeshType_1d_network_layout1):
         for i in range(vaginaElementsCount + 1):
             node = nodes.findNodeByIdentifier(nodeIdentifier)
             fieldcache.setNode(node)
-            x = nxVagina[i]
-            d1 = nd1Vagina[i]
+            x = nxVaginaSampled[i]
+            d1 = nd1VaginaSmoothed[i]
             d2 = nd2Vagina[i]
             d3 = nd3Vagina[i]
             d12 = nd12Vagina[i]
