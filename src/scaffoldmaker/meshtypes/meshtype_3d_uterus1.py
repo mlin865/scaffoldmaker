@@ -1319,7 +1319,7 @@ class MeshType_1d_uterus_network_layout1(MeshType_1d_network_layout1):
                         id13BodyJunction.append(id13)
 
         if isHumanPregnant2 or isHuman2:
-            fundusToBodyLengthScale = 0.428
+            fundusToBodyLengthScale = 0.45
         xFundusPatchStart = [-bodyLength * (fundusToBodyLengthScale if (isHuman2 or isHumanPregnant2) else 1), 0.0, 0.0]
         d1FundusPatch = \
             [bodyLength * (fundusToBodyLengthScale if (isHuman2 or isHumanPregnant2) else 1) / fundusPatchElementsCount,
@@ -1737,6 +1737,7 @@ class MeshType_3d_uterus1(Scaffold_base):
                                               defaultParameterSetName=useParameterSetName),
             'Number of elements around': 20,
             'Number of elements around oviduct/uterine horn': 8,
+            'Number of elements across core box minor': 4,
             'Number of elements through wall': 1,
             'Number of elements along oviduct/uterine horn': 6,
             'Number of elements along body': 5,
@@ -1767,6 +1768,7 @@ class MeshType_3d_uterus1(Scaffold_base):
             'Network layout',
             'Number of elements around',
             'Number of elements around oviduct/uterine horn',
+            'Number of elements across core box minor',
             'Number of elements through wall',
             'Number of elements along oviduct/uterine horn',
             'Number of elements along body',
@@ -1845,6 +1847,13 @@ class MeshType_3d_uterus1(Scaffold_base):
                 options["Number of elements around oviduct/uterine horn"] = options["Number of elements around"] - 4
             dependentChanges = True
 
+        if options["Number of elements across core box minor"] < 2:
+            options["Number of elements across core box minor"] = 2
+            dependentChanges = True
+        elif options["Number of elements across core box minor"] % 2:
+            options["Number of elements across core box minor"] += 1
+            dependentChanges = True
+
         return dependentChanges
 
     @classmethod
@@ -1900,6 +1909,7 @@ class MeshType_3d_uterus1(Scaffold_base):
             defaultElementsCountAround=options['Number of elements around'],
             annotationElementsCountsAround=annotationElementsCountsAround,
             shell_count=shell_count,
+            defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
             useOuterTrimSurfaces=False)
         uterusTubeNetworkMeshBuilder.build()
 
