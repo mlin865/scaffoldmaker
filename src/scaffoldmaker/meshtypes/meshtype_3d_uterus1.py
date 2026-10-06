@@ -1866,6 +1866,7 @@ class MeshType_3d_uterus1(Scaffold_base):
         """
         parameterSetName = options['Base parameter set']
         isHuman = "Human" in parameterSetName
+        isHumanType2 = "Human 2" in parameterSetName or "Human Pregnant 2" in parameterSetName
         isRat = "Rat" in parameterSetName
         isMouse = "Mouse" in parameterSetName
         isRodent = isRat or isMouse
@@ -1910,7 +1911,7 @@ class MeshType_3d_uterus1(Scaffold_base):
             annotationElementsCountsAround=annotationElementsCountsAround,
             shell_count=shell_count,
             defaultElementsCountCoreBoxMinor=options["Number of elements across core box minor"],
-            useOuterTrimSurfaces=False)
+            useOuterTrimSurfaces=True if isHumanType2 else False)
         uterusTubeNetworkMeshBuilder.build()
 
         mesh_dimension = 3 if shell_count else 2
